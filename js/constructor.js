@@ -45,8 +45,8 @@ class CabinetConstructor {
                                 "name": "Секция 1",
                                 "position": { "left": 812, "top": 72 },
                                 "defaultSize": { "width": 528, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 600,
+                                "minWidth": 211,
+                                "maxWidth": 528,
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/3-sections/sections/section-1/",
                                 "variants": [
@@ -58,8 +58,8 @@ class CabinetConstructor {
                                 "name": "Секция 2",
                                 "position": { "left": 1340, "top": 72 },
                                 "defaultSize": { "width": 520, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 600,
+                                "minWidth": 208,
+                                "maxWidth": 520,
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/3-sections/sections/section-2/",
                                 "variants": [
@@ -71,8 +71,8 @@ class CabinetConstructor {
                                 "name": "Секция 3",
                                 "position": { "left": 1860, "top": 72 },
                                 "defaultSize": { "width": 528, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 600,
+                                "minWidth": 211,
+                                "maxWidth": 528,
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/3-sections/sections/section-3/",
                                 "variants": [
@@ -342,11 +342,25 @@ class CabinetConstructor {
     }
 
     pixelsToMillimeters(pixels) {
+        // Специальный коэффициент для центральной секции (520px = 1000мм)
+        if (this.activeSection === 'section-2') {
+            const ratio = 1000 / 520; // 1.923
+            return Math.round(pixels * ratio);
+        }
+        
+        // Стандартный коэффициент для остальных секций
         const ratio = this.layouts?.settings?.pixelsToMillimeters || 1.893939;
         return Math.round(pixels * ratio);
     }
 
     millimetersToPixels(millimeters) {
+        // Специальный коэффициент для центральной секции (1000мм = 520px)
+        if (this.activeSection === 'section-2') {
+            const ratio = 520 / 1000; // 0.52
+            return Math.round(millimeters * ratio);
+        }
+        
+        // Стандартный коэффициент для остальных секций
         const ratio = this.layouts?.settings?.millimetersToPixels || 0.528;
         return Math.round(millimeters * ratio);
     }
