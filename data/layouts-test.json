@@ -1,0 +1,58 @@
+{
+  "layouts": {
+    "3-sections": {
+      "name": "Трехдверный шкаф",
+      "background": "images/layouts/3-sections/background.jpg",
+      "cssClass": "layout-3-sections",
+      "container": {
+        "width": 3200,
+        "height": 1460
+      },
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Секция 1",
+          "position": { "left": 812, "top": 72 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 600,
+          "transformOrigin": "right",
+          "imagePath": "images/layouts/3-sections/sections/section-1/",
+          "variants": [
+            { "id": "variant-1", "name": "Тест вариант 1", "image": "variant-1.jpg" }
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Секция 2",
+          "position": { "left": 1340, "top": 72 },
+          "defaultSize": { "width": 520, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 600,
+          "transformOrigin": "center",
+          "imagePath": "images/layouts/3-sections/sections/section-2/",
+          "variants": [
+            { "id": "variant-1", "name": "Тест вариант 1", "image": "variant-1.jpg" }
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Секция 3",
+          "position": { "left": 1860, "top": 72 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 600,
+          "transformOrigin": "left",
+          "imagePath": "images/layouts/3-sections/sections/section-3/",
+          "variants": [
+            { "id": "variant-1", "name": "Тест вариант 1", "image": "variant-1.jpg" }
+          ]
+        }
+      ]
+    }
+  },
+  "settings": {
+    "millimetersToPixels": 0.528,
+    "pixelsToMillimeters": 1.893939
+  }
+} 

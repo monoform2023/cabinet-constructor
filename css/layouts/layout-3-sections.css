@@ -1,0 +1,41 @@
+/* Стили для компоновки с 3 секциями */
+
+/* Фоновое изображение для 3-секционного варианта */
+.layout-3-sections .main-window {
+    background-image: url('../../images/layouts/3-sections/background.jpg');
+}
+
+/* Позиционирование секций для 3-секционного варианта */
+.layout-3-sections .section-1 {
+    left: calc((812 / 3200) * 100%);
+    top: calc((72 / 1460) * 100%);
+    width: calc((528 / 3200) * 100%);
+    height: calc((1314 / 1460) * 100%);
+    transform-origin: right center;
+}
+
+.layout-3-sections .section-2 {
+    left: calc((1340 / 3200) * 100%);
+    top: calc((72 / 1460) * 100%);
+    width: calc((520 / 3200) * 100%);
+    height: calc((1314 / 1460) * 100%);
+    transform-origin: center center;
+}
+
+.layout-3-sections .section-3 {
+    left: calc((1860 / 3200) * 100%);
+    top: calc((72 / 1460) * 100%);
+    width: calc((528 / 3200) * 100%);
+    height: calc((1314 / 1460) * 100%);
+    transform-origin: left center;
+}
+
+/* Анимации для 3-секционного варианта */
+.layout-3-sections .section {
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+/* Специальные эффекты при изменении размера */
+.layout-3-sections .section.resizing {
+    transition: transform 0.1s ease;
+} 

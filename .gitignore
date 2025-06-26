@@ -1,0 +1,32 @@
+# Операционная система
+.DS_Store
+Thumbs.db
+
+# Редакторы
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Логи
+*.log
+npm-debug.log*
+
+# Временные файлы
+*.tmp
+*.temp
+
+# Файлы кэша
+.cache/
+
+# Пользовательские настройки (если будут)
+config.local.js
+settings.local.json
+
+# Backup файлы
+*.backup
+*.bak
+
+# Placeholder файлы (можно удалить когда добавите реальные изображения)
+**/placeholder.txt 
