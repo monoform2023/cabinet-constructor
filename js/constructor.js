@@ -131,6 +131,11 @@ class CabinetConstructor {
         if (layout.sections.length > 0) {
             this.setActiveSection(layout.sections[0].id);
         }
+
+        // Инициализируем фоновые слои с стандартными размерами
+        setTimeout(() => {
+            this.initializeBackgroundLayers();
+        }, 100); // Небольшая задержка для полной загрузки DOM
     }
 
     updateLayoutClass(cssClass) {
@@ -393,7 +398,97 @@ class CabinetConstructor {
         animateSection(section1Data, section1LeftEdge);
         animateSection(section3Data, section3LeftEdge);
 
+        // Обновляем фоновые слои
+        this.adjustBackgroundLayers(section1LeftEdge, section1Data.currentWidth, section2Data.currentWidth, section3Data.currentWidth, section3LeftEdge);
+    }
 
+    // Система динамического масштабирования и позиционирования фоновых слоев
+    adjustBackgroundLayers(section1LeftEdge, section1Width, section2Width, section3Width, section3LeftEdge) {
+        const backgroundLeft = document.getElementById('background-left');
+        const backgroundCenter = document.getElementById('background-center');
+        const backgroundRight = document.getElementById('background-right');
+
+        if (!backgroundLeft || !backgroundCenter || !backgroundRight) return;
+
+        // Вычисляем реальные края секций
+        const section1Scale = section1Width / 528; // Масштаб левой секции
+        const section2Scale = section2Width / 520; // Масштаб центральной секции  
+        const section3Scale = section3Width / 528; // Масштаб правой секции
+
+        // Реальные размеры секций после масштабирования
+        const section1RealWidth = 528 * section1Scale;
+        const section2RealWidth = 520 * section2Scale;
+        const section3RealWidth = 528 * section3Scale;
+
+        // Позиции краев секций
+        const section1RightEdge = section1LeftEdge + section1RealWidth;
+        const section3RightEdge = section3LeftEdge + section3RealWidth;
+
+        // 1. ЛЕВЫЙ ФОН: привязывается к левому краю левой секции
+        const leftBgRightEdge = section1LeftEdge; // Правый край левого фона = левый край секции 1
+        const leftBgWidth = leftBgRightEdge; // Ширина = расстояние от 0 до левого края секции 1
+        const leftBgWidthPercent = (leftBgWidth / 3200) * 100;
+        
+        backgroundLeft.style.width = `${leftBgWidthPercent}%`;
+        backgroundLeft.style.left = '0%';
+
+        // 2. ЦЕНТРАЛЬНЫЙ ФОН: привязывается к внешним краям крайних секций
+        const centerBgLeftEdge = section1LeftEdge; // Левый край = левый край секции 1
+        const centerBgRightEdge = section3RightEdge; // Правый край = правый край секции 3
+        const centerBgWidth = centerBgRightEdge - centerBgLeftEdge; // Общая ширина всех секций
+        const centerBgLeftPercent = (centerBgLeftEdge / 3200) * 100;
+        const centerBgWidthPercent = (centerBgWidth / 3200) * 100;
+
+        // Просто меняем размер и позицию контейнера, фон растянется автоматически
+        backgroundCenter.style.left = `${centerBgLeftPercent}%`;
+        backgroundCenter.style.width = `${centerBgWidthPercent}%`;
+        backgroundCenter.style.transform = 'none'; // Убираем масштабирование
+
+        // 3. ПРАВЫЙ ФОН: привязывается к правому краю правой секции
+        const rightBgLeftEdge = section3RightEdge; // Левый край правого фона = правый край секции 3
+        const rightBgWidth = 3200 - rightBgLeftEdge; // Ширина = от правого края секции 3 до края (3200px)
+        const rightBgLeftPercent = (rightBgLeftEdge / 3200) * 100;
+        const rightBgWidthPercent = (rightBgWidth / 3200) * 100;
+        
+        backgroundRight.style.left = `${rightBgLeftPercent}%`;
+        backgroundRight.style.width = `${rightBgWidthPercent}%`;
+
+        // Плавные переходы для фоновых слоев
+        [backgroundLeft, backgroundCenter, backgroundRight].forEach(bg => {
+            bg.style.transition = 'left 0.3s ease, width 0.3s ease';
+            setTimeout(() => {
+                bg.style.transition = '';
+            }, 300);
+        });
+
+        console.log('Фоновые слои обновлены:', {
+            leftWidth: leftBgWidthPercent.toFixed(2) + '%',
+            centerLeft: centerBgLeftPercent.toFixed(2) + '%',
+            centerWidth: centerBgWidthPercent.toFixed(2) + '%',
+            rightLeft: rightBgLeftPercent.toFixed(2) + '%',
+            rightWidth: rightBgWidthPercent.toFixed(2) + '%'
+        });
+    }
+
+    // Инициализация фоновых слоев при загрузке компоновки
+    initializeBackgroundLayers() {
+        const section1Data = this.sections.get('section-1');
+        const section2Data = this.sections.get('section-2');
+        const section3Data = this.sections.get('section-3');
+
+        if (!section1Data || !section2Data || !section3Data) return;
+
+        // Используем стандартные размеры и позиции из конфигурации
+        const section1LeftEdge = section1Data.config.position.left;
+        this.adjustBackgroundLayers(
+            section1LeftEdge,
+            section1Data.currentWidth,
+            section2Data.currentWidth,
+            section3Data.currentWidth,
+            section3Data.config.position.left
+        );
+
+        console.log('Фоновые слои инициализированы с стандартными размерами');
     }
 
     pixelsToMillimeters(pixels) {

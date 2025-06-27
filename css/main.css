@@ -72,27 +72,30 @@ body {
     position: absolute;
     top: 0;
     height: 100%;
-    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    transition: left 0.3s ease, width 0.3s ease;
 }
 
 /* Левая часть фона: 812px из 3200px = 25.375% */
 .background-left {
     left: 0;
     width: 25.375%;
+    background-size: 100% 100%; /* Растягиваем только по размеру контейнера */
 }
 
 /* Центральная часть фона: 1576px из 3200px = 49.25% */
 .background-center {
     left: 25.375%;
     width: 49.25%;
+    background-size: 100% 100%; /* Растягиваем на всю ширину и высоту контейнера */
 }
 
 /* Правая часть фона: 812px из 3200px = 25.375% */
 .background-right {
     left: 74.625%;
     width: 25.375%;
+    background-size: 100% 100%; /* Растягиваем только по размеру контейнера */
 }
 
 /* Контейнер для секций */
