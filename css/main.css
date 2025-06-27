@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #ebebeb;
     overflow-x: auto;
 }
 
@@ -40,7 +40,11 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    position: relative;
 }
 
 /* Главное окно конструктора */
@@ -62,18 +66,29 @@ body {
     }
     
     .control-panel {
-        padding: 15px;
-        min-height: 350px;
+        width: calc(100% - 30px);
+        padding: 15px 20px;
+        min-height: 60px;
+        gap: 20px;
+        flex-direction: column;
     }
     
-    .sections-tabs {
+    .bottom-strip {
+        padding-top: 15px;
+    }
+    
+    .layout-selector {
+        gap: 10px;
+    }
+    
+    .section-controls {
+        gap: 15px;
         flex-wrap: wrap;
-        gap: 5px;
+        justify-content: center;
     }
     
-    .section-tab {
-        padding: 8px 15px;
-        font-size: 14px;
+    .width-slider {
+        width: 100px;
     }
 }
 
@@ -141,43 +156,55 @@ body {
 
 /* Панель управления */
 .control-panel {
-    width: 100%;
-    min-height: 400px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 20px;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    color: white;
-    flex-shrink: 0;
+    max-width: 1200px;
+    width: calc(100% - 80px);
+    min-height: 80px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
 }
 
 /* Селектор компоновки */
 .layout-selector {
-    margin-bottom: 20px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .layout-selector label {
-    font-size: 18px;
-    font-weight: 600;
-    margin-right: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    margin: 0;
 }
 
 .layout-selector select {
-    padding: 8px 15px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    background: white;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
     color: #333;
     cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
 }
 
-/* Табы секций */
+.layout-selector select:focus {
+    border-color: #007bff;
+}
+
+/* Табы секций - скрыты в минималистичном дизайне */
 .sections-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    display: none;
 }
 
 .section-tab {
@@ -202,9 +229,8 @@ body {
 /* Контролы секции */
 .section-controls {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
 
 /* Выпадающий список вариантов */
@@ -212,23 +238,32 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .variants-dropdown label {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .variants-dropdown select {
-    padding: 8px 15px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    background: white;
+    padding: 8px 12px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
     color: #333;
-    min-width: 200px;
+    min-width: 140px;
     cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.variants-dropdown select:focus {
+    border-color: #007bff;
 }
 
 /* Контрол ширины */
@@ -236,56 +271,72 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .width-control label {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .width-slider-container {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .width-slider {
-    width: 200px;
-    height: 6px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.3);
+    width: 120px;
+    height: 4px;
+    border-radius: 2px;
+    background: #e9ecef;
     outline: none;
     cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.width-slider:hover {
+    background: #dee2e6;
 }
 
 .width-slider::-webkit-slider-thumb {
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: white;
+    background: #007bff;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease;
+}
+
+.width-slider::-webkit-slider-thumb:hover {
+    background: #0056b3;
 }
 
 .width-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: white;
+    background: #007bff;
     cursor: pointer;
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .width-display {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-weight: 600;
-    min-width: 70px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    min-width: 50px;
     text-align: center;
+    color: #495057;
 }
 
 /* Скрытие контролов по умолчанию */
