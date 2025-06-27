@@ -22,22 +22,21 @@ body {
 
 /* Главное окно конструктора */
 .main-window {
-    width: min(95vw, 3200px);
-    height: calc(min(95vw, 3200px) * 1460 / 3200);
+    width: min(100vw, 3200px);
+    height: calc(min(100vw, 3200px) * 1460 / 3200);
     position: relative;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    margin: 20px auto;
+    margin: 0 auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
     overflow: hidden;
 }
 
 /* Для мобильных устройств */
 @media screen and (max-width: 768px) {
     .main-window {
-        margin: 10px auto;
+        margin: 0 auto;
     }
     
     .control-panel {
