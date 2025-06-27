@@ -332,13 +332,68 @@ class CabinetConstructor {
         // Сохраняем новую ширину
         sectionData.currentWidth = newWidth;
 
+        // Применяем систему прилипания секций
+        this.adjustSectionsAlignment();
+
         // Обновляем отображение размера
         const widthDisplay = document.getElementById('width-display');
         if (widthDisplay) {
             widthDisplay.textContent = `${this.pixelsToMillimeters(newWidth)}мм`;
         }
 
-        console.log(`Изменена ширина секции ${this.activeSection} на ${newWidth}px (${this.pixelsToMillimeters(newWidth)}мм)`);
+
+    }
+
+    // Универсальная система выравнивания секций с фиксированным центром центральной секции
+    adjustSectionsAlignment() {
+        const section1Data = this.sections.get('section-1');
+        const section2Data = this.sections.get('section-2');
+        const section3Data = this.sections.get('section-3');
+
+        if (!section1Data || !section2Data || !section3Data) return;
+
+        // Получаем исходные позиции и размеры из конфигурации
+        const originalSection2Left = 1340; // Исходная позиция центральной секции
+        const originalSection2Width = 520; // Исходная ширина центральной секции
+        
+        // Центр центральной секции всегда зафиксирован
+        const section2Center = originalSection2Left + (originalSection2Width / 2);
+        
+        // Рассчитываем реальные края центральной секции
+        const section2HalfWidth = section2Data.currentWidth / 2;
+        const section2LeftEdge = section2Center - section2HalfWidth;
+        const section2RightEdge = section2Center + section2HalfWidth;
+
+        // Левая секция: её правый край должен плотно прилегать к левому краю центральной
+        // При transform-origin: right нужно позиционировать так, чтобы правый край был в нужном месте
+        const section1RightEdge = section2LeftEdge;
+        const section1OriginalWidth = section1Data.config.defaultSize.width;
+        // Позиция левого края = позиция правого края - исходная ширина (т.к. transform-origin: right)
+        const section1LeftEdge = section1RightEdge - section1OriginalWidth;
+        
+        // Правая секция: её левый край должен плотно прилегать к правому краю центральной  
+        // При transform-origin: left левый край остается на месте, поэтому позиционируем по левому краю
+        const section3LeftEdge = section2RightEdge;
+
+        // Функция для плавного перемещения секции
+        const animateSection = (sectionData, newLeftPx) => {
+            const newLeftPercent = (newLeftPx / 3200) * 100;
+            sectionData.element.style.transition = 'left 0.3s ease';
+            sectionData.element.style.left = `${newLeftPercent}%`;
+            
+            // Обновляем позицию в конфигурации
+            sectionData.config.position.left = newLeftPx;
+            
+            setTimeout(() => {
+                sectionData.element.style.transition = '';
+            }, 300);
+        };
+
+        // Применяем новые позиции
+        animateSection(section1Data, section1LeftEdge);
+        animateSection(section3Data, section3LeftEdge);
+
+
     }
 
     pixelsToMillimeters(pixels) {
