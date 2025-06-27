@@ -370,10 +370,14 @@ class CabinetConstructor {
         const section2RightEdge = section2Center + section2HalfWidth;
 
         // Левая секция: её правый край должен плотно прилегать к левому краю центральной
-        // При transform-origin: right нужно позиционировать так, чтобы правый край был в нужном месте
+        // При transform-origin: right правый край остается неподвижным при масштабировании
         const section1RightEdge = section2LeftEdge;
         const section1OriginalWidth = section1Data.config.defaultSize.width;
-        // Позиция левого края = позиция правого края - исходная ширина (т.к. transform-origin: right)
+        const section1Scale = section1Data.currentWidth / section1OriginalWidth;
+        const section1RealWidth = section1OriginalWidth * section1Scale;
+        
+        // Для transform-origin: right позиционируем по правому краю
+        // Левый край элемента = правый край - исходная ширина (DOM позиция не меняется при scale)
         const section1LeftEdge = section1RightEdge - section1OriginalWidth;
         
         // Правая секция: её левый край должен плотно прилегать к правому краю центральной  
@@ -398,12 +402,15 @@ class CabinetConstructor {
         animateSection(section1Data, section1LeftEdge);
         animateSection(section3Data, section3LeftEdge);
 
+        // Вычисляем реальную позицию левой секции после масштабирования
+        const section1RealLeftEdge = section1RightEdge - section1RealWidth;
+        
         // Обновляем фоновые слои
-        this.adjustBackgroundLayers(section1LeftEdge, section1Data.currentWidth, section2Data.currentWidth, section3Data.currentWidth, section3LeftEdge);
+        this.adjustBackgroundLayers(section1RealLeftEdge, section1RealWidth, section2Data.currentWidth, section3Data.currentWidth, section3LeftEdge);
     }
 
     // Система динамического масштабирования и позиционирования фоновых слоев
-    adjustBackgroundLayers(section1LeftEdge, section1Width, section2Width, section3Width, section3LeftEdge) {
+    adjustBackgroundLayers(section1LeftEdge, section1RealWidth, section2Width, section3Width, section3LeftEdge) {
         const backgroundLeft = document.getElementById('background-left');
         const backgroundCenter = document.getElementById('background-center');
         const backgroundRight = document.getElementById('background-right');
@@ -411,12 +418,10 @@ class CabinetConstructor {
         if (!backgroundLeft || !backgroundCenter || !backgroundRight) return;
 
         // Вычисляем реальные края секций
-        const section1Scale = section1Width / 528; // Масштаб левой секции
         const section2Scale = section2Width / 520; // Масштаб центральной секции  
         const section3Scale = section3Width / 528; // Масштаб правой секции
 
-        // Реальные размеры секций после масштабирования
-        const section1RealWidth = 528 * section1Scale;
+        // Реальные размеры секций после масштабирования (section1RealWidth уже передана)
         const section2RealWidth = 520 * section2Scale;
         const section3RealWidth = 528 * section3Scale;
 
@@ -425,12 +430,14 @@ class CabinetConstructor {
         const section3RightEdge = section3LeftEdge + section3RealWidth;
 
         // 1. ЛЕВЫЙ ФОН: привязывается к левому краю левой секции
+        const leftBgLeftEdge = 0; // Левый край левого фона всегда в позиции 0
         const leftBgRightEdge = section1LeftEdge; // Правый край левого фона = левый край секции 1
-        const leftBgWidth = leftBgRightEdge; // Ширина = расстояние от 0 до левого края секции 1
+        const leftBgWidth = leftBgRightEdge - leftBgLeftEdge; // Ширина = от 0 до левого края секции 1
+        const leftBgLeftPercent = (leftBgLeftEdge / 3200) * 100;
         const leftBgWidthPercent = (leftBgWidth / 3200) * 100;
         
+        backgroundLeft.style.left = `${leftBgLeftPercent}%`;
         backgroundLeft.style.width = `${leftBgWidthPercent}%`;
-        backgroundLeft.style.left = '0%';
 
         // 2. ЦЕНТРАЛЬНЫЙ ФОН: привязывается к внешним краям крайних секций
         const centerBgLeftEdge = section1LeftEdge; // Левый край = левый край секции 1
@@ -462,11 +469,10 @@ class CabinetConstructor {
         });
 
         console.log('Фоновые слои обновлены:', {
-            leftWidth: leftBgWidthPercent.toFixed(2) + '%',
-            centerLeft: centerBgLeftPercent.toFixed(2) + '%',
-            centerWidth: centerBgWidthPercent.toFixed(2) + '%',
-            rightLeft: rightBgLeftPercent.toFixed(2) + '%',
-            rightWidth: rightBgWidthPercent.toFixed(2) + '%'
+            'Секция 1': `${section1LeftEdge.toFixed(0)}px - ${(section1LeftEdge + section1RealWidth).toFixed(0)}px (ширина: ${section1RealWidth.toFixed(0)}px)`,
+            'Левый фон': `${leftBgLeftPercent.toFixed(2)}% ширина: ${leftBgWidthPercent.toFixed(2)}%`,
+            'Центр фон': `${centerBgLeftPercent.toFixed(2)}% ширина: ${centerBgWidthPercent.toFixed(2)}%`,
+            'Правый фон': `${rightBgLeftPercent.toFixed(2)}% ширина: ${rightBgWidthPercent.toFixed(2)}%`
         });
     }
 
