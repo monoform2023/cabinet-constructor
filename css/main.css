@@ -20,6 +20,29 @@ body {
     overflow-x: auto;
 }
 
+/* Декоративные полоски */
+.top-strip {
+    width: min(100vw, 3200px);
+    height: calc(min(100vw, 3200px) * 350 / 3200);
+    margin: 0 auto;
+    background-image: url('../images/top-strip.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.bottom-strip {
+    width: min(100vw, 3200px);
+    height: calc(min(100vw, 3200px) * 370 / 3200);
+    margin: 0 auto;
+    background-image: url('../images/bottom-strip.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+}
+
 /* Главное окно конструктора */
 .main-window {
     width: min(100vw, 3200px);
@@ -29,7 +52,6 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     margin: 0 auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
