@@ -384,18 +384,13 @@ class CabinetConstructor {
         // При transform-origin: left левый край остается на месте, поэтому позиционируем по левому краю
         const section3LeftEdge = section2RightEdge;
 
-        // Функция для плавного перемещения секции
+        // Функция для мгновенного перемещения секции (без анимации)
         const animateSection = (sectionData, newLeftPx) => {
             const newLeftPercent = (newLeftPx / 3200) * 100;
-            sectionData.element.style.transition = 'left 0.3s ease';
             sectionData.element.style.left = `${newLeftPercent}%`;
             
             // Обновляем позицию в конфигурации
             sectionData.config.position.left = newLeftPx;
-            
-            setTimeout(() => {
-                sectionData.element.style.transition = '';
-            }, 300);
         };
 
         // Применяем новые позиции
@@ -460,12 +455,9 @@ class CabinetConstructor {
         backgroundRight.style.left = `${rightBgLeftPercent}%`;
         backgroundRight.style.width = `${rightBgWidthPercent}%`;
 
-        // Плавные переходы для фоновых слоев
+        // Убираем переходы для мгновенного обновления фоновых слоев
         [backgroundLeft, backgroundCenter, backgroundRight].forEach(bg => {
-            bg.style.transition = 'left 0.3s ease, width 0.3s ease';
-            setTimeout(() => {
-                bg.style.transition = '';
-            }, 300);
+            bg.style.transition = 'none';
         });
 
         console.log('Фоновые слои обновлены:', {

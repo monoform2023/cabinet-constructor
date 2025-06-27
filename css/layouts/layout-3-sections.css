@@ -38,12 +38,4 @@
     transform-origin: left center;
 }
 
-/* Анимации для 3-секционного варианта */
-.layout-3-sections .section {
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-/* Специальные эффекты при изменении размера */
-.layout-3-sections .section.resizing {
-    transition: transform 0.1s ease;
-} 
+/* Убираем все анимации для мгновенного обновления */ 

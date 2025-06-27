@@ -74,7 +74,6 @@ body {
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
-    transition: left 0.3s ease, width 0.3s ease;
 }
 
 /* Левая часть фона: 812px из 3200px = 25.375% */
@@ -113,23 +112,10 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-    transition: all 0.3s ease;
     border: none;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.section:hover {
-    outline: 2px solid rgba(0, 123, 255, 0.5);
-    outline-offset: -2px;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-}
-
-.section.active {
-    outline: 2px solid #007bff;
-    outline-offset: -2px;
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
 }
 
 /* Панель управления */
