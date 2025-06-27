@@ -1,8 +1,16 @@
 /* Стили для компоновки с 3 секциями */
 
-/* Фоновое изображение для 3-секционного варианта */
-.layout-3-sections .main-window {
-    background-image: url('../../images/layouts/3-sections/background.jpg');
+/* Трехслойная фоновая система для 3-секционного варианта */
+.layout-3-sections .background-left {
+    background-image: url('../../images/layouts/3-sections/background-left.jpg');
+}
+
+.layout-3-sections .background-center {
+    background-image: url('../../images/layouts/3-sections/background-center.jpg');
+}
+
+.layout-3-sections .background-right {
+    background-image: url('../../images/layouts/3-sections/background-right.jpg');
 }
 
 /* Позиционирование секций для 3-секционного варианта */

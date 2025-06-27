@@ -56,11 +56,51 @@ body {
     }
 }
 
+/* Трехслойная фоновая система */
+.background-layers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.background-left,
+.background-center,
+.background-right {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Левая часть фона: 812px из 3200px = 25.375% */
+.background-left {
+    left: 0;
+    width: 25.375%;
+}
+
+/* Центральная часть фона: 1576px из 3200px = 49.25% */
+.background-center {
+    left: 25.375%;
+    width: 49.25%;
+}
+
+/* Правая часть фона: 812px из 3200px = 25.375% */
+.background-right {
+    left: 74.625%;
+    width: 25.375%;
+}
+
 /* Контейнер для секций */
 .sections-container {
     position: relative;
     width: 100%;
     height: 100%;
+    z-index: 1;
 }
 
 /* Базовые стили для секций */
