@@ -144,7 +144,7 @@ body {
 /* Базовые стили для секций */
 .section {
     position: absolute;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;

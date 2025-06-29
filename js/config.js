@@ -47,6 +47,13 @@ const CONFIG = {
         }
     },
 
+    // Настройки изображений
+    IMAGES: {
+        SIZE_THRESHOLD_MM: 700, // Порог переключения на малый размер (в мм)
+        LARGE_SIZE: '1000',     // Суффикс для больших изображений
+        SMALL_SIZE: '700'       // Суффикс для малых изображений
+    },
+
     // Отладка
     DEBUG: {
         ENABLED: true,
@@ -84,5 +91,44 @@ window.ConfigUtils = {
                 console[level](logMessage);
             }
         }
+    },
+
+    // Получение пути к изображению нужного размера
+    getImagePath(originalImageName, size = null) {
+        if (!originalImageName) return '';
+        
+        // Если размер не указан, определяем по умолчанию как большой
+        if (!size) {
+            size = CONFIG.IMAGES.LARGE_SIZE;
+        }
+        
+        // Заменяем размер в названии файла
+        const largeSizePattern = new RegExp(`_${CONFIG.IMAGES.LARGE_SIZE}(\\.[^.]+)$`);
+        const smallSizePattern = new RegExp(`_${CONFIG.IMAGES.SMALL_SIZE}(\\.[^.]+)$`);
+        
+        if (largeSizePattern.test(originalImageName) || smallSizePattern.test(originalImageName)) {
+            // Заменяем существующий размер на нужный
+            return originalImageName
+                .replace(largeSizePattern, `_${size}$1`)
+                .replace(smallSizePattern, `_${size}$1`);
+        }
+        
+        // Если размер не найден в названии, возвращаем оригинал
+        return originalImageName;
+    },
+
+    // Получение оптимального размера изображения на основе размера секции в мм
+    getOptimalImageSize(sectionWidthMm) {
+        return sectionWidthMm < CONFIG.IMAGES.SIZE_THRESHOLD_MM 
+            ? CONFIG.IMAGES.SMALL_SIZE 
+            : CONFIG.IMAGES.LARGE_SIZE;
+    },
+
+    // Генерация путей для предзагрузки (обе версии)
+    generatePreloadPaths(imagePath, imageName) {
+        return [
+            imagePath + this.getImagePath(imageName, CONFIG.IMAGES.LARGE_SIZE),
+            imagePath + this.getImagePath(imageName, CONFIG.IMAGES.SMALL_SIZE)
+        ];
     }
 }; 

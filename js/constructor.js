@@ -193,13 +193,6 @@ class CabinetConstructor {
             sectionElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
             sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1460) * 100}%`;
             
-            // Устанавливаем первый вариант изображения по умолчанию
-            if (sectionConfig.variants && sectionConfig.variants.length > 0) {
-                const defaultVariant = sectionConfig.variants[0];
-                const imagePath = `${sectionConfig.imagePath}${defaultVariant.image}`;
-                sectionElement.style.backgroundImage = `url('${imagePath}')`;
-            }
-
             // Добавляем обработчик клика
             sectionElement.addEventListener('click', () => {
                 this.setActiveSection(sectionConfig.id);
@@ -208,12 +201,18 @@ class CabinetConstructor {
             sectionsContainer.appendChild(sectionElement);
             
             // Сохраняем данные секции
-            this.sections.set(sectionConfig.id, {
+            const sectionData = {
                 element: sectionElement,
                 config: sectionConfig,
                 currentVariant: sectionConfig.variants[0],
                 currentWidth: sectionConfig.defaultSize.width
-            });
+            };
+            this.sections.set(sectionConfig.id, sectionData);
+
+            // Устанавливаем первый вариант изображения с учетом размера
+            if (sectionConfig.variants && sectionConfig.variants.length > 0) {
+                this.updateSectionImage(sectionData);
+            }
         });
     }
 
@@ -326,14 +325,42 @@ class CabinetConstructor {
         const variant = sectionData.config.variants.find(v => v.id === variantId);
         if (!variant) return;
 
-        // Обновляем изображение
-        const imagePath = `${sectionData.config.imagePath}${variant.image}`;
-        sectionData.element.style.backgroundImage = `url('${imagePath}')`;
-        
         // Сохраняем выбранный вариант
         sectionData.currentVariant = variant;
 
+        // Обновляем изображение с учетом текущего размера секции
+        this.updateSectionImage(sectionData);
+
         console.log(`Изменен вариант секции ${this.activeSection} на ${variant.name}`);
+    }
+
+    // Обновление изображения секции с учетом её размера
+    updateSectionImage(sectionData) {
+        if (!sectionData || !sectionData.currentVariant) return;
+
+        // Определяем размер секции в миллиметрах
+        const sectionWidthMm = this.pixelsToMillimeters(sectionData.currentWidth);
+        
+        // Получаем оптимальный размер изображения
+        const optimalSize = ConfigUtils.getOptimalImageSize(sectionWidthMm);
+        
+        // Генерируем путь к изображению нужного размера
+        const optimizedImageName = ConfigUtils.getImagePath(sectionData.currentVariant.image, optimalSize);
+        const imagePath = `${sectionData.config.imagePath}${optimizedImageName}`;
+        
+        // Применяем изображение
+        sectionData.element.style.backgroundImage = `url('${imagePath}')`;
+        
+        // Устанавливаем подходящий background-size в зависимости от размера изображения
+        if (optimalSize === CONFIG.IMAGES.SMALL_SIZE) {
+            // Для изображений 700: растягиваем точно по размерам блока (ширина и высота)
+            sectionData.element.style.backgroundSize = '100% 100%';
+        } else {
+            // Для изображений 1000: вписываем в контейнер с сохранением пропорций
+            sectionData.element.style.backgroundSize = 'contain';
+        }
+        
+        ConfigUtils.log('debug', `Секция ${sectionData.config.id}: размер ${sectionWidthMm}мм, используется изображение ${optimalSize} (${optimizedImageName}), background-size: ${sectionData.element.style.backgroundSize}`);
     }
 
     changeWidth(newWidth) {
@@ -352,6 +379,9 @@ class CabinetConstructor {
         // Сохраняем новую ширину
         sectionData.currentWidth = newWidth;
 
+        // Обновляем изображение с учетом нового размера
+        this.updateSectionImage(sectionData);
+
         // Применяем систему прилипания секций
         this.adjustSectionsAlignment();
 
@@ -360,8 +390,6 @@ class CabinetConstructor {
         if (widthDisplay) {
             widthDisplay.textContent = `${this.pixelsToMillimeters(newWidth)}мм`;
         }
-
-
     }
 
     // Универсальная система выравнивания секций с фиксированным центром центральной секции

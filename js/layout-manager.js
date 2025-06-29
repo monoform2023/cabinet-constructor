@@ -28,16 +28,16 @@ class LayoutManager {
                 criticalImages.push(layout.background);
             }
             
-            // Первые варианты каждой секции для быстрого отображения
+            // Первые варианты каждой секции для быстрого отображения (обе версии)
             layout.sections.forEach(section => {
                 if (section.variants && section.variants[0]) {
-                    const imagePath = `${section.imagePath}${section.variants[0].image}`;
-                    criticalImages.push(imagePath);
+                    const imagePaths = ConfigUtils.generatePreloadPaths(section.imagePath, section.variants[0].image);
+                    criticalImages.push(...imagePaths);
                 }
             });
         });
 
-        ConfigUtils.log('info', `Предзагружаем ${criticalImages.length} критических изображений`);
+        ConfigUtils.log('info', `Предзагружаем ${criticalImages.length} критических изображений (включая версии 700 и 1000)`);
         
         // Асинхронная предзагрузка
         const preloadPromises = criticalImages.map(imagePath => this.preloadImage(imagePath));
@@ -177,14 +177,18 @@ class LayoutManager {
     async preloadLayoutImages(layout) {
         const imagesToPreload = [];
         
-        // Собираем все варианты изображений секций
+        // Собираем все варианты изображений секций (обе версии - 700 и 1000)
         layout.sections.forEach(section => {
             if (section.variants) {
                 section.variants.forEach(variant => {
-                    const imagePath = `${section.imagePath}${variant.image}`;
-                    if (!this.preloadedImages.has(imagePath)) {
-                        imagesToPreload.push(imagePath);
-                    }
+                    // Получаем пути для обеих версий изображения
+                    const imagePaths = ConfigUtils.generatePreloadPaths(section.imagePath, variant.image);
+                    
+                    imagePaths.forEach(imagePath => {
+                        if (!this.preloadedImages.has(imagePath)) {
+                            imagesToPreload.push(imagePath);
+                        }
+                    });
                 });
             }
         });
@@ -194,7 +198,7 @@ class LayoutManager {
             return;
         }
 
-        ConfigUtils.log('info', `Предзагружаем ${imagesToPreload.length} изображений компоновки "${layout.name}"`);
+        ConfigUtils.log('info', `Предзагружаем ${imagesToPreload.length} изображений компоновки "${layout.name}" (включая версии 700 и 1000)`);
         
         // Асинхронная предзагрузка пакетами для избежания перегрузки
         const batchSize = 5;
