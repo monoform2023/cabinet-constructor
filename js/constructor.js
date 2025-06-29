@@ -50,7 +50,12 @@ class CabinetConstructor {
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/3-sections/sections/section-1/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Тест вариант 1", "image": "section-1variant-1.jpg" }
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s1_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -63,7 +68,12 @@ class CabinetConstructor {
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/3-sections/sections/section-2/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Тест вариант 1", "image": "section-2variant-1.jpg" }
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s2_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -76,7 +86,12 @@ class CabinetConstructor {
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/3-sections/sections/section-3/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Тест вариант 1", "image": "section-3variant-1.jpg.jpg" }
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s3_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s3_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s3_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s3_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s3_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s3_k6_c1_1000.jpg" }
                                 ]
                             }
                         ]
