@@ -25,7 +25,7 @@ body {
 /* Главное окно конструктора */
 .main-window {
     width: min(100vw, 3200px);
-    height: calc(min(100vw, 3200px) * 1910 / 3200);
+    height: calc(min(100vw, 3200px) * 1919 / 3200);
     position: relative;
     background-size: cover;
     background-position: center;
@@ -51,6 +51,19 @@ body {
     
     .layout-selector {
         gap: 10px;
+    }
+    
+    .color-selector {
+        gap: 6px;
+    }
+    
+    .color-buttons {
+        gap: 6px;
+    }
+    
+    .color-button {
+        width: 28px;
+        height: 28px;
     }
     
     .section-controls {
@@ -173,6 +186,71 @@ body {
 
 .layout-selector select:focus {
     border-color: #007bff;
+}
+
+/* Селектор цвета */
+.color-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-selector label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.color-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.color-button {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.color-button:hover {
+    border-color: #007bff;
+    transform: scale(1.1);
+}
+
+.color-button.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Цвета для кнопок (временные, заменятся на миниатюры) */
+.color-button[data-color="c1"] {
+    background-color: #8B4513;
+}
+
+.color-button[data-color="c2"] {
+    background-color: #654321;
+}
+
+.color-button[data-color="c3"] {
+    background-color: #A0522D;
+}
+
+.color-button[data-color="c4"] {
+    background-color: #D2691E;
+}
+
+.color-button[data-color="c5"] {
+    background-color: #CD853F;
 }
 
 /* Табы секций - скрыты в минималистичном дизайне */

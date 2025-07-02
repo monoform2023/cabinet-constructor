@@ -5,6 +5,7 @@ class CabinetConstructor {
         this.currentLayout = '3-sections';
         this.activeSection = null;
         this.sections = new Map();
+        this.currentColor = 'c1'; // Текущий выбранный цвет (по умолчанию c1)
         
         this.init();
     }
@@ -37,7 +38,7 @@ class CabinetConstructor {
                         "cssClass": "layout-3-sections",
                         "container": {
                             "width": 3200,
-                            "height": 1910
+                            "height": 1919
                         },
                         "sections": [
                             {
@@ -150,6 +151,7 @@ class CabinetConstructor {
         // Инициализируем фоновые слои с стандартными размерами
         setTimeout(() => {
             this.initializeBackgroundLayers();
+            this.initColorSelector(); // Инициализируем селектор цвета
         }, 100); // Небольшая задержка для полной загрузки DOM
     }
 
@@ -189,9 +191,9 @@ class CabinetConstructor {
             
             // Устанавливаем позицию и размер в процентах для адаптивности
             sectionElement.style.left = `${(sectionConfig.position.left / 3200) * 100}%`;
-            sectionElement.style.top = `${(sectionConfig.position.top / 1910) * 100}%`;
+            sectionElement.style.top = `${(sectionConfig.position.top / 1919) * 100}%`;
             sectionElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
-            sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1910) * 100}%`;
+            sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1919) * 100}%`;
 
             // Добавляем обработчик клика
             sectionElement.addEventListener('click', () => {
@@ -334,6 +336,28 @@ class CabinetConstructor {
         console.log(`Изменен вариант секции ${this.activeSection} на ${variant.name}`);
     }
 
+    changeColor(newColor) {
+        if (this.currentColor === newColor) return;
+
+        console.log('Смена цвета с', this.currentColor, 'на', newColor);
+        
+        // Обновляем текущий цвет
+        this.currentColor = newColor;
+        
+        // Обновляем активную кнопку цвета
+        document.querySelectorAll('.color-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`[data-color="${newColor}"]`).classList.add('active');
+        
+        // Обновляем изображения всех секций с сохранением выбранных вариантов
+        this.sections.forEach((sectionData, sectionId) => {
+            this.updateSectionImage(sectionData);
+        });
+        
+        console.log('Цвет изменен на:', newColor);
+    }
+
     // Обновление изображения секции с учетом её размера
     updateSectionImage(sectionData) {
         if (!sectionData || !sectionData.currentVariant) return;
@@ -344,8 +368,11 @@ class CabinetConstructor {
         // Получаем оптимальный размер изображения
         const optimalSize = ConfigUtils.getOptimalImageSize(sectionWidthMm);
         
+        // Заменяем цвет в названии изображения на текущий выбранный цвет
+        const imageNameWithColor = sectionData.currentVariant.image.replace(/c\d+/, this.currentColor);
+        
         // Генерируем путь к изображению нужного размера
-        const optimizedImageName = ConfigUtils.getImagePath(sectionData.currentVariant.image, optimalSize);
+        const optimizedImageName = ConfigUtils.getImagePath(imageNameWithColor, optimalSize);
         const imagePath = `${sectionData.config.imagePath}${optimizedImageName}`;
         
         // Применяем изображение
@@ -360,7 +387,7 @@ class CabinetConstructor {
             sectionData.element.style.backgroundSize = 'contain';
         }
         
-        ConfigUtils.log('debug', `Секция ${sectionData.config.id}: размер ${sectionWidthMm}мм, используется изображение ${optimalSize} (${optimizedImageName}), background-size: ${sectionData.element.style.backgroundSize}`);
+        ConfigUtils.log('debug', `Секция ${sectionData.config.id}: размер ${sectionWidthMm}мм, цвет ${this.currentColor}, используется изображение ${optimalSize} (${optimizedImageName}), background-size: ${sectionData.element.style.backgroundSize}`);
     }
 
     changeWidth(newWidth) {
@@ -530,6 +557,25 @@ class CabinetConstructor {
         );
 
         console.log('Фоновые слои инициализированы с стандартными размерами');
+    }
+
+    initColorSelector() {
+        // Инициализируем обработчики событий для кнопок цвета
+        const colorButtons = document.querySelectorAll('.color-button');
+        colorButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newColor = e.target.dataset.color;
+                this.changeColor(newColor);
+            });
+        });
+
+        // Устанавливаем активную кнопку по умолчанию
+        document.querySelectorAll('.color-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`[data-color="${this.currentColor}"]`).classList.add('active');
+
+        console.log('Селектор цвета инициализирован');
     }
 
     pixelsToMillimeters(pixels) {
