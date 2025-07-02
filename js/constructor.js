@@ -77,8 +77,8 @@ class CabinetConstructor {
                                 "name": "Секция 1",
                                 "position": { "left": 1046, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 700,
+                                "minWidth": 211,
+                                "maxWidth": 528,
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/2-sections/sections/section-1/",
                                 "variants": [
@@ -95,8 +95,8 @@ class CabinetConstructor {
                                 "name": "Секция 2",
                                 "position": { "left": 1626, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 700,
+                                "minWidth": 211,
+                                "maxWidth": 528,
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/2-sections/sections/section-2/",
                                 "variants": [
@@ -319,6 +319,7 @@ class CabinetConstructor {
         // Инициализируем фоновые слои с стандартными размерами
         setTimeout(() => {
             this.initializeBackgroundLayers();
+            this.adjustSectionsAlignment(); // Выравниваем секции сразу после загрузки
             this.initColorSelector(); // Инициализируем селектор цвета
         }, 100); // Небольшая задержка для полной загрузки DOM
     }
@@ -459,7 +460,10 @@ class CabinetConstructor {
                            max="${sectionData.config.maxWidth}" 
                            value="${sectionData.currentWidth}">
                     <div class="width-display" id="width-display">
-                        ${this.pixelsToMillimeters(sectionData.currentWidth)}мм (${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм)
+                        ${this.pixelsToMillimeters(sectionData.currentWidth)}мм
+                    </div>
+                    <div class="width-range" id="width-range">
+                        Диапазон: ${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм
                     </div>
                 </div>
             </div>
@@ -584,6 +588,12 @@ class CabinetConstructor {
         const widthDisplay = document.getElementById('width-display');
         if (widthDisplay) {
             widthDisplay.textContent = `${this.pixelsToMillimeters(newWidth)}мм`;
+        }
+        
+        // Обновляем отображение диапазона (если нужно)
+        const widthRange = document.getElementById('width-range');
+        if (widthRange) {
+            widthRange.textContent = `Диапазон: ${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм`;
         }
     }
 
