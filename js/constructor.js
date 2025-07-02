@@ -37,13 +37,13 @@ class CabinetConstructor {
                         "cssClass": "layout-3-sections",
                         "container": {
                             "width": 3200,
-                            "height": 1460
+                            "height": 1910
                         },
                         "sections": [
                             {
                                 "id": "section-1",
                                 "name": "Секция 1",
-                                "position": { "left": 812, "top": 72 },
+                                "position": { "left": 428, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -61,7 +61,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-2",
                                 "name": "Секция 2",
-                                "position": { "left": 1340, "top": 72 },
+                                "position": { "left": 956, "top": 305 },
                                 "defaultSize": { "width": 520, "height": 1314 },
                                 "minWidth": 208,
                                 "maxWidth": 520,
@@ -79,7 +79,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-3",
                                 "name": "Секция 3",
-                                "position": { "left": 1860, "top": 72 },
+                                "position": { "left": 1476, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -189,9 +189,9 @@ class CabinetConstructor {
             
             // Устанавливаем позицию и размер в процентах для адаптивности
             sectionElement.style.left = `${(sectionConfig.position.left / 3200) * 100}%`;
-            sectionElement.style.top = `${(sectionConfig.position.top / 1460) * 100}%`;
+            sectionElement.style.top = `${(sectionConfig.position.top / 1910) * 100}%`;
             sectionElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
-            sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1460) * 100}%`;
+            sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1910) * 100}%`;
 
             // Добавляем обработчик клика
             sectionElement.addEventListener('click', () => {
@@ -401,7 +401,7 @@ class CabinetConstructor {
         if (!section1Data || !section2Data || !section3Data) return;
 
         // Получаем исходные позиции и размеры из конфигурации
-        const originalSection2Left = 1340; // Исходная позиция центральной секции
+        const originalSection2Left = 956; // Исходная позиция центральной секции
         const originalSection2Width = 520; // Исходная ширина центральной секции
         
         // Центр центральной секции всегда зафиксирован

@@ -11,7 +11,7 @@ const CONFIG = {
     // Размеры основного окна
     MAIN_WINDOW: {
         WIDTH: 3200,
-        HEIGHT: 1460
+        HEIGHT: 1910
     },
 
     // Настройки анимаций

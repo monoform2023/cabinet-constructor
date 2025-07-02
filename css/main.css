@@ -25,7 +25,7 @@ body {
 /* Главное окно конструктора */
 .main-window {
     width: min(100vw, 3200px);
-    height: calc(min(100vw, 3200px) * 1460 / 3200);
+    height: calc(min(100vw, 3200px) * 1910 / 3200);
     position: relative;
     background-size: cover;
     background-position: center;
@@ -84,24 +84,24 @@ body {
     background-position: center;
 }
 
-/* Левая часть фона: 812px из 3200px = 25.375% */
+/* Левая часть фона: 428px из 3200px = 13.375% */
 .background-left {
     left: 0;
-    width: 25.375%;
+    width: 13.375%;
     background-size: 100% 100%; /* Растягиваем только по размеру контейнера */
 }
 
 /* Центральная часть фона: 1576px из 3200px = 49.25% */
 .background-center {
-    left: 25.375%;
+    left: 13.375%;
     width: 49.25%;
     background-size: 100% 100%; /* Растягиваем на всю ширину и высоту контейнера */
 }
 
-/* Правая часть фона: 812px из 3200px = 25.375% */
+/* Правая часть фона: 1196px из 3200px = 37.375% */
 .background-right {
-    left: 74.625%;
-    width: 25.375%;
+    left: 62.625%;
+    width: 37.375%;
     background-size: 100% 100%; /* Растягиваем только по размеру контейнера */
 }
 

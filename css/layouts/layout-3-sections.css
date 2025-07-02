@@ -15,27 +15,28 @@
 
 /* Позиционирование секций для 3-секционного варианта */
 .layout-3-sections .section-1 {
-    left: calc((812 / 3200) * 100%);
-    top: calc((72 / 1460) * 100%);
+    left: calc((428 / 3200) * 100%);
+    top: calc((305 / 1910) * 100%);
     width: calc((528 / 3200) * 100%);
-    height: calc((1314 / 1460) * 100%);
+    height: calc((1314 / 1910) * 100%);
     transform-origin: right center;
 }
 
 .layout-3-sections .section-2 {
-    left: calc((1340 / 3200) * 100%);
-    top: calc((72 / 1460) * 100%);
+    left: calc((956 / 3200) * 100%);
+    top: calc((305 / 1910) * 100%);
     width: calc((520 / 3200) * 100%);
-    height: calc((1314 / 1460) * 100%);
+    height: calc((1314 / 1910) * 100%);
     transform-origin: center center;
 }
 
 .layout-3-sections .section-3 {
-    left: calc((1860 / 3200) * 100%);
-    top: calc((72 / 1460) * 100%);
+    left: calc((1476 / 3200) * 100%);
+    top: calc((305 / 1910) * 100%);
     width: calc((528 / 3200) * 100%);
-    height: calc((1314 / 1460) * 100%);
+    height: calc((1314 / 1910) * 100%);
     transform-origin: left center;
 }
 
-/* Убираем все анимации для мгновенного обновления */ 
+/* Убираем все анимации для мгновенного обновления */
+/* Обновлено: новое позиционирование секций для схемы 428px отступ */ 
