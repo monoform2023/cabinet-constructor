@@ -22,41 +22,40 @@
             <div class="sections-container" id="sections-container">
                 <!-- Секции будут добавляться динамически -->
             </div>
-        </div>
-        
-        <!-- Панель управления -->
-        <div class="control-panel" id="control-panel">
-            <!-- Селектор компоновки -->
-            <div class="layout-selector">
-                <label for="layout-select">Количество секций:</label>
-                <select id="layout-select">
-                    <option value="1-section">1 секция</option>
-                    <option value="2-sections">2 секции</option>
-                    <option value="3-sections" selected>3 секции</option>
-                    <option value="4-sections">4 секции</option>
-                </select>
-            </div>
             
-            <!-- Контейнер для табов секций -->
-            <div class="sections-tabs" id="sections-tabs">
-                <!-- Табы будут добавляться динамически -->
-            </div>
-            
-            <!-- Селектор цвета -->
-            <div class="color-selector">
-                <label>Цвет:</label>
-                <div class="color-buttons" id="color-buttons">
-                    <button class="color-button active" data-color="c1" title="Цвет 1"></button>
-                    <button class="color-button" data-color="c2" title="Цвет 2"></button>
-                    <button class="color-button" data-color="c3" title="Цвет 3"></button>
-                    <button class="color-button" data-color="c4" title="Цвет 4"></button>
-                    <button class="color-button" data-color="c5" title="Цвет 5"></button>
+            <!-- Панель управления -->
+            <div class="control-panel" id="control-panel">
+                <!-- 1. Селектор компоновки -->
+                <div class="layout-selector">
+                    <label for="layout-select">Количество секций:</label>
+                    <select id="layout-select">
+                        <option value="1-section">1 секция</option>
+                        <option value="2-sections">2 секции</option>
+                        <option value="3-sections" selected>3 секции</option>
+                        <option value="4-sections">4 секции</option>
+                    </select>
                 </div>
-            </div>
-
-            <!-- Контейнер для контролов активной секции -->
-            <div class="section-controls" id="section-controls">
-                <!-- Контролы будут добавляться динамически -->
+                
+                <!-- 2. Контейнер для контролов активной секции (размер и варианты) -->
+                <div class="section-controls" id="section-controls">
+                    <!-- Контролы будут добавляться динамически -->
+                </div>
+                
+                <!-- 3. Селектор цвета -->
+                <div class="color-selector">
+                    <label>Цвет:</label>
+                    <div class="color-buttons" id="color-buttons">
+                        <button class="color-button active" data-color="c1" title="Цвет 1"></button>
+                        <button class="color-button" data-color="c2" title="Цвет 2"></button>
+                        <button class="color-button" data-color="c3" title="Цвет 3"></button>
+                        <button class="color-button" data-color="c4" title="Цвет 4"></button>
+                        <button class="color-button" data-color="c5" title="Цвет 5"></button>
+                    </div>
+                </div>
+                
+                <!-- Контейнер для табов секций (скрытый, используется только для управления) -->
+                <div class="sections-tabs" id="sections-tabs" style="display: none;">
+                    <!-- Табы будут добавляться динамически -->
                 </div>
             </div>
         </div>
