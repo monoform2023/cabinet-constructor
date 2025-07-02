@@ -185,9 +185,9 @@ class LayoutManager {
                     const imagePaths = ConfigUtils.generatePreloadPaths(section.imagePath, variant.image);
                     
                     imagePaths.forEach(imagePath => {
-                        if (!this.preloadedImages.has(imagePath)) {
-                            imagesToPreload.push(imagePath);
-                        }
+                    if (!this.preloadedImages.has(imagePath)) {
+                        imagesToPreload.push(imagePath);
+                    }
                     });
                 });
             }

@@ -192,7 +192,7 @@ class CabinetConstructor {
             sectionElement.style.top = `${(sectionConfig.position.top / 1460) * 100}%`;
             sectionElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
             sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1460) * 100}%`;
-            
+
             // Добавляем обработчик клика
             sectionElement.addEventListener('click', () => {
                 this.setActiveSection(sectionConfig.id);
@@ -324,7 +324,7 @@ class CabinetConstructor {
 
         const variant = sectionData.config.variants.find(v => v.id === variantId);
         if (!variant) return;
-
+        
         // Сохраняем выбранный вариант
         sectionData.currentVariant = variant;
 

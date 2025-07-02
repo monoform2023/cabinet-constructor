@@ -20,32 +20,7 @@ body {
     overflow-x: auto;
 }
 
-/* Декоративные полоски */
-.top-strip {
-    width: min(100vw, 3200px);
-    height: calc(min(100vw, 3200px) * 350 / 3200);
-    margin: 0 auto;
-    background-image: url('../images/top-strip.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: block;
-}
 
-.bottom-strip {
-    width: min(100vw, 3200px);
-    height: calc(min(100vw, 3200px) * 370 / 3200);
-    margin: 0 auto;
-    background-image: url('../images/bottom-strip.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 20px;
-    position: relative;
-}
 
 /* Главное окно конструктора */
 .main-window {
@@ -71,10 +46,7 @@ body {
         min-height: 60px;
         gap: 20px;
         flex-direction: column;
-    }
-    
-    .bottom-strip {
-        padding-top: 15px;
+        margin: 15px auto;
     }
     
     .layout-selector {
@@ -170,6 +142,7 @@ body {
     justify-content: center;
     gap: 50px;
     flex-wrap: wrap;
+    margin: 20px auto;
 }
 
 /* Селектор компоновки */
