@@ -1,0 +1,49 @@
+/* Стили для компоновки с 4 секциями */
+
+/* Трехслойная фоновая система для 4-секционного варианта */
+.layout-4-sections .background-left {
+    background-image: url('../../images/layouts/4-sections/background-left.jpg');
+}
+
+.layout-4-sections .background-center {
+    background-image: url('../../images/layouts/4-sections/background-center.jpg');
+}
+
+.layout-4-sections .background-right {
+    background-image: url('../../images/layouts/4-sections/background-right.jpg');
+}
+
+/* Позиционирование секций для 4-секционного варианта */
+.layout-4-sections .section-1 {
+    left: calc((760 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((390 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: right center;
+}
+
+.layout-4-sections .section-2 {
+    left: calc((1190 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((390 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: center center;
+}
+
+.layout-4-sections .section-3 {
+    left: calc((1620 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((390 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: center center;
+}
+
+.layout-4-sections .section-4 {
+    left: calc((2050 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((390 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: left center;
+}
+
+/* Убираем все анимации для мгновенного обновления */ 

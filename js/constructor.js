@@ -29,9 +29,87 @@ class CabinetConstructor {
 
     async loadLayouts() {
         try {
-            // Встроенная тестовая конфигурация для обхода CORS
+            console.log('Загружаем встроенную конфигурацию со всеми макетами...');
+            
+            // Встроенная конфигурация со всеми макетами (работает без HTTP сервера)
             this.layouts = {
                 "layouts": {
+                    "1-section": {
+                        "name": "Однодверный шкаф",
+                        "background": "images/layouts/1-section/background.jpg",
+                        "cssClass": "layout-1-section",
+                        "container": {
+                            "width": 3200,
+                            "height": 1919
+                        },
+                        "sections": [
+                            {
+                                "id": "section-1",
+                                "name": "Секция 1",
+                                "position": { "left": 1340, "top": 305 },
+                                "defaultSize": { "width": 520, "height": 1314 },
+                                "minWidth": 400,
+                                "maxWidth": 800,
+                                "transformOrigin": "center",
+                                "imagePath": "images/layouts/1-section/sections/section-1/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "1_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "1_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "1_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "1_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "1_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "1_s1_k6_c1_1000.jpg" }
+                                ]
+                            }
+                        ]
+                    },
+                    "2-sections": {
+                        "name": "Двухдверный шкаф", 
+                        "background": "images/layouts/2-sections/background.jpg",
+                        "cssClass": "layout-2-sections",
+                        "container": {
+                            "width": 3200,
+                            "height": 1919
+                        },
+                        "sections": [
+                            {
+                                "id": "section-1",
+                                "name": "Секция 1",
+                                "position": { "left": 1046, "top": 305 },
+                                "defaultSize": { "width": 528, "height": 1314 },
+                                "minWidth": 400,
+                                "maxWidth": 700,
+                                "transformOrigin": "right",
+                                "imagePath": "images/layouts/2-sections/sections/section-1/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "2_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "2_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "2_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "2_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "2_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "2_s1_k6_c1_1000.jpg" }
+                                ]
+                            },
+                            {
+                                "id": "section-2", 
+                                "name": "Секция 2",
+                                "position": { "left": 1626, "top": 305 },
+                                "defaultSize": { "width": 528, "height": 1314 },
+                                "minWidth": 400,
+                                "maxWidth": 700,
+                                "transformOrigin": "left",
+                                "imagePath": "images/layouts/2-sections/sections/section-2/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "2_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "2_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "2_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "2_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "2_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "2_s2_k6_c1_1000.jpg" }
+                                ]
+                            }
+                        ]
+                    },
                     "3-sections": {
                         "name": "Трехдверный шкаф",
                         "background": "images/layouts/3-sections/background.jpg",
@@ -96,6 +174,89 @@ class CabinetConstructor {
                                 ]
                             }
                         ]
+                    },
+                    "4-sections": {
+                        "name": "Четырехдверный шкаф",
+                        "background": "images/layouts/4-sections/background.jpg",
+                        "cssClass": "layout-4-sections",
+                        "container": {
+                            "width": 3200,
+                            "height": 1919
+                        },
+                        "sections": [
+                            {
+                                "id": "section-1",
+                                "name": "Секция 1",
+                                "position": { "left": 760, "top": 305 },
+                                "defaultSize": { "width": 390, "height": 1314 },
+                                "minWidth": 300,
+                                "maxWidth": 500,
+                                "transformOrigin": "right",
+                                "imagePath": "images/layouts/4-sections/sections/section-1/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s1_k6_c1_1000.jpg" }
+                                ]
+                            },
+                            {
+                                "id": "section-2",
+                                "name": "Секция 2",
+                                "position": { "left": 1190, "top": 305 },
+                                "defaultSize": { "width": 390, "height": 1314 },
+                                "minWidth": 300,
+                                "maxWidth": 500,
+                                "transformOrigin": "center",
+                                "imagePath": "images/layouts/4-sections/sections/section-2/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s2_k6_c1_1000.jpg" }
+                                ]
+                            },
+                            {
+                                "id": "section-3",
+                                "name": "Секция 3",
+                                "position": { "left": 1620, "top": 305 },
+                                "defaultSize": { "width": 390, "height": 1314 },
+                                "minWidth": 300,
+                                "maxWidth": 500,
+                                "transformOrigin": "center",
+                                "imagePath": "images/layouts/4-sections/sections/section-3/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s3_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s3_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s3_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s3_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s3_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s3_k6_c1_1000.jpg" }
+                                ]
+                            },
+                            {
+                                "id": "section-4",
+                                "name": "Секция 4",
+                                "position": { "left": 2050, "top": 305 },
+                                "defaultSize": { "width": 390, "height": 1314 },
+                                "minWidth": 300,
+                                "maxWidth": 500,
+                                "transformOrigin": "left",
+                                "imagePath": "images/layouts/4-sections/sections/section-4/",
+                                "variants": [
+                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s4_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s4_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s4_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s4_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s4_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s4_k6_c1_1000.jpg" }
+                                ]
+                            }
+                        ]
                     }
                 },
                 "settings": {
@@ -103,11 +264,11 @@ class CabinetConstructor {
                     "pixelsToMillimeters": 1.893939
                 }
             };
-            console.log('Тестовая конфигурация загружена встроенно');
+            
+            console.log('Встроенная конфигурация загружена');
+            console.log('Доступные макеты:', Object.keys(this.layouts.layouts));
         } catch (error) {
-            console.error('Ошибка загрузки конфигурации:', error);
-            // Заглушка для тестирования без файла
-            this.layouts = { layouts: {}, settings: { millimetersToPixels: 0.528 } };
+            console.error('Ошибка инициализации конфигурации:', error);
         }
     }
 
@@ -116,16 +277,23 @@ class CabinetConstructor {
         const layoutSelect = document.getElementById('layout-select');
         if (layoutSelect) {
             layoutSelect.addEventListener('change', (e) => {
+                console.log('Переключаем макет на:', e.target.value);
                 this.currentLayout = e.target.value;
                 this.loadLayout(this.currentLayout);
             });
+        } else {
+            console.error('layout-select элемент не найден!');
         }
     }
 
     loadLayout(layoutId) {
+        console.log('loadLayout вызвана для:', layoutId);
+        console.log('Доступные макеты:', this.layouts ? Object.keys(this.layouts.layouts) : 'layouts не загружены');
+        
         const layout = this.layouts.layouts[layoutId];
         if (!layout) {
             console.error('Компоновка не найдена:', layoutId);
+            console.log('Содержимое this.layouts:', this.layouts);
             return;
         }
 
@@ -291,7 +459,7 @@ class CabinetConstructor {
                            max="${sectionData.config.maxWidth}" 
                            value="${sectionData.currentWidth}">
                     <div class="width-display" id="width-display">
-                        ${this.pixelsToMillimeters(sectionData.currentWidth)}мм
+                        ${this.pixelsToMillimeters(sectionData.currentWidth)}мм (${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм)
                     </div>
                 </div>
             </div>
@@ -419,17 +587,68 @@ class CabinetConstructor {
         }
     }
 
-    // Универсальная система выравнивания секций с фиксированным центром центральной секции
+    // Универсальная система выравнивания секций
     adjustSectionsAlignment() {
+        if (this.currentLayout === '2-sections') {
+            this.adjustTwoSectionsAlignment();
+        } else if (this.currentLayout === '3-sections') {
+            this.adjustThreeSectionsAlignment();
+        } else {
+            console.log('Система выравнивания пропущена для макета:', this.currentLayout);
+        }
+    }
+
+    // Система выравнивания для 2-х секций
+    adjustTwoSectionsAlignment() {
+        const section1Data = this.sections.get('section-1');
+        const section2Data = this.sections.get('section-2');
+
+        if (!section1Data || !section2Data) return;
+
+        // Для 2-секций: секции должны стоять вплотную друг к другу
+        // section-1 (transform-origin: right): правый край фиксирован
+        // section-2 (transform-origin: left): левый край прилегает к правому краю section-1
+
+        // Исходные позиции и размеры из конфигурации
+        const section1OriginalLeft = section1Data.config.position.left; // 1046
+        const section1OriginalWidth = section1Data.config.defaultSize.width; // 528
+        const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1574
+
+        // Вычисляем реальную ширину после масштабирования
+        const section1Scale = section1Data.currentWidth / section1OriginalWidth;
+        const section1RealWidth = section1OriginalWidth * section1Scale;
+
+        // Левый край section-1 после масштабирования (при transform-origin: right)
+        const section1RealLeft = section1OriginalRight - section1RealWidth;
+
+        // section-2 должна начинаться сразу после section-1
+        const section2NewLeft = section1OriginalRight; // Правый край исходной section-1
+
+        // Применяем новую позицию для section-2
+        const section2NewLeftPercent = (section2NewLeft / 3200) * 100;
+        section2Data.element.style.left = `${section2NewLeftPercent}%`;
+        section2Data.config.position.left = section2NewLeft;
+
+        // Обновляем фоновые слои для 2-секций
+        this.adjustTwoSectionsBackgrounds(section1RealLeft, section1RealWidth, section2Data.currentWidth, section2NewLeft);
+
+        console.log('Выравнивание 2-секций:', {
+            'Секция 1': `${section1RealLeft.toFixed(0)}px - ${section1OriginalRight}px (ширина: ${section1RealWidth.toFixed(0)}px)`,
+            'Секция 2': `${section2NewLeft}px начало, ширина: ${section2Data.currentWidth}px`
+        });
+    }
+
+    // Система выравнивания для 3-х секций (исходная логика)
+    adjustThreeSectionsAlignment() {
         const section1Data = this.sections.get('section-1');
         const section2Data = this.sections.get('section-2');
         const section3Data = this.sections.get('section-3');
 
         if (!section1Data || !section2Data || !section3Data) return;
 
-        // Получаем исходные позиции и размеры из конфигурации
-        const originalSection2Left = 956; // Исходная позиция центральной секции
-        const originalSection2Width = 520; // Исходная ширина центральной секции
+        // Получаем исходные позиции и размеры из конфигурации (только для 3-секций)
+        const originalSection2Left = 956; // Исходная позиция центральной секции в 3-секционном макете
+        const originalSection2Width = 520; // Исходная ширина центральной секции в 3-секционном макете
         
         // Центр центральной секции всегда зафиксирован
         const section2Center = originalSection2Left + (originalSection2Width / 2);
@@ -482,8 +701,8 @@ class CabinetConstructor {
 
         if (!backgroundLeft || !backgroundCenter || !backgroundRight) return;
 
-        // Вычисляем реальные края секций
-        const section2Scale = section2Width / 520; // Масштаб центральной секции  
+        // Вычисляем реальные края секций (только для 3-секционного макета)
+        const section2Scale = section2Width / 520; // Масштаб центральной секции в 3-секционном макете
         const section3Scale = section3Width / 528; // Масштаб правой секции
 
         // Реальные размеры секций после масштабирования (section1RealWidth уже передана)
@@ -538,25 +757,113 @@ class CabinetConstructor {
         });
     }
 
+    // Система фоновых слоев для 2-х секций
+    adjustTwoSectionsBackgrounds(section1RealLeft, section1RealWidth, section2Width, section2Left) {
+        const backgroundLeft = document.getElementById('background-left');
+        const backgroundCenter = document.getElementById('background-center');
+        const backgroundRight = document.getElementById('background-right');
+
+        if (!backgroundLeft || !backgroundCenter || !backgroundRight) return;
+
+        // Вычисляем реальные размеры и позиции
+        const section2OriginalWidth = 528; // Исходная ширина section-2 в 2-секционном макете
+        const section2Scale = section2Width / section2OriginalWidth;
+        const section2RealWidth = section2OriginalWidth * section2Scale;
+        const section2RealRight = section2Left + section2RealWidth;
+
+        // 1. ЛЕВЫЙ ФОН: от левого края (0) до левого края section-1
+        const leftBgLeftEdge = 0;
+        const leftBgRightEdge = section1RealLeft;
+        const leftBgWidth = leftBgRightEdge - leftBgLeftEdge;
+        const leftBgLeftPercent = (leftBgLeftEdge / 3200) * 100;
+        const leftBgWidthPercent = (leftBgWidth / 3200) * 100;
+        
+        backgroundLeft.style.left = `${leftBgLeftPercent}%`;
+        backgroundLeft.style.width = `${leftBgWidthPercent}%`;
+
+        // 2. ЦЕНТРАЛЬНЫЙ ФОН: от левого края section-1 до правого края section-2
+        const centerBgLeftEdge = section1RealLeft;
+        const centerBgRightEdge = section2RealRight;
+        const centerBgWidth = centerBgRightEdge - centerBgLeftEdge;
+        const centerBgLeftPercent = (centerBgLeftEdge / 3200) * 100;
+        const centerBgWidthPercent = (centerBgWidth / 3200) * 100;
+
+        backgroundCenter.style.left = `${centerBgLeftPercent}%`;
+        backgroundCenter.style.width = `${centerBgWidthPercent}%`;
+        backgroundCenter.style.transform = 'none';
+
+        // 3. ПРАВЫЙ ФОН: от правого края section-2 до правого края экрана (3200px)
+        const rightBgLeftEdge = section2RealRight;
+        const rightBgWidth = 3200 - rightBgLeftEdge;
+        const rightBgLeftPercent = (rightBgLeftEdge / 3200) * 100;
+        const rightBgWidthPercent = (rightBgWidth / 3200) * 100;
+        
+        backgroundRight.style.left = `${rightBgLeftPercent}%`;
+        backgroundRight.style.width = `${rightBgWidthPercent}%`;
+
+        // Убираем переходы для мгновенного обновления
+        [backgroundLeft, backgroundCenter, backgroundRight].forEach(bg => {
+            bg.style.transition = 'none';
+        });
+
+        console.log('Фоны 2-секций обновлены:', {
+            'Секция 1': `${section1RealLeft.toFixed(0)}px - ${(section1RealLeft + section1RealWidth).toFixed(0)}px`,
+            'Секция 2': `${section2Left}px - ${section2RealRight.toFixed(0)}px`,
+            'Левый фон': `${leftBgLeftPercent.toFixed(2)}% ширина: ${leftBgWidthPercent.toFixed(2)}%`,
+            'Центр фон': `${centerBgLeftPercent.toFixed(2)}% ширина: ${centerBgWidthPercent.toFixed(2)}%`,
+            'Правый фон': `${rightBgLeftPercent.toFixed(2)}% ширина: ${rightBgWidthPercent.toFixed(2)}%`
+        });
+    }
+
     // Инициализация фоновых слоев при загрузке компоновки
     initializeBackgroundLayers() {
-        const section1Data = this.sections.get('section-1');
-        const section2Data = this.sections.get('section-2');
-        const section3Data = this.sections.get('section-3');
+        console.log('Инициализация фоновых слоев для макета:', this.currentLayout);
+        console.log('Загруженные секции:', Array.from(this.sections.keys()));
+        
+        if (this.currentLayout === '2-sections') {
+            const section1Data = this.sections.get('section-1');
+            const section2Data = this.sections.get('section-2');
 
-        if (!section1Data || !section2Data || !section3Data) return;
+            if (!section1Data || !section2Data) return;
 
-        // Используем стандартные размеры и позиции из конфигурации
-        const section1LeftEdge = section1Data.config.position.left;
-        this.adjustBackgroundLayers(
-            section1LeftEdge,
-            section1Data.currentWidth,
-            section2Data.currentWidth,
-            section3Data.currentWidth,
-            section3Data.config.position.left
-        );
+            // Инициализируем фоны для 2-секций с базовыми размерами
+            const section1OriginalLeft = section1Data.config.position.left; // 1046
+            const section1OriginalWidth = section1Data.config.defaultSize.width; // 528
+            const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1574
+            
+            // При инициализации секции имеют стандартные размеры
+            const section1RealLeft = section1OriginalLeft; // Без масштабирования
+            
+            this.adjustTwoSectionsBackgrounds(
+                section1RealLeft,
+                section1Data.currentWidth,
+                section2Data.currentWidth,
+                section2Data.config.position.left
+            );
 
-        console.log('Фоновые слои инициализированы с стандартными размерами');
+            console.log('Фоновые слои инициализированы для 2-секций');
+            
+        } else if (this.currentLayout === '3-sections') {
+            const section1Data = this.sections.get('section-1');
+            const section2Data = this.sections.get('section-2');
+            const section3Data = this.sections.get('section-3');
+
+            if (!section1Data || !section2Data || !section3Data) return;
+
+            // Используем стандартные размеры и позиции из конфигурации
+            const section1LeftEdge = section1Data.config.position.left;
+            this.adjustBackgroundLayers(
+                section1LeftEdge,
+                section1Data.currentWidth,
+                section2Data.currentWidth,
+                section3Data.currentWidth,
+                section3Data.config.position.left
+            );
+
+            console.log('Фоновые слои инициализированы для 3-секций');
+        } else {
+            console.log('Фоновые слои для', this.currentLayout, 'будут использовать базовое позиционирование');
+        }
     }
 
     initColorSelector() {
@@ -579,25 +886,25 @@ class CabinetConstructor {
     }
 
     pixelsToMillimeters(pixels) {
-        // Специальный коэффициент для центральной секции (520px = 1000мм)
-        if (this.activeSection === 'section-2') {
+        // Специальный коэффициент ТОЛЬКО для центральной секции в 3-секционном макете (520px = 1000мм)
+        if (this.currentLayout === '3-sections' && this.activeSection === 'section-2') {
             const ratio = 1000 / 520; // 1.923
             return Math.round(pixels * ratio);
         }
         
-        // Стандартный коэффициент для остальных секций
+        // Стандартный коэффициент для всех остальных секций
         const ratio = this.layouts?.settings?.pixelsToMillimeters || 1.893939;
         return Math.round(pixels * ratio);
     }
 
     millimetersToPixels(millimeters) {
-        // Специальный коэффициент для центральной секции (1000мм = 520px)
-        if (this.activeSection === 'section-2') {
+        // Специальный коэффициент ТОЛЬКО для центральной секции в 3-секционном макете (1000мм = 520px)
+        if (this.currentLayout === '3-sections' && this.activeSection === 'section-2') {
             const ratio = 520 / 1000; // 0.52
             return Math.round(millimeters * ratio);
         }
         
-        // Стандартный коэффициент для остальных секций
+        // Стандартный коэффициент для всех остальных секций
         const ratio = this.layouts?.settings?.millimetersToPixels || 0.528;
         return Math.round(millimeters * ratio);
     }

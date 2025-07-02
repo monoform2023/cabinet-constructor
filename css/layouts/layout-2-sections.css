@@ -1,0 +1,33 @@
+/* Стили для компоновки с 2 секциями */
+
+/* Трехслойная фоновая система для 2-секционного варианта */
+.layout-2-sections .background-left {
+    background-image: url('../../images/layouts/2-sections/background-left.jpg');
+}
+
+.layout-2-sections .background-center {
+    background-image: url('../../images/layouts/2-sections/background-center.jpg');
+}
+
+.layout-2-sections .background-right {
+    background-image: url('../../images/layouts/2-sections/background-right.jpg');
+}
+
+/* Позиционирование секций для 2-секционного варианта */
+.layout-2-sections .section-1 {
+    left: calc((1046 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((528 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: right center;
+}
+
+.layout-2-sections .section-2 {
+    left: calc((1626 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((528 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: left center;
+}
+
+/* Убираем все анимации для мгновенного обновления */ 

@@ -1,0 +1,18 @@
+Фоновые изображения для 4-секционного макета:
+
+Трехслойная система фона:
+- background-left.jpg   (левая часть фона)
+- background-center.jpg (центральная часть фона)
+- background-right.jpg  (правая часть фона)
+
+Размеры фона: 3200 × 1919 пикселей
+
+Секция 1: left: 760px,  width: 390px
+Секция 2: left: 1190px, width: 390px
+Секция 3: left: 1620px, width: 390px
+Секция 4: left: 2050px, width: 390px
+
+Эти изображения автоматически загружаются через CSS:
+.layout-4-sections .background-left { background-image: url('background-left.jpg'); }
+.layout-4-sections .background-center { background-image: url('background-center.jpg'); }
+.layout-4-sections .background-right { background-image: url('background-right.jpg'); } 

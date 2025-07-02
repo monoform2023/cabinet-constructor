@@ -1,0 +1,16 @@
+Фоновые изображения для 1-секционного макета:
+
+Трехслойная система фона:
+- background-left.jpg   (левая часть фона)
+- background-center.jpg (центральная часть фона)
+- background-right.jpg  (правая часть фона)
+
+Размеры фона: 3200 × 1919 пикселей
+Левая часть: 13.375% ширины (428px)
+Центральная часть: 49.25% ширины (1576px)
+Правая часть: 37.375% ширины (1196px)
+
+Эти изображения автоматически загружаются через CSS:
+.layout-1-section .background-left { background-image: url('background-left.jpg'); }
+.layout-1-section .background-center { background-image: url('background-center.jpg'); }
+.layout-1-section .background-right { background-image: url('background-right.jpg'); } 
