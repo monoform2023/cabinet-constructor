@@ -42,7 +42,7 @@ body {
         left: 50%;
         transform: translate(-50%, -50%);
         width: 90vw;
-        max-width: 480px;
+        max-width: 620px;
         height: 80vh;
         max-height: 700px;
         z-index: 100;
@@ -60,7 +60,7 @@ body {
     
     .control-panel {
         width: 95vw;
-        max-width: 420px;
+        max-width: 560px;
         height: 85vh;
         font-size: 14px;
         gap: 15px;
@@ -151,7 +151,7 @@ body {
     position: absolute;
     top: calc((305 / 1919) * 100%);
     right: calc((137 / 3200) * 100%);
-    width: calc((528 / 3200) * 100%);
+    width: calc((668 / 3200) * 100%);
     height: calc((969 / 1919) * 100%);
     background: white;
     padding: 20px;
