@@ -363,6 +363,9 @@ class CabinetConstructor {
             sectionElement.style.top = `${(sectionConfig.position.top / 1919) * 100}%`;
             sectionElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
             sectionElement.style.height = `${(sectionConfig.defaultSize.height / 1919) * 100}%`;
+            
+            // Устанавливаем transform-origin из конфигурации
+            sectionElement.style.transformOrigin = sectionConfig.transformOrigin;
 
             // Добавляем обработчик клика
             sectionElement.addEventListener('click', () => {
@@ -573,6 +576,7 @@ class CabinetConstructor {
         
         // Применяем трансформацию в зависимости от transform-origin
         const transformOrigin = sectionData.config.transformOrigin;
+        sectionData.element.style.transformOrigin = transformOrigin;
         sectionData.element.style.transform = `scaleX(${scale})`;
         
         // Сохраняем новую ширину
@@ -714,36 +718,34 @@ class CabinetConstructor {
 
         if (!section1Data || !section2Data || !section3Data || !section4Data) return;
 
-        // Используем те же параметры что и в 3-секционном макете для первых трех секций
-        const originalSection2Left = 956; // Исходная позиция центральной секции
-        const originalSection2Width = 520; // Исходная ширина центральной секции
+        // Фиксированный центр ТОЛЬКО для section-2 (как в 3-секционном макете)
+        const originalSection2Left = 956; // Исходная позиция второй секции
+        const originalSection2Width = 520; // Исходная ширина второй секции
+        const section2Center = originalSection2Left + (originalSection2Width / 2); // Центр второй секции
         
-        // Центр центральной секции всегда зафиксирован
-        const section2Center = originalSection2Left + (originalSection2Width / 2);
-        
-        // Рассчитываем реальные края центральной секции
+        // Вычисляем реальные края секции 2 (с фиксированным центром)
         const section2HalfWidth = section2Data.currentWidth / 2;
         const section2LeftEdge = section2Center - section2HalfWidth;
         const section2RightEdge = section2Center + section2HalfWidth;
 
-        // Левая секция: её правый край должен плотно прилегать к левому краю центральной
+        // Секция 1: её правый край должен плотно прилегать к левому краю секции 2
         const section1RightEdge = section2LeftEdge;
         const section1OriginalWidth = section1Data.config.defaultSize.width;
         const section1Scale = section1Data.currentWidth / section1OriginalWidth;
         const section1RealWidth = section1OriginalWidth * section1Scale;
         
         // Для transform-origin: right позиционируем по правому краю
-        const section1LeftEdge = section1RightEdge - section1OriginalWidth;
+        const section1NewLeftEdge = section1RightEdge - section1OriginalWidth;
         
-        // Третья секция: её левый край должен плотно прилегать к правому краю центральной
+        // Секция 3: её левый край должен плотно прилегать к правому краю секции 2
         // При transform-origin: left левый край остается на месте
-        const section3LeftEdge = section2RightEdge;
+        const section3NewLeftEdge = section2RightEdge;
         
-        // Четвертая секция: её левый край должен плотно прилегать к правому краю третьей секции
+        // Секция 4: её левый край должен плотно прилегать к правому краю секции 3
         const section3OriginalWidth = section3Data.config.defaultSize.width;
         const section3Scale = section3Data.currentWidth / section3OriginalWidth;
         const section3RealWidth = section3OriginalWidth * section3Scale;
-        const section4LeftEdge = section3LeftEdge + section3RealWidth;
+        const section4NewLeftEdge = section3NewLeftEdge + section3RealWidth;
 
         // Функция для мгновенного перемещения секции
         const animateSection = (sectionData, newLeftPx) => {
@@ -752,22 +754,22 @@ class CabinetConstructor {
             sectionData.config.position.left = newLeftPx;
         };
 
-        // Применяем новые позиции
-        animateSection(section1Data, section1LeftEdge);
-        animateSection(section3Data, section3LeftEdge);
-        animateSection(section4Data, section4LeftEdge);
+        // Применяем новые позиции (только section-2 не двигается, у неё центр зафиксирован)
+        animateSection(section1Data, section1NewLeftEdge);
+        animateSection(section3Data, section3NewLeftEdge);
+        animateSection(section4Data, section4NewLeftEdge);
 
         // Вычисляем реальную позицию левой секции после масштабирования
         const section1RealLeftEdge = section1RightEdge - section1RealWidth;
         
         // Обновляем фоновые слои для 4-секций
-        this.adjustFourSectionsBackgrounds(section1RealLeftEdge, section1RealWidth, section2Data.currentWidth, section3Data.currentWidth, section4Data.currentWidth, section3LeftEdge, section4LeftEdge);
+        this.adjustFourSectionsBackgrounds(section1RealLeftEdge, section1RealWidth, section2Data.currentWidth, section3Data.currentWidth, section4Data.currentWidth, section3NewLeftEdge, section4NewLeftEdge);
 
         console.log('Выравнивание 4-секций:', {
             'Секция 1': `${section1RealLeftEdge.toFixed(0)}px - ${section1RightEdge}px (ширина: ${section1RealWidth.toFixed(0)}px)`,
-            'Секция 2': `${section2LeftEdge.toFixed(0)}px - ${section2RightEdge.toFixed(0)}px (ширина: ${section2Data.currentWidth}px)`,
-            'Секция 3': `${section3LeftEdge}px - ${(section3LeftEdge + section3RealWidth).toFixed(0)}px (ширина: ${section3RealWidth.toFixed(0)}px)`,
-            'Секция 4': `${section4LeftEdge}px начало, ширина: ${section4Data.currentWidth}px`
+            'Секция 2': `Центр: ${section2Center}px, ${section2LeftEdge.toFixed(0)}px - ${section2RightEdge.toFixed(0)}px (ширина: ${section2Data.currentWidth}px)`,
+            'Секция 3': `${section3NewLeftEdge}px - ${(section3NewLeftEdge + section3RealWidth).toFixed(0)}px (ширина: ${section3RealWidth.toFixed(0)}px)`,
+            'Секция 4': `${section4NewLeftEdge}px начало, ширина: ${section4Data.currentWidth}px`
         });
     }
 
@@ -1052,7 +1054,7 @@ class CabinetConstructor {
     }
 
     pixelsToMillimeters(pixels) {
-        // Специальный коэффициент ТОЛЬКО для центральной секции в 3-секционном и 4-секционном макетах (520px = 1000мм)
+        // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (520px = 1000мм)
         if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
             const ratio = 1000 / 520; // 1.923
             return Math.round(pixels * ratio);
@@ -1064,7 +1066,7 @@ class CabinetConstructor {
     }
 
     millimetersToPixels(millimeters) {
-        // Специальный коэффициент ТОЛЬКО для центральной секции в 3-секционном и 4-секционном макетах (1000мм = 520px)
+        // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (1000мм = 520px)
         if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
             const ratio = 520 / 1000; // 0.52
             return Math.round(millimeters * ratio);
