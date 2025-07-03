@@ -152,7 +152,7 @@ body {
     top: calc((305 / 1919) * 100%);
     right: calc((137 / 3200) * 100%);
     width: calc((668 / 3200) * 100%);
-    height: calc((969 / 1919) * 100%);
+    min-height: calc((400 / 1919) * 100%);
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -164,7 +164,6 @@ body {
     justify-content: flex-start;
     gap: 20px;
     z-index: 10;
-    overflow: hidden;
     font-size: calc(min(100vw, 3200px) * 16 / 3200); /* Увеличенный размер шрифта */
 }
 
@@ -398,8 +397,291 @@ body {
     font-weight: 500;
     font-size: 12px;
     min-width: 50px;
+    width: 60px;
     text-align: center;
     color: #495057;
+    cursor: text;
+    transition: border-color 0.2s ease;
+    outline: none;
+}
+
+.width-display:hover {
+    border-color: #007bff;
+}
+
+.width-display:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Контрол высоты */
+.height-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.height-control label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.height-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.height-slider {
+    width: 120px;
+    height: 4px;
+    border-radius: 2px;
+    background: #ced4da;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 1;
+}
+
+.height-slider.active {
+    background: #e9ecef;
+    opacity: 1;
+}
+
+.height-slider:hover {
+    background: #adb5bd;
+}
+
+.height-slider.active:hover {
+    background: #dee2e6;
+}
+
+.height-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #adb5bd;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease;
+}
+
+.height-slider.active::-webkit-slider-thumb {
+    background: #28a745;
+}
+
+.height-slider::-webkit-slider-thumb:hover,
+.height-slider.active::-webkit-slider-thumb:hover {
+    background: #1e7e34;
+}
+
+.height-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #adb5bd;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.height-slider.active::-moz-range-thumb {
+    background: #28a745;
+}
+
+.height-display {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    min-width: 50px;
+    width: 60px;
+    text-align: center;
+    color: #495057;
+    cursor: text;
+    transition: border-color 0.2s ease;
+    outline: none;
+}
+
+.height-display:hover {
+    border-color: #28a745;
+}
+
+.height-display:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+/* Контрол глубины */
+.depth-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.custom-depth-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.custom-depth-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.custom-depth-checkbox label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    cursor: pointer;
+}
+
+.price-note {
+    font-size: 12px;
+    color: #28a745;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.depth-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.depth-slider {
+    width: 120px;
+    height: 4px;
+    border-radius: 2px;
+    background: #ced4da;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 1;
+}
+
+.depth-slider.active {
+    background: #e9ecef;
+    opacity: 1;
+}
+
+.depth-slider:hover {
+    background: #adb5bd;
+}
+
+.depth-slider.active:hover {
+    background: #dee2e6;
+}
+
+.depth-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #adb5bd;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease;
+}
+
+.depth-slider.active::-webkit-slider-thumb {
+    background: #fd7e14;
+}
+
+.depth-slider::-webkit-slider-thumb:hover,
+.depth-slider.active::-webkit-slider-thumb:hover {
+    background: #e8630b;
+}
+
+.depth-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #adb5bd;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.depth-slider.active::-moz-range-thumb {
+    background: #fd7e14;
+}
+
+.depth-display {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    min-width: 50px;
+    width: 60px;
+    text-align: center;
+    color: #495057;
+    cursor: text;
+    transition: border-color 0.2s ease;
+    outline: none;
+}
+
+.depth-display:hover {
+    border-color: #fd7e14;
+}
+
+.depth-display:focus {
+    outline: none;
+    border-color: #fd7e14;
+    box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.25);
+}
+
+/* Tooltip для подсказок */
+.input-tooltip {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #dc3545;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.input-tooltip.show {
+    opacity: 1;
+}
+
+.input-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #dc3545;
+}
+
+/* Контейнеры для input полей с относительным позиционированием */
+.width-slider-container,
+.height-slider-container,
+.depth-slider-container {
+    position: relative;
 }
 
 /* Скрытие контролов по умолчанию */

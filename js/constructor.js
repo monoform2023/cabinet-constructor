@@ -7,6 +7,13 @@ class CabinetConstructor {
         this.sections = new Map();
         this.currentColor = 'c1'; // Текущий выбранный цвет (по умолчанию c1)
         
+        // Глобальные настройки высоты и глубины (не зависят от секций)
+        this.globalSettings = {
+            sectionHeight: 2620,
+            sectionDepth: 582,
+            hasCustomDepth: false
+        };
+        
         this.init();
     }
 
@@ -320,7 +327,6 @@ class CabinetConstructor {
         setTimeout(() => {
             this.initializeBackgroundLayers();
             this.adjustSectionsAlignment(); // Выравниваем секции сразу после загрузки
-            this.initColorSelector(); // Инициализируем селектор цвета
         }, 100); // Небольшая задержка для полной загрузки DOM
     }
 
@@ -462,12 +468,66 @@ class CabinetConstructor {
                            min="${sectionData.config.minWidth}" 
                            max="${sectionData.config.maxWidth}" 
                            value="${sectionData.currentWidth}">
-                    <div class="width-display" id="width-display">
-                        ${this.pixelsToMillimeters(sectionData.currentWidth)}мм
-                    </div>
-                    <div class="width-range" id="width-range">
-                        Диапазон: ${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм
-                    </div>
+                    <input type="text" 
+                           class="width-display" 
+                           id="width-display"
+                           value="${this.pixelsToMillimeters(sectionData.currentWidth)}"
+                           data-min="${this.pixelsToMillimeters(sectionData.config.minWidth)}" 
+                           data-max="${this.pixelsToMillimeters(sectionData.config.maxWidth)}">
+                    <span style="font-size: 12px; color: #495057;">мм</span>
+                </div>
+            </div>
+
+            <div class="color-selector">
+                <label>Цвет:</label>
+                <div class="color-buttons" id="color-buttons">
+                    <button class="color-button ${this.currentColor === 'c1' ? 'active' : ''}" data-color="c1" title="Цвет 1"></button>
+                    <button class="color-button ${this.currentColor === 'c2' ? 'active' : ''}" data-color="c2" title="Цвет 2"></button>
+                    <button class="color-button ${this.currentColor === 'c3' ? 'active' : ''}" data-color="c3" title="Цвет 3"></button>
+                    <button class="color-button ${this.currentColor === 'c4' ? 'active' : ''}" data-color="c4" title="Цвет 4"></button>
+                    <button class="color-button ${this.currentColor === 'c5' ? 'active' : ''}" data-color="c5" title="Цвет 5"></button>
+                </div>
+            </div>
+
+            <div class="height-control">
+                <label>Высота секции:</label>
+                <div class="height-slider-container">
+                    <input type="range" 
+                           class="height-slider" 
+                           id="height-slider"
+                           min="2400" 
+                           max="2800" 
+                           value="${this.globalSettings.sectionHeight}">
+                    <input type="text" 
+                           class="height-display" 
+                           id="height-display"
+                           value="${this.globalSettings.sectionHeight}"
+                           data-min="2400" 
+                           data-max="2800">
+                    <span style="font-size: 12px; color: #495057;">мм</span>
+                </div>
+            </div>
+
+            <div class="depth-control">
+                <div class="custom-depth-checkbox">
+                    <input type="checkbox" id="custom-depth-checkbox" ${this.globalSettings.hasCustomDepth ? 'checked' : ''}>
+                    <label for="custom-depth-checkbox">Нестандартная глубина</label>
+                    <span class="price-note">+20%</span>
+                </div>
+                <div class="depth-slider-container" id="depth-slider-container" style="display: ${this.globalSettings.hasCustomDepth ? 'block' : 'none'};">
+                    <input type="range" 
+                           class="depth-slider ${this.globalSettings.hasCustomDepth ? 'active' : ''}" 
+                           id="depth-slider"
+                           min="410" 
+                           max="640" 
+                           value="${this.globalSettings.sectionDepth}">
+                    <input type="text" 
+                           class="depth-display" 
+                           id="depth-display"
+                           value="${this.globalSettings.sectionDepth}"
+                           data-min="410" 
+                           data-max="640">
+                    <span style="font-size: 12px; color: #495057;">мм</span>
                 </div>
             </div>
         `;
@@ -479,6 +539,12 @@ class CabinetConstructor {
     initSectionControlsEvents() {
         const variantSelect = document.getElementById('variant-select');
         const widthSlider = document.getElementById('width-slider');
+        const widthDisplay = document.getElementById('width-display');
+        const heightSlider = document.getElementById('height-slider');
+        const heightDisplay = document.getElementById('height-display');
+        const customDepthCheckbox = document.getElementById('custom-depth-checkbox');
+        const depthSlider = document.getElementById('depth-slider');
+        const depthDisplay = document.getElementById('depth-display');
 
         if (variantSelect) {
             variantSelect.addEventListener('change', (e) => {
@@ -491,6 +557,80 @@ class CabinetConstructor {
                 this.changeWidth(parseInt(e.target.value));
             });
         }
+
+        if (widthDisplay) {
+            this.initInputField(widthDisplay, (value) => {
+                const pixels = this.millimetersToPixels(value);
+                this.changeWidth(pixels);
+                if (widthSlider) widthSlider.value = pixels;
+            });
+        }
+
+        if (heightSlider) {
+            // Активируем слайдер при первом взаимодействии
+            heightSlider.addEventListener('mousedown', () => {
+                this.activateSlider(heightSlider);
+            });
+            
+            heightSlider.addEventListener('input', (e) => {
+                this.activateSlider(heightSlider);
+                this.changeHeight(parseInt(e.target.value));
+            });
+        }
+
+        if (heightDisplay) {
+            this.initInputField(heightDisplay, (value) => {
+                this.changeHeight(value);
+                if (heightSlider) {
+                    heightSlider.value = value;
+                    this.activateSlider(heightSlider);
+                }
+            });
+        }
+
+        if (customDepthCheckbox) {
+            customDepthCheckbox.addEventListener('change', (e) => {
+                this.toggleCustomDepth(e.target.checked);
+            });
+        }
+
+        if (depthSlider) {
+            // Активируем слайдер при первом взаимодействии
+            depthSlider.addEventListener('mousedown', () => {
+                this.activateSlider(depthSlider);
+            });
+            
+            depthSlider.addEventListener('input', (e) => {
+                this.activateSlider(depthSlider);
+                this.changeDepth(parseInt(e.target.value));
+            });
+        }
+
+        if (depthDisplay) {
+            this.initInputField(depthDisplay, (value) => {
+                this.changeDepth(value);
+                if (depthSlider) {
+                    depthSlider.value = value;
+                    this.activateSlider(depthSlider);
+                }
+            });
+        }
+
+        // Инициализируем цветовые кнопки
+        this.initColorButtons();
+    }
+
+    // Инициализация цветовых кнопок
+    initColorButtons() {
+        const colorButtons = document.querySelectorAll('.color-button');
+        colorButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newColor = e.target.dataset.color;
+                if (newColor) {
+                    this.changeColor(newColor);
+                }
+            });
+        });
     }
 
     changeVariant(variantId) {
@@ -591,13 +731,118 @@ class CabinetConstructor {
         // Обновляем отображение размера
         const widthDisplay = document.getElementById('width-display');
         if (widthDisplay) {
-            widthDisplay.textContent = `${this.pixelsToMillimeters(newWidth)}мм`;
+            widthDisplay.value = this.pixelsToMillimeters(newWidth);
         }
+    }
+
+    changeHeight(newHeight) {
+        // Сохраняем высоту в глобальных настройках
+        this.globalSettings.sectionHeight = newHeight;
+
+        // Обновляем отображение высоты
+        const heightDisplay = document.getElementById('height-display');
+        if (heightDisplay) {
+            heightDisplay.value = newHeight;
+        }
+
+        console.log(`Высота секции изменена на ${newHeight}мм`);
+    }
+
+    toggleCustomDepth(isEnabled) {
+        const depthSliderContainer = document.getElementById('depth-slider-container');
+        if (depthSliderContainer) {
+            depthSliderContainer.style.display = isEnabled ? 'block' : 'none';
+        }
+
+        // Сохраняем в глобальных настройках
+        this.globalSettings.hasCustomDepth = isEnabled;
+
+        console.log(`Нестандартная глубина: ${isEnabled ? 'включена' : 'выключена'}`);
+    }
+
+
+
+    changeDepth(newDepth) {
+        // Сохраняем глубину в глобальных настройках
+        this.globalSettings.sectionDepth = newDepth;
+
+        // Обновляем отображение глубины
+        const depthDisplay = document.getElementById('depth-display');
+        if (depthDisplay) {
+            depthDisplay.value = newDepth;
+        }
+
+        console.log(`Глубина секции изменена на ${newDepth}мм`);
+    }
+
+    // Активация слайдера (делает его визуально активным)
+    activateSlider(slider) {
+        if (slider && !slider.classList.contains('active')) {
+            slider.classList.add('active');
+        }
+    }
+
+    // Инициализация интерактивного поля ввода
+    initInputField(inputElement, onChangeCallback) {
+        const minValue = parseInt(inputElement.dataset.min);
+        const maxValue = parseInt(inputElement.dataset.max);
         
-        // Обновляем отображение диапазона (если нужно)
-        const widthRange = document.getElementById('width-range');
-        if (widthRange) {
-            widthRange.textContent = `Диапазон: ${this.pixelsToMillimeters(sectionData.config.minWidth)}-${this.pixelsToMillimeters(sectionData.config.maxWidth)}мм`;
+        // Обработчик изменения значения
+        const handleChange = () => {
+            const value = parseInt(inputElement.value);
+            
+            // Убираем предыдущий tooltip если есть
+            this.removeTooltip(inputElement);
+            
+            if (isNaN(value) || value < minValue || value > maxValue) {
+                this.showTooltip(inputElement, `Диапазон: ${minValue}-${maxValue}мм`);
+                return;
+            }
+            
+            onChangeCallback(value);
+        };
+
+        // Валидация при потере фокуса
+        inputElement.addEventListener('blur', handleChange);
+        
+        // Валидация при нажатии Enter
+        inputElement.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleChange();
+                inputElement.blur();
+            }
+        });
+
+        // Убираем tooltip при фокусе
+        inputElement.addEventListener('focus', () => {
+            this.removeTooltip(inputElement);
+        });
+    }
+
+    // Показать tooltip с подсказкой
+    showTooltip(inputElement, message) {
+        // Убираем предыдущий tooltip
+        this.removeTooltip(inputElement);
+        
+        const tooltip = document.createElement('div');
+        tooltip.className = 'input-tooltip show';
+        tooltip.textContent = message;
+        tooltip.dataset.tooltip = 'true';
+        
+        inputElement.parentElement.appendChild(tooltip);
+        
+        // Автоматически убираем tooltip через 3 секунды
+        setTimeout(() => {
+            this.removeTooltip(inputElement);
+        }, 3000);
+    }
+
+    // Убрать tooltip
+    removeTooltip(inputElement) {
+        const existingTooltip = inputElement.parentElement.querySelector('[data-tooltip="true"]');
+        if (existingTooltip) {
+            existingTooltip.remove();
         }
     }
 
