@@ -187,7 +187,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-1",
                                 "name": "Секция 1",
-                                "position": { "left": 428, "top": 305 },
+                                "position": { "left": 138, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -205,7 +205,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-2",
                                 "name": "Секция 2",
-                                "position": { "left": 956, "top": 305 },
+                                "position": { "left": 666, "top": 305 },
                                 "defaultSize": { "width": 520, "height": 1314 },
                                 "minWidth": 208,
                                 "maxWidth": 520,
@@ -223,7 +223,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-3",
                                 "name": "Секция 3",
-                                "position": { "left": 1476, "top": 305 },
+                                "position": { "left": 1186, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -241,7 +241,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-4",
                                 "name": "Секция 4",
-                                "position": { "left": 2004, "top": 305 },
+                                "position": { "left": 1714, "top": 305 },
                                 "defaultSize": { "width": 520, "height": 1314 },
                                 "minWidth": 208,
                                 "maxWidth": 520,
@@ -719,7 +719,7 @@ class CabinetConstructor {
         if (!section1Data || !section2Data || !section3Data || !section4Data) return;
 
         // Фиксированный центр ТОЛЬКО для section-2 (как в 3-секционном макете)
-        const originalSection2Left = 956; // Исходная позиция второй секции
+        const originalSection2Left = 666; // Исходная позиция второй секции
         const originalSection2Width = 520; // Исходная ширина второй секции
         const section2Center = originalSection2Left + (originalSection2Width / 2); // Центр второй секции
         
