@@ -75,7 +75,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-1",
                                 "name": "Секция 1",
-                                "position": { "left": 1046, "top": 305 },
+                                "position": { "left": 746, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -93,7 +93,7 @@ class CabinetConstructor {
                             {
                                 "id": "section-2", 
                                 "name": "Секция 2",
-                                "position": { "left": 1626, "top": 305 },
+                                "position": { "left": 1326, "top": 305 },
                                 "defaultSize": { "width": 528, "height": 1314 },
                                 "minWidth": 211,
                                 "maxWidth": 528,
@@ -620,9 +620,9 @@ class CabinetConstructor {
         // section-2 (transform-origin: left): левый край прилегает к правому краю section-1
 
         // Исходные позиции и размеры из конфигурации
-        const section1OriginalLeft = section1Data.config.position.left; // 1046
+        const section1OriginalLeft = section1Data.config.position.left; // 746
         const section1OriginalWidth = section1Data.config.defaultSize.width; // 528
-        const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1574
+        const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1274
 
         // Вычисляем реальную ширину после масштабирования
         const section1Scale = section1Data.currentWidth / section1OriginalWidth;
@@ -837,9 +837,9 @@ class CabinetConstructor {
             if (!section1Data || !section2Data) return;
 
             // Инициализируем фоны для 2-секций с базовыми размерами
-            const section1OriginalLeft = section1Data.config.position.left; // 1046
+            const section1OriginalLeft = section1Data.config.position.left; // 746
             const section1OriginalWidth = section1Data.config.defaultSize.width; // 528
-            const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1574
+            const section1OriginalRight = section1OriginalLeft + section1OriginalWidth; // 1274
             
             // При инициализации секции имеют стандартные размеры
             const section1RealLeft = section1OriginalLeft; // Без масштабирования
