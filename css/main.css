@@ -146,6 +146,45 @@ body {
     box-sizing: border-box;
 }
 
+/* Пульсирующий кружок при наведении на секцию (только если секция не активна) */
+.section:hover:not(.active)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid rgba(0, 123, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse-circle 1.5s infinite;
+    z-index: 5;
+    pointer-events: none;
+    /* Исправляем искажение от transform: scale() родительского элемента */
+    transform-origin: center center;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+/* Анимация пульсации для кружка */
+@keyframes pulse-circle {
+    0% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+
 /* Панель управления */
 .control-panel {
     position: absolute;
@@ -244,25 +283,40 @@ body {
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-/* Цвета для кнопок (временные, заменятся на миниатюры) */
+/* Миниатюры для кнопок цвета */
 .color-button[data-color="c1"] {
-    background-color: #8B4513;
+    background-image: url('../images/color-thumbnails/c1-thumbnail.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .color-button[data-color="c2"] {
-    background-color: #654321;
+    background-image: url('../images/color-thumbnails/c2-thumbnail.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .color-button[data-color="c3"] {
-    background-color: #A0522D;
+    background-image: url('../images/color-thumbnails/c3-thumbnail.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .color-button[data-color="c4"] {
-    background-color: #D2691E;
+    background-image: url('../images/color-thumbnails/c4-thumbnail.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .color-button[data-color="c5"] {
-    background-color: #CD853F;
+    background-image: url('../images/color-thumbnails/c5-thumbnail.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Табы секций - скрыты в минималистичном дизайне */
@@ -351,7 +405,7 @@ body {
 }
 
 .width-slider {
-    width: 120px;
+    width: 192px;
     height: 4px;
     border-radius: 2px;
     background: #e9ecef;
@@ -439,11 +493,11 @@ body {
     width: 120px;
     height: 4px;
     border-radius: 2px;
-    background: #ced4da;
+    background: #dee2e6;
     outline: none;
     cursor: pointer;
     transition: all 0.2s ease;
-    opacity: 1;
+    opacity: 0.6;
 }
 
 .height-slider.active {
@@ -452,7 +506,7 @@ body {
 }
 
 .height-slider:hover {
-    background: #adb5bd;
+    background: #ced4da;
 }
 
 .height-slider.active:hover {
@@ -464,7 +518,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #adb5bd;
+    background: #868e96;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: background 0.2s ease;
@@ -483,7 +537,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #adb5bd;
+    background: #868e96;
     cursor: pointer;
     border: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -565,11 +619,11 @@ body {
     width: 120px;
     height: 4px;
     border-radius: 2px;
-    background: #ced4da;
+    background: #dee2e6;
     outline: none;
     cursor: pointer;
     transition: all 0.2s ease;
-    opacity: 1;
+    opacity: 0.6;
 }
 
 .depth-slider.active {
@@ -578,7 +632,7 @@ body {
 }
 
 .depth-slider:hover {
-    background: #adb5bd;
+    background: #ced4da;
 }
 
 .depth-slider.active:hover {
@@ -590,7 +644,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #adb5bd;
+    background: #868e96;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: background 0.2s ease;
@@ -609,7 +663,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #adb5bd;
+    background: #868e96;
     cursor: pointer;
     border: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);

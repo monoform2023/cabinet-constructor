@@ -60,12 +60,12 @@ class CabinetConstructor {
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/1-section/sections/section-1/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "1_s1_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "1_s1_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "1_s1_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "1_s1_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "1_s1_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "1_s1_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "1_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "1_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "1_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "1_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "1_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "1_s1_k6_c1_1000.jpg" }
                                 ]
                             }
                         ]
@@ -89,12 +89,12 @@ class CabinetConstructor {
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/2-sections/sections/section-1/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "2_s1_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "2_s1_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "2_s1_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "2_s1_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "2_s1_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "2_s1_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "2_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "2_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "2_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "2_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "2_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "2_s1_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -107,12 +107,12 @@ class CabinetConstructor {
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/2-sections/sections/section-2/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "2_s2_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "2_s2_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "2_s2_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "2_s2_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "2_s2_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "2_s2_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "2_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "2_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "2_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "2_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "2_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "2_s2_k6_c1_1000.jpg" }
                                 ]
                             }
                         ]
@@ -136,12 +136,12 @@ class CabinetConstructor {
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/3-sections/sections/section-1/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s1_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s1_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s1_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s1_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s1_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s1_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "3_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "3_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "3_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "3_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "3_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "3_s1_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -154,12 +154,12 @@ class CabinetConstructor {
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/3-sections/sections/section-2/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s2_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s2_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s2_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s2_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s2_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s2_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "3_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "3_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "3_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "3_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "3_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "3_s2_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -172,12 +172,12 @@ class CabinetConstructor {
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/3-sections/sections/section-3/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "3_s3_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "3_s3_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "3_s3_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "3_s3_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "3_s3_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "3_s3_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "3_s3_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "3_s3_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "3_s3_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "3_s3_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "3_s3_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "3_s3_k6_c1_1000.jpg" }
                                 ]
                             }
                         ]
@@ -201,12 +201,12 @@ class CabinetConstructor {
                                 "transformOrigin": "right",
                                 "imagePath": "images/layouts/4-sections/sections/section-1/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s1_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s1_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s1_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s1_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s1_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s1_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "4_s1_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "4_s1_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "4_s1_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "4_s1_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "4_s1_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "4_s1_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -219,12 +219,12 @@ class CabinetConstructor {
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/4-sections/sections/section-2/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s2_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s2_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s2_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s2_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s2_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s2_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "4_s2_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "4_s2_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "4_s2_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "4_s2_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "4_s2_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "4_s2_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -237,12 +237,12 @@ class CabinetConstructor {
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/4-sections/sections/section-3/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s3_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s3_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s3_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s3_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s3_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s3_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "4_s3_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "4_s3_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "4_s3_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "4_s3_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "4_s3_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "4_s3_k6_c1_1000.jpg" }
                                 ]
                             },
                             {
@@ -255,12 +255,12 @@ class CabinetConstructor {
                                 "transformOrigin": "left",
                                 "imagePath": "images/layouts/4-sections/sections/section-4/",
                                 "variants": [
-                                    { "id": "variant-1", "name": "Вариант 1", "image": "4_s4_k1_c1_1000.jpg" },
-                                    { "id": "variant-2", "name": "Вариант 2", "image": "4_s4_k2_c1_1000.jpg" },
-                                    { "id": "variant-3", "name": "Вариант 3", "image": "4_s4_k3_c1_1000.jpg" },
-                                    { "id": "variant-4", "name": "Вариант 4", "image": "4_s4_k4_c1_1000.jpg" },
-                                    { "id": "variant-5", "name": "Вариант 5", "image": "4_s4_k5_c1_1000.jpg" },
-                                    { "id": "variant-6", "name": "Вариант 6", "image": "4_s4_k6_c1_1000.jpg" }
+                                    { "id": "variant-1", "name": "Два ящика и штанга", "image": "4_s4_k1_c1_1000.jpg" },
+                                    { "id": "variant-2", "name": "Только полки", "image": "4_s4_k2_c1_1000.jpg" },
+                                    { "id": "variant-3", "name": "Четыре ящика и штанга", "image": "4_s4_k3_c1_1000.jpg" },
+                                    { "id": "variant-4", "name": "Полка и штанга", "image": "4_s4_k4_c1_1000.jpg" },
+                                    { "id": "variant-5", "name": "Две штанги", "image": "4_s4_k5_c1_1000.jpg" },
+                                    { "id": "variant-6", "name": "Два ящика и полки", "image": "4_s4_k6_c1_1000.jpg" }
                                 ]
                             }
                         ]
@@ -490,7 +490,7 @@ class CabinetConstructor {
             </div>
 
             <div class="height-control">
-                <label>Высота секции:</label>
+                <label>Высота шкафа:</label>
                 <div class="height-slider-container">
                     <input type="range" 
                            class="height-slider" 
@@ -745,7 +745,7 @@ class CabinetConstructor {
             heightDisplay.value = newHeight;
         }
 
-        console.log(`Высота секции изменена на ${newHeight}мм`);
+        console.log(`Высота шкафа изменена на ${newHeight}мм`);
     }
 
     toggleCustomDepth(isEnabled) {
