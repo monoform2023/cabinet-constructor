@@ -1,0 +1,25 @@
+/* Стили для компоновки с 1 секцией */
+
+/* Трехслойная фоновая система для 1-секционного варианта */
+.layout-1-section .background-left {
+    background-image: url('../../images/layouts/1-section/background-left.jpg');
+}
+
+.layout-1-section .background-center {
+    background-image: url('../../images/layouts/1-section/background-center.jpg');
+}
+
+.layout-1-section .background-right {
+    background-image: url('../../images/layouts/1-section/background-right.jpg');
+}
+
+/* Позиционирование секций для 1-секционного варианта */
+.layout-1-section .section-1 {
+    left: calc((1340 / 3200) * 100%);
+    top: calc((305 / 1919) * 100%);
+    width: calc((520 / 3200) * 100%);
+    height: calc((1314 / 1919) * 100%);
+    transform-origin: center center;
+}
+
+/* Убираем все анимации для мгновенного обновления */ 

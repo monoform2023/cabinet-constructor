@@ -1,0 +1,232 @@
+{
+  "layouts": {
+    "1-section": {
+      "name": "Однодверный шкаф",
+      "background": "images/layouts/1-section/background.jpg",
+      "cssClass": "layout-1-section",
+      "container": {
+        "width": 3200,
+        "height": 1919
+      },
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Секция 1",
+          "position": { "left": 1340, "top": 305 },
+          "defaultSize": { "width": 520, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 800,
+          "transformOrigin": "center",
+          "imagePath": "images/layouts/1-section/sections/section-1/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "1_s1_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "1_s1_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "1_s1_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "1_s1_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "1_s1_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "1_s1_k6_c1_1000.jpg" }
+          ]
+        }
+      ]
+    },
+    "2-sections": {
+      "name": "Двухдверный шкаф", 
+      "background": "images/layouts/2-sections/background.jpg",
+      "cssClass": "layout-2-sections",
+      "container": {
+        "width": 3200,
+        "height": 1919
+      },
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Секция 1",
+          "position": { "left": 1046, "top": 305 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 700,
+          "transformOrigin": "right",
+          "imagePath": "images/layouts/2-sections/sections/section-1/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "2_s1_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "2_s1_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "2_s1_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "2_s1_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "2_s1_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "2_s1_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-2", 
+          "name": "Секция 2",
+          "position": { "left": 1626, "top": 305 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 400,
+          "maxWidth": 700,
+          "transformOrigin": "left",
+          "imagePath": "images/layouts/2-sections/sections/section-2/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "2_s2_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "2_s2_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "2_s2_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "2_s2_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "2_s2_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "2_s2_k6_c1_1000.jpg" }
+          ]
+        }
+      ]
+    },
+    "3-sections": {
+      "name": "Трехдверный шкаф",
+      "background": "images/layouts/3-sections/background.jpg",
+      "cssClass": "layout-3-sections",
+      "container": {
+        "width": 3200,
+        "height": 1919
+      },
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Секция 1",
+          "position": { "left": 428, "top": 305 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 211,
+          "maxWidth": 528,
+          "transformOrigin": "right",
+          "imagePath": "images/layouts/3-sections/sections/section-1/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "3_s1_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "3_s1_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "3_s1_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "3_s1_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "3_s1_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "3_s1_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Секция 2",
+          "position": { "left": 956, "top": 305 },
+          "defaultSize": { "width": 520, "height": 1314 },
+          "minWidth": 208,
+          "maxWidth": 520,
+          "transformOrigin": "center",
+          "imagePath": "images/layouts/3-sections/sections/section-2/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "3_s2_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "3_s2_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "3_s2_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "3_s2_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "3_s2_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "3_s2_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Секция 3",
+          "position": { "left": 1476, "top": 305 },
+          "defaultSize": { "width": 528, "height": 1314 },
+          "minWidth": 211,
+          "maxWidth": 528,
+          "transformOrigin": "left",
+          "imagePath": "images/layouts/3-sections/sections/section-3/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "3_s3_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "3_s3_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "3_s3_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "3_s3_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "3_s3_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "3_s3_k6_c1_1000.jpg" }
+          ]
+        }
+      ]
+    },
+    "4-sections": {
+      "name": "Четырехдверный шкаф",
+      "background": "images/layouts/4-sections/background.jpg",
+      "cssClass": "layout-4-sections",
+      "container": {
+        "width": 3200,
+        "height": 1919
+      },
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Секция 1",
+          "position": { "left": 760, "top": 305 },
+          "defaultSize": { "width": 390, "height": 1314 },
+          "minWidth": 300,
+          "maxWidth": 500,
+          "transformOrigin": "right",
+          "imagePath": "images/layouts/4-sections/sections/section-1/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "4_s1_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "4_s1_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "4_s1_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "4_s1_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "4_s1_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "4_s1_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-2",
+          "name": "Секция 2",
+          "position": { "left": 1190, "top": 305 },
+          "defaultSize": { "width": 390, "height": 1314 },
+          "minWidth": 300,
+          "maxWidth": 500,
+          "transformOrigin": "center",
+          "imagePath": "images/layouts/4-sections/sections/section-2/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "4_s2_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "4_s2_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "4_s2_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "4_s2_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "4_s2_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "4_s2_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Секция 3",
+          "position": { "left": 1620, "top": 305 },
+          "defaultSize": { "width": 390, "height": 1314 },
+          "minWidth": 300,
+          "maxWidth": 500,
+          "transformOrigin": "center",
+          "imagePath": "images/layouts/4-sections/sections/section-3/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "4_s3_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "4_s3_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "4_s3_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "4_s3_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "4_s3_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "4_s3_k6_c1_1000.jpg" }
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "Секция 4",
+          "position": { "left": 2050, "top": 305 },
+          "defaultSize": { "width": 390, "height": 1314 },
+          "minWidth": 300,
+          "maxWidth": 500,
+          "transformOrigin": "left",
+          "imagePath": "images/layouts/4-sections/sections/section-4/",
+          "variants": [
+            { "id": "variant-1", "name": "Вариант 1", "image": "4_s4_k1_c1_1000.jpg" },
+            { "id": "variant-2", "name": "Вариант 2", "image": "4_s4_k2_c1_1000.jpg" },
+            { "id": "variant-3", "name": "Вариант 3", "image": "4_s4_k3_c1_1000.jpg" },
+            { "id": "variant-4", "name": "Вариант 4", "image": "4_s4_k4_c1_1000.jpg" },
+            { "id": "variant-5", "name": "Вариант 5", "image": "4_s4_k5_c1_1000.jpg" },
+            { "id": "variant-6", "name": "Вариант 6", "image": "4_s4_k6_c1_1000.jpg" }
+          ]
+        }
+      ]
+    }
+  },
+  "settings": {
+    "millimetersToPixels": 0.528,
+    "pixelsToMillimeters": 1.893939
+  }
+} 

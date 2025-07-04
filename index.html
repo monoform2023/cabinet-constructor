@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор шкафов</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/layouts/layout-3-sections.css" id="layout-styles">
+</head>
+<body>
+    <!-- Основное окно конструктора -->
+    <div class="constructor-container" id="constructor-container">
+        <div class="main-window" id="main-window">
+            <!-- Трехслойная фоновая система -->
+            <div class="background-layers">
+                <div class="background-left" id="background-left"></div>
+                <div class="background-center" id="background-center"></div>
+                <div class="background-right" id="background-right"></div>
+            </div>
+            
+            <!-- Контейнер для секций -->
+            <div class="sections-container" id="sections-container">
+                <!-- Секции будут добавляться динамически -->
+            </div>
+            
+            <!-- Панель управления -->
+            <div class="control-panel" id="control-panel">
+                <!-- 1. Селектор компоновки -->
+                <div class="layout-selector">
+                    <label for="layout-select">Количество секций:</label>
+                    <select id="layout-select">
+                        <option value="1-section">1 секция</option>
+                        <option value="2-sections">2 секции</option>
+                        <option value="3-sections" selected>3 секции</option>
+                        <option value="4-sections">4 секции</option>
+                    </select>
+                </div>
+                
+                <!-- 2. Контейнер для контролов активной секции (размер и варианты) -->
+                <div class="section-controls" id="section-controls">
+                    <!-- Контролы будут добавляться динамически -->
+                </div>
+                
+                <!-- Контейнер для табов секций (скрытый, используется только для управления) -->
+                <div class="sections-tabs" id="sections-tabs" style="display: none;">
+                    <!-- Табы будут добавляться динамически -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="js/config.js"></script>
+    <script src="js/layout-manager.js"></script>
+    <script src="js/constructor.js"></script>
+</body>
+</html> 
