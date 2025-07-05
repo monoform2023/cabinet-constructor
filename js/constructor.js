@@ -53,10 +53,10 @@ class CabinetConstructor {
                             {
                                 "id": "section-1",
                                 "name": "Секция 1",
-                                "position": { "left": 1340, "top": 305 },
-                                "defaultSize": { "width": 520, "height": 1314 },
-                                "minWidth": 400,
-                                "maxWidth": 800,
+                                "position": { "left": 1062, "top": 305 },
+                                "defaultSize": { "width": 536, "height": 1314 },
+                                "minWidth": 211,
+                                "maxWidth": 528,
                                 "transformOrigin": "center",
                                 "imagePath": "images/layouts/1-section/sections/section-1/",
                                 "variants": [
@@ -848,7 +848,9 @@ class CabinetConstructor {
 
     // Универсальная система выравнивания секций
     adjustSectionsAlignment() {
-        if (this.currentLayout === '2-sections') {
+        if (this.currentLayout === '1-section') {
+            this.adjustOneSectionAlignment();
+        } else if (this.currentLayout === '2-sections') {
             this.adjustTwoSectionsAlignment();
         } else if (this.currentLayout === '3-sections') {
             this.adjustThreeSectionsAlignment();
@@ -857,6 +859,36 @@ class CabinetConstructor {
         } else {
             console.log('Система выравнивания пропущена для макета:', this.currentLayout);
         }
+    }
+
+    // Система выравнивания для 1-й секции
+    adjustOneSectionAlignment() {
+        const section1Data = this.sections.get('section-1');
+        if (!section1Data) return;
+
+        // Для односекционного варианта секция имеет transform-origin: center
+        // Это означает что при масштабировании центр секции остается на месте
+        // а левый и правый края изменяются равномерно
+        
+        // Исходные данные из конфигурации
+        const originalLeft = section1Data.config.position.left; // 1062
+        const originalWidth = section1Data.config.defaultSize.width; // 536
+        
+        // Центр секции (неизменный при transform-origin: center)
+        const sectionCenter = originalLeft + (originalWidth / 2); // 1330
+        
+        // Вычисляем реальные границы секции после масштабирования
+        const realHalfWidth = section1Data.currentWidth / 2;
+        const realLeftEdge = sectionCenter - realHalfWidth;
+        const realRightEdge = sectionCenter + realHalfWidth;
+
+        // Позицию элемента НЕ изменяем! CSS сам управляет позиционированием через transform-origin: center
+        // Обновляем только фоновые слои
+        this.adjustOneSectionBackgrounds(realLeftEdge, section1Data.currentWidth);
+
+        console.log('Выравнивание 1-секции (центр зафиксирован):', {
+            'Секция 1': `${realLeftEdge.toFixed(0)}px - ${realRightEdge.toFixed(0)}px (ширина: ${section1Data.currentWidth}px), центр: ${sectionCenter}px`
+        });
     }
 
     // Система выравнивания для 2-х секций
@@ -1211,7 +1243,28 @@ class CabinetConstructor {
         console.log('Инициализация фоновых слоев для макета:', this.currentLayout);
         console.log('Загруженные секции:', Array.from(this.sections.keys()));
         
-        if (this.currentLayout === '2-sections') {
+        if (this.currentLayout === '1-section') {
+            const section1Data = this.sections.get('section-1');
+
+            if (!section1Data) return;
+
+            // Инициализируем фоны для 1-секции с правильным расчетом центра
+            const originalLeft = section1Data.config.position.left; // 1062
+            const originalWidth = section1Data.config.defaultSize.width; // 536
+            const sectionCenter = originalLeft + (originalWidth / 2); // 1330
+            
+            // При инициализации секция имеет стандартный размер
+            const realHalfWidth = section1Data.currentWidth / 2;
+            const realLeftEdge = sectionCenter - realHalfWidth;
+            
+            this.adjustOneSectionBackgrounds(
+                realLeftEdge,
+                section1Data.currentWidth
+            );
+
+            console.log('Фоновые слои инициализированы для 1-секции');
+            
+        } else if (this.currentLayout === '2-sections') {
             const section1Data = this.sections.get('section-1');
             const section2Data = this.sections.get('section-2');
 
@@ -1299,6 +1352,12 @@ class CabinetConstructor {
     }
 
     pixelsToMillimeters(pixels) {
+        // Специальный коэффициент для односекционного варианта (536px = 1000мм)
+        if (this.currentLayout === '1-section') {
+            const ratio = 1000 / 536; // 1.8656
+            return Math.round(pixels * ratio);
+        }
+        
         // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (520px = 1000мм)
         if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
             const ratio = 1000 / 520; // 1.923
@@ -1311,6 +1370,12 @@ class CabinetConstructor {
     }
 
     millimetersToPixels(millimeters) {
+        // Специальный коэффициент для односекционного варианта (1000мм = 536px)
+        if (this.currentLayout === '1-section') {
+            const ratio = 536 / 1000; // 0.536
+            return Math.round(millimeters * ratio);
+        }
+        
         // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (1000мм = 520px)
         if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
             const ratio = 520 / 1000; // 0.52
@@ -1320,6 +1385,60 @@ class CabinetConstructor {
         // Стандартный коэффициент для всех остальных секций
         const ratio = this.layouts?.settings?.millimetersToPixels || 0.528;
         return Math.round(millimeters * ratio);
+    }
+
+    // Система фоновых слоев для 1-й секции
+    adjustOneSectionBackgrounds(sectionLeft, sectionWidth) {
+        const backgroundLeft = document.getElementById('background-left');
+        const backgroundCenter = document.getElementById('background-center');
+        const backgroundRight = document.getElementById('background-right');
+
+        if (!backgroundLeft || !backgroundCenter || !backgroundRight) return;
+
+        // Вычисляем реальные края секции
+        const sectionRight = sectionLeft + sectionWidth;
+
+        // 1. ЛЕВЫЙ ФОН: от левого края (0) до левого края секции
+        const leftBgLeftEdge = 0;
+        const leftBgRightEdge = sectionLeft;
+        const leftBgWidth = leftBgRightEdge - leftBgLeftEdge;
+        const leftBgLeftPercent = (leftBgLeftEdge / 3200) * 100;
+        const leftBgWidthPercent = (leftBgWidth / 3200) * 100;
+        
+        backgroundLeft.style.left = `${leftBgLeftPercent}%`;
+        backgroundLeft.style.width = `${leftBgWidthPercent}%`;
+
+        // 2. ЦЕНТРАЛЬНЫЙ ФОН: точно под секцией
+        const centerBgLeftEdge = sectionLeft;
+        const centerBgRightEdge = sectionRight;
+        const centerBgWidth = centerBgRightEdge - centerBgLeftEdge;
+        const centerBgLeftPercent = (centerBgLeftEdge / 3200) * 100;
+        const centerBgWidthPercent = (centerBgWidth / 3200) * 100;
+
+        backgroundCenter.style.left = `${centerBgLeftPercent}%`;
+        backgroundCenter.style.width = `${centerBgWidthPercent}%`;
+        backgroundCenter.style.transform = 'none';
+
+        // 3. ПРАВЫЙ ФОН: от правого края секции до правого края экрана (3200px)
+        const rightBgLeftEdge = sectionRight;
+        const rightBgWidth = 3200 - rightBgLeftEdge;
+        const rightBgLeftPercent = (rightBgLeftEdge / 3200) * 100;
+        const rightBgWidthPercent = (rightBgWidth / 3200) * 100;
+        
+        backgroundRight.style.left = `${rightBgLeftPercent}%`;
+        backgroundRight.style.width = `${rightBgWidthPercent}%`;
+
+        // Убираем переходы для мгновенного обновления
+        [backgroundLeft, backgroundCenter, backgroundRight].forEach(bg => {
+            bg.style.transition = 'none';
+        });
+
+        console.log('Фоны 1-секции обновлены:', {
+            'Секция 1': `${sectionLeft.toFixed(0)}px - ${sectionRight.toFixed(0)}px (ширина: ${sectionWidth}px)`,
+            'Левый фон': `${leftBgLeftPercent.toFixed(2)}% ширина: ${leftBgWidthPercent.toFixed(2)}%`,
+            'Центр фон': `${centerBgLeftPercent.toFixed(2)}% ширина: ${centerBgWidthPercent.toFixed(2)}%`,
+            'Правый фон': `${rightBgLeftPercent.toFixed(2)}% ширина: ${rightBgWidthPercent.toFixed(2)}%`
+        });
     }
 }
 
