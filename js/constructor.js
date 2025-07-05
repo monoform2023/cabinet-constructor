@@ -14,6 +14,10 @@ class CabinetConstructor {
             hasCustomDepth: false
         };
         
+        // Состояние дверей
+        this.doorsEnabled = false;
+        this.doors = new Map(); // Хранение данных дверей
+        
         this.init();
     }
 
@@ -284,50 +288,61 @@ class CabinetConstructor {
         const layoutSelect = document.getElementById('layout-select');
         if (layoutSelect) {
             layoutSelect.addEventListener('change', (e) => {
-                console.log('Переключаем макет на:', e.target.value);
-                this.currentLayout = e.target.value;
-                this.loadLayout(this.currentLayout);
+                this.loadLayout(e.target.value);
             });
-        } else {
-            console.error('layout-select элемент не найден!');
         }
+        
+        // Чекбокс дверей
+        const doorsCheckbox = document.getElementById('doors-enabled');
+        if (doorsCheckbox) {
+            doorsCheckbox.addEventListener('change', (e) => {
+                this.toggleDoors(e.target.checked);
+            });
+        }
+        
+        console.log('Обработчики событий инициализированы');
     }
 
     loadLayout(layoutId) {
-        console.log('loadLayout вызвана для:', layoutId);
-        console.log('Доступные макеты:', this.layouts ? Object.keys(this.layouts.layouts) : 'layouts не загружены');
-        
-        const layout = this.layouts.layouts[layoutId];
-        if (!layout) {
-            console.error('Компоновка не найдена:', layoutId);
-            console.log('Содержимое this.layouts:', this.layouts);
+        if (!this.layouts || !this.layouts.layouts[layoutId]) {
+            console.error('Макет не найден:', layoutId);
             return;
         }
 
-        console.log('Загружаем компоновку:', layout.name);
+        this.currentLayout = layoutId;
+        const layoutConfig = this.layouts.layouts[layoutId];
+
+        console.log('Загружаем макет:', layoutId, layoutConfig);
 
         // Обновляем CSS класс
-        this.updateLayoutClass(layout.cssClass);
-        
-        // Очищаем текущие секции
+        this.updateLayoutClass(layoutConfig.cssClass);
+
+        // Очищаем существующие секции
         this.clearSections();
         
-        // Создаем новые секции
-        this.createSections(layout.sections);
-        
-        // Создаем табы
-        this.createSectionTabs(layout.sections);
-        
-        // Активируем первую секцию
-        if (layout.sections.length > 0) {
-            this.setActiveSection(layout.sections[0].id);
+        // Очищаем существующие двери
+        this.clearDoors();
+
+        // Создаем секции
+        this.createSections(layoutConfig.sections);
+
+        // Создаем табы секций
+        this.createSectionTabs(layoutConfig.sections);
+
+        // Устанавливаем первую секцию как активную
+        if (layoutConfig.sections.length > 0) {
+            this.setActiveSection(layoutConfig.sections[0].id);
         }
 
-        // Инициализируем фоновые слои с стандартными размерами
-        setTimeout(() => {
-            this.initializeBackgroundLayers();
-            this.adjustSectionsAlignment(); // Выравниваем секции сразу после загрузки
-        }, 100); // Небольшая задержка для полной загрузки DOM
+        // Инициализируем фоновые слои
+        this.initializeBackgroundLayers();
+
+        // Если двери были включены, пересоздаем их
+        if (this.doorsEnabled) {
+            this.createDoors();
+        }
+
+        console.log('Макет загружен:', layoutId);
     }
 
     updateLayoutClass(cssClass) {
@@ -711,28 +726,25 @@ class CabinetConstructor {
         const sectionData = this.sections.get(this.activeSection);
         if (!sectionData) return;
 
-        // Вычисляем масштаб
-        const scale = newWidth / sectionData.config.defaultSize.width;
-        
-        // Применяем трансформацию в зависимости от transform-origin
-        const transformOrigin = sectionData.config.transformOrigin;
-        sectionData.element.style.transformOrigin = transformOrigin;
-        sectionData.element.style.transform = `scaleX(${scale})`;
-        
-        // Сохраняем новую ширину
+        // Обновляем ширину секции
         sectionData.currentWidth = newWidth;
+        
+        // Применяем масштабирование к элементу секции
+        const scale = newWidth / sectionData.config.defaultSize.width;
+        sectionData.element.style.transform = `scaleX(${scale})`;
 
-        // Обновляем изображение с учетом нового размера
+        // Обновляем изображение секции
         this.updateSectionImage(sectionData);
 
-        // Применяем систему прилипания секций
+        // Применяем система выравнивания секций
         this.adjustSectionsAlignment();
 
-        // Обновляем отображение размера
-        const widthDisplay = document.getElementById('width-display');
-        if (widthDisplay) {
-            widthDisplay.value = this.pixelsToMillimeters(newWidth);
+        // Обновляем соответствующую дверь, если двери включены
+        if (this.doorsEnabled) {
+            this.updateDoor(this.activeSection);
         }
+
+        console.log(`Ширина секции ${this.activeSection} изменена на ${newWidth}px`);
     }
 
     changeHeight(newHeight) {
@@ -858,6 +870,11 @@ class CabinetConstructor {
             this.adjustFourSectionsAlignment();
         } else {
             console.log('Система выравнивания пропущена для макета:', this.currentLayout);
+        }
+        
+        // Обновляем все двери после изменения позиций секций
+        if (this.doorsEnabled) {
+            this.updateAllDoors();
         }
     }
 
@@ -1438,6 +1455,130 @@ class CabinetConstructor {
             'Левый фон': `${leftBgLeftPercent.toFixed(2)}% ширина: ${leftBgWidthPercent.toFixed(2)}%`,
             'Центр фон': `${centerBgLeftPercent.toFixed(2)}% ширина: ${centerBgWidthPercent.toFixed(2)}%`,
             'Правый фон': `${rightBgLeftPercent.toFixed(2)}% ширина: ${rightBgWidthPercent.toFixed(2)}%`
+        });
+    }
+
+    // Переключение дверей
+    toggleDoors(enabled) {
+        this.doorsEnabled = enabled;
+        const doorsContainer = document.getElementById('doors-container');
+        
+        if (enabled) {
+            // Включаем двери
+            if (doorsContainer) {
+                doorsContainer.style.display = 'block';
+            }
+            // Создаем двери, если их еще нет
+            if (this.doors.size === 0) {
+                this.createDoors();
+            }
+        } else {
+            // Выключаем двери
+            if (doorsContainer) {
+                doorsContainer.style.display = 'none';
+            }
+        }
+        
+        console.log(`Двери ${enabled ? 'включены' : 'выключены'}`);
+    }
+
+    // Создание дверей (дублирует логику секций)
+    createDoors() {
+        const doorsContainer = document.getElementById('doors-container');
+        if (!doorsContainer) return;
+        
+        // Очищаем контейнер
+        doorsContainer.innerHTML = '';
+        this.doors.clear();
+        
+        // Получаем конфигурацию секций текущего макета
+        const layoutConfig = this.layouts.layouts[this.currentLayout];
+        if (!layoutConfig || !layoutConfig.sections) return;
+        
+        layoutConfig.sections.forEach(sectionConfig => {
+            // Создаем DOM элемент двери (копируем структуру секции)
+            const doorElement = document.createElement('div');
+            doorElement.className = `door ${sectionConfig.id}-door`;
+            doorElement.id = `${sectionConfig.id}-door`;
+            
+            // Используем ту же логику позиционирования, что и для секций
+            doorElement.style.left = `${(sectionConfig.position.left / 3200) * 100}%`;
+            doorElement.style.top = `${(sectionConfig.position.top / 1919) * 100}%`;
+            doorElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
+            doorElement.style.height = `${(sectionConfig.defaultSize.height / 1919) * 100}%`;
+            
+            // Устанавливаем transform-origin из конфигурации
+            doorElement.style.transformOrigin = sectionConfig.transformOrigin;
+            
+            // Применяем текущий transform от соответствующей секции
+            const sectionData = this.sections.get(sectionConfig.id);
+            if (sectionData && sectionData.element.style.transform) {
+                doorElement.style.transform = sectionData.element.style.transform;
+            }
+            
+            // Добавляем стили для позиционирования (как у секций)
+            doorElement.style.position = 'absolute';
+            
+            // Пока ставим временный цвет для тестирования
+            doorElement.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
+            doorElement.style.border = '2px solid red';
+            
+            doorsContainer.appendChild(doorElement);
+            
+            // Сохраняем данные двери
+            const doorData = {
+                element: doorElement,
+                config: sectionConfig,
+                currentWidth: sectionData ? sectionData.currentWidth : sectionConfig.defaultSize.width
+            };
+            this.doors.set(sectionConfig.id, doorData);
+        });
+        
+        console.log('Двери созданы:', this.doors.size);
+    }
+
+    clearDoors() {
+        const doorsContainer = document.getElementById('doors-container');
+        if (doorsContainer) {
+            doorsContainer.innerHTML = '';
+        }
+        this.doors.clear();
+    }
+
+    // Обновление конкретной двери
+    updateDoor(sectionId) {
+        const doorData = this.doors.get(sectionId);
+        const sectionData = this.sections.get(sectionId);
+        
+        if (!doorData || !sectionData) return;
+        
+        // Синхронизируем все стили позиционирования
+        doorData.element.style.left = sectionData.element.style.left;
+        doorData.element.style.top = sectionData.element.style.top;
+        doorData.element.style.width = sectionData.element.style.width;
+        doorData.element.style.height = sectionData.element.style.height;
+        
+        // Синхронизируем transform
+        if (sectionData.element.style.transform) {
+            doorData.element.style.transform = sectionData.element.style.transform;
+        }
+        
+        // Синхронизируем transform-origin
+        if (sectionData.element.style.transformOrigin) {
+            doorData.element.style.transformOrigin = sectionData.element.style.transformOrigin;
+        }
+        
+        // Обновляем данные ширины
+        doorData.currentWidth = sectionData.currentWidth;
+        
+        // Здесь позже будет обновление изображения двери
+        console.log(`Дверь ${sectionId} обновлена`);
+    }
+
+    // Обновление всех дверей
+    updateAllDoors() {
+        this.doors.forEach((doorData, sectionId) => {
+            this.updateDoor(sectionId);
         });
     }
 }
