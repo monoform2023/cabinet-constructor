@@ -20,8 +20,6 @@ body {
     overflow: hidden;
 }
 
-
-
 /* Главное окно конструктора */
 .main-window {
     width: min(100vw, 3200px);
@@ -32,6 +30,171 @@ body {
     background-repeat: no-repeat;
     margin: 0 auto;
     overflow: hidden;
+}
+
+/* Комплексные адаптивные стили */
+/* Очень большие экраны (> 1400px) */
+@media screen and (min-width: 1401px) {
+    .control-panel {
+        font-size: clamp(16px, 1.2vw, 18px);
+    }
+    
+    .price-amount {
+        font-size: clamp(28px, 2.2vw, 32px);
+    }
+    
+    .price-currency {
+        font-size: clamp(22px, 1.8vw, 26px);
+    }
+    
+    .color-button {
+        height: clamp(40px, 3vw, 50px);
+    }
+    
+    .door-color-button {
+        height: clamp(40px, 3vw, 50px);
+    }
+}
+
+/* Большие экраны (1200px - 1400px) */
+@media screen and (max-width: 1400px) {
+    .control-panel {
+        font-size: clamp(14px, 1.5vw, 16px);
+        padding: clamp(15px, 1.5vw, 18px);
+        gap: clamp(8px, 1vw, 12px);
+    }
+    
+    .price-amount {
+        font-size: clamp(24px, 2.5vw, 28px);
+    }
+    
+    .price-currency {
+        font-size: clamp(18px, 2vw, 22px);
+    }
+    
+    .color-button {
+        height: clamp(35px, 3.5vw, 42px);
+    }
+    
+    .door-color-button {
+        height: clamp(35px, 3.5vw, 42px);
+    }
+    
+    .layout-selector select,
+    .variants-dropdown select,
+    .doors-handle-selector select {
+        padding: clamp(6px, 0.8vw, 8px) clamp(8px, 1vw, 12px);
+        font-size: clamp(12px, 1.2vw, 14px);
+    }
+    
+    .width-control label,
+    .height-control label,
+    .doors-control label,
+    .doors-handle-selector label,
+    .doors-mirror-control label,
+    .custom-depth-checkbox label,
+    .lighting-control label,
+    .door-sensor-control label,
+    .assembly-control label {
+        font-size: clamp(12px, 1.3vw, 14px);
+    }
+    
+    .dimensions-display {
+        font-size: clamp(12px, 1.2vw, 14px);
+    }
+    
+    .width-slider,
+    .height-slider,
+    .depth-slider {
+        height: clamp(6px, 0.8vw, 8px);
+    }
+    
+    .width-display,
+    .height-display,
+    .depth-display {
+        width: clamp(50px, 6vw, 70px);
+        height: clamp(28px, 3vw, 35px);
+        font-size: clamp(12px, 1.2vw, 14px);
+    }
+    
+    .help-icon {
+        width: clamp(16px, 1.5vw, 18px);
+        height: clamp(16px, 1.5vw, 18px);
+        font-size: clamp(10px, 1vw, 12px);
+    }
+    
+    .help-tooltip {
+        font-size: clamp(11px, 1.1vw, 13px);
+        padding: clamp(6px, 0.8vw, 8px) clamp(8px, 1vw, 10px);
+        max-width: clamp(200px, 25vw, 280px);
+    }
+    
+    input[type="checkbox"] {
+        width: clamp(16px, 1.5vw, 18px);
+        height: clamp(16px, 1.5vw, 18px);
+    }
+    
+    .additional-params-title {
+        font-size: clamp(12px, 1.3vw, 14px);
+    }
+    
+    .additional-params-toggle {
+        font-size: clamp(16px, 1.5vw, 18px);
+    }
+}
+
+/* Средние экраны (1024px - 1199px) */
+@media screen and (max-width: 1199px) {
+    .control-panel {
+        font-size: clamp(13px, 1.8vw, 15px);
+        padding: clamp(12px, 1.8vw, 16px);
+        gap: clamp(6px, 1.2vw, 10px);
+    }
+    
+    .price-amount {
+        font-size: clamp(20px, 3vw, 24px);
+    }
+    
+    .price-currency {
+        font-size: clamp(16px, 2.5vw, 20px);
+    }
+    
+    .price-info {
+        margin-bottom: clamp(6px, 1.2vw, 8px);
+        padding-bottom: clamp(6px, 1.2vw, 8px);
+    }
+    
+    .color-button {
+        height: clamp(30px, 4vw, 38px);
+    }
+    
+    .door-color-button {
+        height: clamp(30px, 4vw, 38px);
+    }
+    
+    .color-buttons,
+    .doors-color-buttons {
+        gap: clamp(4px, 1vw, 6px);
+    }
+    
+    .layout-selector,
+    .variants-dropdown,
+    .color-selector,
+    .doors-control,
+    .doors-color-selector,
+    .doors-handle-selector,
+    .doors-mirror-control,
+    .custom-depth-checkbox,
+    .lighting-control,
+    .door-sensor-control,
+    .assembly-control {
+        margin-bottom: clamp(6px, 1.2vw, 8px);
+    }
+    
+    .section-controls {
+        margin-bottom: clamp(6px, 1.2vw, 8px);
+        padding-bottom: clamp(6px, 1.2vw, 8px);
+    }
 }
 
 /* Адаптивные стили для планшетов */
@@ -46,9 +209,88 @@ body {
         height: 80vh;
         max-height: 700px;
         z-index: 100;
-        font-size: 16px;
-        gap: 20px;
-        padding: 20px;
+        font-size: clamp(14px, 2vw, 16px);
+        gap: clamp(8px, 1.5vw, 12px);
+        padding: clamp(15px, 2vw, 20px);
+        overflow-y: auto;
+    }
+    
+    .price-amount {
+        font-size: clamp(18px, 3.5vw, 22px);
+    }
+    
+    .price-currency {
+        font-size: clamp(14px, 3vw, 18px);
+    }
+    
+    .color-button {
+        height: clamp(32px, 4.5vw, 40px);
+    }
+    
+    .door-color-button {
+        height: clamp(32px, 4.5vw, 40px);
+    }
+    
+    .layout-selector select,
+    .variants-dropdown select,
+    .doors-handle-selector select {
+        padding: clamp(6px, 1vw, 8px) clamp(8px, 1.5vw, 10px);
+        font-size: clamp(12px, 1.8vw, 14px);
+    }
+    
+    .width-control label,
+    .height-control label,
+    .doors-control label,
+    .doors-handle-selector label,
+    .doors-mirror-control label,
+    .custom-depth-checkbox label,
+    .lighting-control label,
+    .door-sensor-control label,
+    .assembly-control label {
+        font-size: clamp(12px, 1.8vw, 14px);
+    }
+    
+    .dimensions-display {
+        font-size: clamp(11px, 1.5vw, 13px);
+    }
+    
+    .width-slider,
+    .height-slider,
+    .depth-slider {
+        height: clamp(5px, 1vw, 7px);
+    }
+    
+    .width-display,
+    .height-display,
+    .depth-display {
+        width: clamp(45px, 7vw, 60px);
+        height: clamp(25px, 3.5vw, 32px);
+        font-size: clamp(11px, 1.5vw, 13px);
+    }
+    
+    .help-icon {
+        width: clamp(14px, 2vw, 16px);
+        height: clamp(14px, 2vw, 16px);
+        font-size: clamp(9px, 1.2vw, 11px);
+    }
+    
+    .help-tooltip {
+        font-size: clamp(10px, 1.5vw, 12px);
+        padding: clamp(5px, 1vw, 7px) clamp(6px, 1.2vw, 8px);
+        max-width: clamp(180px, 30vw, 250px);
+    }
+    
+    input[type="checkbox"] {
+        width: clamp(14px, 2vw, 16px);
+        height: clamp(14px, 2vw, 16px);
+    }
+    
+    .additional-params-title {
+        font-size: clamp(11px, 1.8vw, 13px);
+    }
+    
+    .additional-params-toggle {
+        font-size: clamp(14px, 2vw, 16px);
     }
 }
 
@@ -62,25 +304,234 @@ body {
         width: 95vw;
         max-width: 560px;
         height: 85vh;
-        font-size: 14px;
-        gap: 15px;
-        padding: 15px;
+        font-size: clamp(13px, 2.5vw, 15px);
+        gap: clamp(6px, 2vw, 10px);
+        padding: clamp(12px, 2.5vw, 15px);
+    }
+    
+    .price-amount {
+        font-size: clamp(16px, 4vw, 20px);
+    }
+    
+    .price-currency {
+        font-size: clamp(12px, 3.5vw, 16px);
     }
     
     .color-button {
-        height: 35px;
+        height: clamp(28px, 5vw, 35px);
+    }
+    
+    .door-color-button {
+        height: clamp(28px, 5vw, 35px);
     }
     
     .layout-selector select,
-    .variants-dropdown select {
-        padding: 6px 8px;
-        font-size: 13px;
+    .variants-dropdown select,
+    .doors-handle-selector select {
+        padding: clamp(5px, 1.2vw, 6px) clamp(6px, 1.5vw, 8px);
+        font-size: clamp(11px, 2vw, 13px);
+    }
+    
+    .width-control label,
+    .height-control label,
+    .doors-control label,
+    .doors-handle-selector label,
+    .doors-mirror-control label,
+    .custom-depth-checkbox label,
+    .lighting-control label,
+    .door-sensor-control label,
+    .assembly-control label {
+        font-size: clamp(11px, 2vw, 13px);
+    }
+    
+    .dimensions-display {
+        font-size: clamp(10px, 1.8vw, 12px);
+    }
+    
+    .width-slider,
+    .height-slider,
+    .depth-slider {
+        height: clamp(4px, 1.2vw, 6px);
+    }
+    
+    .width-display,
+    .height-display,
+    .depth-display {
+        width: clamp(40px, 8vw, 55px);
+        height: clamp(22px, 4vw, 28px);
+        font-size: clamp(10px, 1.8vw, 12px);
+    }
+    
+    .help-icon {
+        width: clamp(12px, 2.5vw, 14px);
+        height: clamp(12px, 2.5vw, 14px);
+        font-size: clamp(8px, 1.5vw, 10px);
+    }
+    
+    .help-tooltip {
+        font-size: clamp(9px, 1.8vw, 11px);
+        padding: clamp(4px, 1.2vw, 6px) clamp(5px, 1.5vw, 7px);
+        max-width: clamp(160px, 35vw, 220px);
+    }
+    
+    input[type="checkbox"] {
+        width: clamp(12px, 2.5vw, 14px);
+        height: clamp(12px, 2.5vw, 14px);
+    }
+    
+    .additional-params-title {
+        font-size: clamp(10px, 2vw, 12px);
+    }
+    
+    .additional-params-toggle {
+        font-size: clamp(12px, 2.5vw, 14px);
+    }
+    
+    .color-buttons,
+    .doors-color-buttons {
+        gap: clamp(3px, 1.2vw, 5px);
     }
     
     .layout-selector,
+    .variants-dropdown,
+    .color-selector,
+    .doors-control,
+    .doors-color-selector,
+    .doors-handle-selector,
+    .doors-mirror-control,
+    .custom-depth-checkbox,
+    .lighting-control,
+    .door-sensor-control,
+    .assembly-control {
+        margin-bottom: clamp(4px, 1.5vw, 6px);
+    }
+    
     .section-controls {
-        margin-bottom: 10px;
-        padding-bottom: 10px;
+        margin-bottom: clamp(4px, 1.5vw, 6px);
+        padding-bottom: clamp(4px, 1.5vw, 6px);
+    }
+    
+    .price-info {
+        margin-bottom: clamp(4px, 1.5vw, 6px);
+        padding-bottom: clamp(4px, 1.5vw, 6px);
+    }
+}
+
+/* Очень маленькие экраны (< 480px) */
+@media screen and (max-width: 480px) {
+    .control-panel {
+        width: 98vw;
+        height: 90vh;
+        font-size: clamp(12px, 3vw, 14px);
+        gap: clamp(4px, 2.5vw, 8px);
+        padding: clamp(10px, 3vw, 12px);
+    }
+    
+    .price-amount {
+        font-size: clamp(14px, 4.5vw, 18px);
+    }
+    
+    .price-currency {
+        font-size: clamp(11px, 4vw, 14px);
+    }
+    
+    .color-button {
+        height: clamp(24px, 6vw, 30px);
+    }
+    
+    .door-color-button {
+        height: clamp(24px, 6vw, 30px);
+    }
+    
+    .layout-selector select,
+    .variants-dropdown select,
+    .doors-handle-selector select {
+        padding: clamp(4px, 1.5vw, 5px) clamp(5px, 2vw, 6px);
+        font-size: clamp(10px, 2.5vw, 12px);
+    }
+    
+    .width-control label,
+    .height-control label,
+    .doors-control label,
+    .doors-handle-selector label,
+    .doors-mirror-control label,
+    .custom-depth-checkbox label,
+    .lighting-control label,
+    .door-sensor-control label,
+    .assembly-control label {
+        font-size: clamp(10px, 2.5vw, 12px);
+    }
+    
+    .dimensions-display {
+        font-size: clamp(9px, 2.2vw, 11px);
+    }
+    
+    .width-slider,
+    .height-slider,
+    .depth-slider {
+        height: clamp(3px, 1.5vw, 5px);
+    }
+    
+    .width-display,
+    .height-display,
+    .depth-display {
+        width: clamp(35px, 9vw, 45px);
+        height: clamp(20px, 5vw, 25px);
+        font-size: clamp(9px, 2.2vw, 11px);
+    }
+    
+    .help-icon {
+        width: clamp(10px, 3vw, 12px);
+        height: clamp(10px, 3vw, 12px);
+        font-size: clamp(7px, 2vw, 9px);
+    }
+    
+    .help-tooltip {
+        font-size: clamp(8px, 2.2vw, 10px);
+        padding: clamp(3px, 1.5vw, 5px) clamp(4px, 2vw, 6px);
+        max-width: clamp(140px, 40vw, 200px);
+    }
+    
+    input[type="checkbox"] {
+        width: clamp(10px, 3vw, 12px);
+        height: clamp(10px, 3vw, 12px);
+    }
+    
+    .additional-params-title {
+        font-size: clamp(9px, 2.5vw, 11px);
+    }
+    
+    .additional-params-toggle {
+        font-size: clamp(11px, 3vw, 13px);
+    }
+    
+    .color-buttons,
+    .doors-color-buttons {
+        gap: clamp(2px, 1.5vw, 4px);
+    }
+    
+    .layout-selector,
+    .variants-dropdown,
+    .color-selector,
+    .doors-control,
+    .doors-color-selector,
+    .doors-handle-selector,
+    .doors-mirror-control,
+    .custom-depth-checkbox,
+    .lighting-control,
+    .door-sensor-control,
+    .assembly-control {
+        margin-bottom: clamp(3px, 2vw, 5px);
+    }
+    
+    .section-controls {
+        margin-bottom: clamp(3px, 2vw, 5px);
+        padding-bottom: clamp(3px, 2vw, 5px);
+    }
+    
+    .price-info {
+        margin-bottom: clamp(3px, 2vw, 5px);
+        padding-bottom: clamp(3px, 2vw, 5px);
     }
 }
 
@@ -239,15 +690,22 @@ body {
 
 .price-display {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 6px;
+    flex-wrap: nowrap;
+}
+
+.price-group {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
 }
 
 .price-amount {
     font-size: 28px;
     font-weight: 700;
     color: #2c3e50;
-    margin-right: 6px;
 }
 
 .price-currency {
@@ -257,10 +715,12 @@ body {
 }
 
 .dimensions-display {
-    font-size: 14px;
+    font-size: 12px;
     color: #6c757d;
     line-height: 1.4;
     font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 #cabinet-dimensions {
@@ -273,18 +733,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
-.layout-selector label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
+.layout-selector-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .layout-selector select {
-    width: 100%;
+    flex: 1;
     padding: 8px 12px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -307,17 +766,11 @@ body {
     gap: 8px;
 }
 
-.color-selector label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
-}
-
 .color-buttons {
     display: flex;
     gap: 8px;
     justify-content: space-between;
+    align-items: center;
 }
 
 .color-button {
@@ -341,6 +794,12 @@ body {
 .color-button.active {
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Стили для help-icon в ряду с цветными кнопками */
+.color-buttons .help-icon {
+    flex-shrink: 0;
+    margin-left: 4px;
 }
 
 /* Миниатюры для кнопок цвета */
@@ -418,15 +877,14 @@ body {
     gap: 6px;
 }
 
-.variants-dropdown label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
+.variants-dropdown-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .variants-dropdown select {
-    width: 100%;
+    flex: 1;
     padding: 8px 12px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -532,6 +990,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    margin-bottom: 16px;
 }
 
 .height-control label {
@@ -822,8 +1281,6 @@ input[type="checkbox"] {
     color: #333;
 }
 
-
-
 /* Панель управления дверьми */
 .doors-panel {
     margin-top: 10px;
@@ -835,24 +1292,20 @@ input[type="checkbox"] {
 
 /* Селектор цвета дверей */
 .doors-color-selector {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
     margin-bottom: 10px;
-}
-
-.doors-color-selector label {
-    display: block;
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
 }
 
 .doors-color-buttons {
     display: flex;
     gap: 8px;
+    align-items: center;
     flex-wrap: wrap;
+}
+
+/* Стили для help-icon в ряду с цветными кнопками дверей */
+.doors-color-buttons .help-icon {
+    flex-shrink: 0;
+    margin-left: 4px;
 }
 
 .door-color-button {
@@ -924,8 +1377,6 @@ input[type="checkbox"] {
     font-weight: 600;
     color: #333;
 }
-
-
 
 /* Система подсказок */
 .help-icon {
@@ -1054,6 +1505,118 @@ input[type="checkbox"] {
     font-weight: 600;
     color: #333;
     cursor: pointer;
+}
+
+/* Кнопки действий */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    align-items: center;
+}
+
+.order-button {
+    flex: 1;
+    background: linear-gradient(135deg, #333 0%, #000 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.order-button:hover {
+    background: linear-gradient(135deg, #555 0%, #333 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.order-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.save-button {
+    width: 44px;
+    height: 44px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #495057;
+}
+
+.save-button:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    color: #212529;
+    transform: translateY(-1px);
+}
+
+.save-button:active {
+    transform: translateY(0);
+    background: #dee2e6;
+}
+
+.save-button svg {
+    transition: transform 0.2s ease;
+}
+
+.save-button:hover svg {
+    transform: scale(1.1);
+}
+
+/* Адаптивность для кнопок действий */
+@media screen and (max-width: 768px) {
+    .action-buttons {
+        gap: clamp(6px, 1.5vw, 8px);
+        margin-top: clamp(12px, 2.5vw, 14px);
+    }
+    
+    .order-button {
+        padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 18px);
+        font-size: clamp(14px, 2.5vw, 15px);
+    }
+    
+    .save-button {
+        width: clamp(38px, 7vw, 42px);
+        height: clamp(38px, 7vw, 42px);
+    }
+    
+    .save-button svg {
+        width: clamp(14px, 2.5vw, 16px);
+        height: clamp(14px, 2.5vw, 16px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .action-buttons {
+        gap: clamp(4px, 1vw, 6px);
+        margin-top: clamp(10px, 2vw, 12px);
+    }
+    
+    .order-button {
+        padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2.5vw, 14px);
+        font-size: clamp(12px, 2vw, 14px);
+    }
+    
+    .save-button {
+        width: clamp(34px, 6vw, 38px);
+        height: clamp(34px, 6vw, 38px);
+    }
+    
+    .save-button svg {
+        width: clamp(12px, 2vw, 14px);
+        height: clamp(12px, 2vw, 14px);
+    }
 }
 
 

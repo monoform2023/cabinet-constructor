@@ -333,6 +333,9 @@ class CabinetConstructor {
         // Инициализируем обработчики дверей
         this.initDoorsEventListeners();
         
+        // Инициализируем кнопки действий
+        this.initActionButtons();
+        
         console.log('Обработчики событий инициализированы');
     }
 
@@ -2109,6 +2112,459 @@ class CabinetConstructor {
         }
     }
 
+    // === КНОПКИ ДЕЙСТВИЙ ===
+    
+    initActionButtons() {
+        // Кнопка заказа
+        const orderButton = document.getElementById('order-button');
+        if (orderButton) {
+            orderButton.addEventListener('click', () => {
+                this.handleOrder();
+            });
+        }
+        
+        // Кнопка сохранения
+        const saveButton = document.getElementById('save-button');
+        if (saveButton) {
+            saveButton.addEventListener('click', () => {
+                this.handleSaveImage();
+            });
+        }
+        
+        console.log('Кнопки действий инициализированы');
+    }
+    
+    handleOrder() {
+        // Переход на страницу заказа (пока просто placeholder)
+        const orderUrl = 'https://example.com/order'; // Здесь будет реальная ссылка
+        
+        // Можно открыть в новой вкладке или в текущей
+        window.open(orderUrl, '_blank');
+        
+        console.log('Переход к оформлению заказа');
+    }
+    
+    async handleSaveImage() {
+        console.log('Начинаем сохранение...');
+        
+        // Показываем индикатор загрузки
+        const saveButton = document.getElementById('save-button');
+        if (saveButton) {
+            saveButton.style.opacity = '0.5';
+            saveButton.style.pointerEvents = 'none';
+        }
+        
+        try {
+            // Собираем данные о текущей конфигурации
+            const configData = this.collectConfigurationData();
+            
+            // Создаем составное изображение с шкафом и описанием
+            await this.createAndDownloadImage(configData);
+            
+        } catch (error) {
+            console.error('Критическая ошибка при сохранении:', error);
+            // Только в случае критической ошибки показываем alert
+            alert('Произошла критическая ошибка при сборе данных');
+        } finally {
+            // Убираем индикатор загрузки
+            const saveButton = document.getElementById('save-button');
+            if (saveButton) {
+                saveButton.style.opacity = '1';
+                saveButton.style.pointerEvents = 'auto';
+            }
+        }
+    }
+    
+    collectConfigurationData() {
+        // Собираем все данные о текущей конфигурации
+        const dimensions = this.calculateCabinetDimensions();
+        
+        // Данные о секциях
+        const sectionsData = [];
+        this.sections.forEach((sectionData, sectionId) => {
+            sectionsData.push({
+                id: sectionId,
+                name: sectionData.config.name,
+                variant: sectionData.currentVariant ? sectionData.currentVariant.name : 'Не выбран',
+                width: this.pixelsToMillimeters(sectionData.currentWidth)
+            });
+        });
+        
+        // Дополнительные параметры
+        const additionalParams = {
+            customDepth: this.globalSettings.hasCustomDepth,
+            depth: this.globalSettings.sectionDepth,
+            lighting: document.getElementById('lighting-enabled')?.checked || false,
+            doorSensor: document.getElementById('door-sensor-enabled')?.checked || false,
+            assembly: document.getElementById('assembly-enabled')?.checked || false
+        };
+        
+        // Данные о дверях
+        const doorsData = {
+            enabled: this.doorsEnabled,
+            color: this.doorsEnabled ? this.doorsSettings.color : null
+        };
+        
+        return {
+            layout: this.currentLayout,
+            layoutName: this.layouts?.layouts[this.currentLayout]?.name || this.currentLayout,
+            dimensions: dimensions,
+            sections: sectionsData,
+            color: this.currentColor,
+            height: this.globalSettings.sectionHeight,
+            doors: doorsData,
+            additionalParams: additionalParams,
+            timestamp: new Date().toLocaleString('ru-RU')
+        };
+    }
+    
+    generateConfigurationReport(data) {
+        let report = '';
+        report += '=== КОНФИГУРАЦИЯ ШКАФА ===\n\n';
+        report += `Дата создания: ${data.timestamp}\n\n`;
+        
+        // Основная информация
+        report += '--- ОСНОВНЫЕ ПАРАМЕТРЫ ---\n';
+        report += `Тип шкафа: ${data.layoutName}\n`;
+        report += `Размеры: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм\n`;
+        report += `Цвет корпуса: ${data.color}\n`;
+        report += `Высота: ${data.height} мм\n\n`;
+        
+        // Секции
+        report += '--- СЕКЦИИ ---\n';
+        data.sections.forEach((section, index) => {
+            report += `${index + 1}. ${section.name}:\n`;
+            report += `   Вариант: ${section.variant}\n`;
+            report += `   Ширина: ${section.width} мм\n\n`;
+        });
+        
+        // Двери
+        report += '--- ДВЕРИ ---\n';
+        if (data.doors.enabled) {
+            report += `Двери: Да\n`;
+            report += `Цвет дверей: ${data.doors.color}\n\n`;
+        } else {
+            report += `Двери: Нет\n\n`;
+        }
+        
+        // Дополнительные параметры
+        report += '--- ДОПОЛНИТЕЛЬНЫЕ ПАРАМЕТРЫ ---\n';
+        if (data.additionalParams.customDepth) {
+            report += `Нестандартная глубина: ${data.additionalParams.depth} мм (+20%)\n`;
+        }
+        if (data.additionalParams.lighting) {
+            report += `Подсветка: Да (3000K, 24v)\n`;
+        }
+        if (data.additionalParams.doorSensor) {
+            report += `Датчик открывания двери: Да\n`;
+        }
+        if (data.additionalParams.assembly) {
+            report += `Сборка: Да\n`;
+        }
+        
+        if (!data.additionalParams.customDepth && !data.additionalParams.lighting && 
+            !data.additionalParams.doorSensor && !data.additionalParams.assembly) {
+            report += `Дополнительные параметры не выбраны\n`;
+        }
+        
+        report += '\n';
+        report += '--- СТОИМОСТЬ ---\n';
+        report += `Примерная стоимость: 235 000 ₽\n`;
+        report += `(Точная стоимость рассчитывается индивидуально)\n\n`;
+        
+        report += '=== КОНЕЦ ОТЧЕТА ===';
+        
+        return report;
+    }
+    
+    async createAndDownloadImage(configData) {
+        try {
+            // Пытаемся создать изображение с html2canvas
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '-9999px';
+            container.style.left = '-9999px';
+            container.style.width = '1800px';
+            container.style.height = 'auto';
+            container.style.background = 'white';
+            container.style.padding = '20px';
+            container.style.fontFamily = 'Arial, sans-serif';
+            
+            // Клонируем только область шкафа (без меню) - увеличено на 80% от оригинала
+            const cabinetArea = document.createElement('div');
+            cabinetArea.style.position = 'relative';
+            cabinetArea.style.width = '1728px';  // 960 * 1.5 * 1.2 = 1728
+            cabinetArea.style.height = '1037px';  // 576 * 1.5 * 1.2 = 1037
+            cabinetArea.style.marginBottom = '20px';
+            cabinetArea.style.overflow = 'hidden';
+            
+            // Клонируем фоновые слои
+            const backgroundLayers = document.querySelector('.background-layers');
+            if (backgroundLayers) {
+                const backgroundClone = backgroundLayers.cloneNode(true);
+                backgroundClone.style.width = '100%';
+                backgroundClone.style.height = '100%';
+                cabinetArea.appendChild(backgroundClone);
+            }
+            
+            // Клонируем секции
+            const sectionsContainer = document.getElementById('sections-container');
+            if (sectionsContainer) {
+                const sectionsClone = sectionsContainer.cloneNode(true);
+                sectionsClone.style.width = '100%';
+                sectionsClone.style.height = '100%';
+                cabinetArea.appendChild(sectionsClone);
+            }
+            
+            // Клонируем двери (если есть)
+            const doorsContainer = document.getElementById('doors-container');
+            if (doorsContainer && doorsContainer.style.display !== 'none') {
+                const doorsClone = doorsContainer.cloneNode(true);
+                doorsClone.style.width = '100%';
+                doorsClone.style.height = '100%';
+                cabinetArea.appendChild(doorsClone);
+            }
+            
+            // Создаем упрощенную информационную панель (только секции)
+            const infoPanel = document.createElement('div');
+            infoPanel.style.width = '1728px';
+            infoPanel.style.fontSize = '22px';
+            infoPanel.style.lineHeight = '1.4';
+            infoPanel.style.color = '#333';
+            infoPanel.innerHTML = this.generateCompactInfoHTML(configData);
+            
+            // Собираем все вместе
+            container.appendChild(cabinetArea);
+            container.appendChild(infoPanel);
+            document.body.appendChild(container);
+            
+            try {
+                // Создаем изображение с помощью html2canvas
+                const canvas = await html2canvas(container, {
+                    width: 1800,
+                    height: container.offsetHeight,
+                    scale: 2, // Увеличиваем разрешение в 2 раза
+                    dpi: 300, // Высокое качество печати
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    removeContainer: true,
+                    ignoreElements: (element) => {
+                        // Игнорируем любые элементы с классом control-panel
+                        return element.classList && element.classList.contains('control-panel');
+                    }
+                });
+                
+                // Конвертируем в blob и скачиваем
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `cabinet-${Date.now()}.png`;
+                        link.style.display = 'none';
+                        
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        URL.revokeObjectURL(url);
+                        console.log('Изображение успешно сохранено');
+                    } else {
+                        throw new Error('Не удалось создать blob');
+                    }
+                }, 'image/png');
+                
+            } catch (canvasError) {
+                console.warn('Ошибка создания изображения:', canvasError);
+                // Fallback к текстовому отчету
+                this.createFallbackReport(configData);
+            } finally {
+                // Удаляем временный контейнер
+                if (document.body.contains(container)) {
+                    document.body.removeChild(container);
+                }
+            }
+            
+        } catch (error) {
+            console.error('Общая ошибка при создании изображения:', error);
+            // Fallback к текстовому отчету
+            this.createFallbackReport(configData);
+        }
+    }
+    
+    createFallbackReport(configData) {
+        // Создаем упрощенный текстовый отчет как fallback
+        console.log('Создаем упрощенный текстовый отчет вместо изображения...');
+        
+        const report = this.generateSectionsReport(configData);
+        this.downloadTextFile(report, `cabinet-info-${Date.now()}.txt`);
+        
+        // Показываем уведомление пользователю
+        alert('Из-за ограничений безопасности браузера сохранено изображение не удалось.\n\n' +
+              'Вместо этого сохранена информация о шкафе.\n\n' +
+              'Для сохранения изображений откройте страницу через веб-сервер\n' +
+              '(например, используйте Live Server в VS Code).');
+    }
+    
+    generateSectionsReport(data) {
+        let report = '';
+        report += '=== ИНФОРМАЦИЯ О ШКАФЕ ===\n\n';
+        report += `Дата создания: ${data.timestamp}\n\n`;
+        
+        // Основная информация
+        report += '--- ОСНОВНАЯ ИНФОРМАЦИЯ ---\n';
+        report += `Стоимость: 235 000 ₽\n`;
+        report += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм\n\n`;
+        
+        // Секции
+        report += '--- СЕКЦИИ ---\n';
+        data.sections.forEach((section, index) => {
+            report += `${index + 1}. ${section.name} (${section.variant}, ${section.width} мм)\n`;
+        });
+        
+        report += '\n=== КОНЕЦ ОТЧЕТА ===';
+        
+        return report;
+    }
+    
+    generateCompactInfoHTML(data) {
+        let html = '';
+        
+        // Основная информация в одну строку
+        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 12px;">';
+        
+        // Стоимость
+        html += '<div style="font-size: 26px; font-weight: bold; color: #333;">';
+        html += 'Стоимость: 235 000 ₽';
+        html += '</div>';
+        
+        // Размер шкафа
+        html += '<div style="font-size: 22px; color: #666;">';
+        html += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм`;
+        html += '</div>';
+        
+        html += '</div>';
+        
+        // Секции компактно
+        html += '<div style="background: #fff; padding: 20px; border-radius: 12px; border: 2px solid #ddd;">';
+        html += '<div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 12px;">Секции:</div>';
+        
+        // Секции в одну строку через разделитель
+        const sectionsText = data.sections.map((section, index) => {
+            return `${index + 1}. ${section.name} (${section.variant}, ${section.width} мм)`;
+        }).join(' • ');
+        
+        html += `<div style="font-size: 18px; color: #666; line-height: 1.4;">${sectionsText}</div>`;
+        html += '</div>';
+        
+        return html;
+    }
+    
+    generateSectionsHTML(data) {
+        let html = '';
+        
+        // Заголовок
+        html += '<div style="text-align: center; margin-bottom: 20px;">';
+        html += '<h3 style="margin: 0; color: #333; font-size: 20px;">Секции шкафа</h3>';
+        html += '</div>';
+        
+        // Секции в одну строку
+        html += '<div style="display: flex; justify-content: space-between; gap: 20px;">';
+        
+        data.sections.forEach((section, index) => {
+            html += '<div style="flex: 1; text-align: center; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">';
+            html += `<div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px;">${index + 1}</div>`;
+            html += `<div style="font-size: 16px; color: #666; margin-bottom: 4px;">${section.name}</div>`;
+            html += `<div style="font-size: 14px; color: #888; margin-bottom: 4px;">${section.variant}</div>`;
+            html += `<div style="font-size: 14px; color: #888;">Ширина: ${section.width} мм</div>`;
+            html += '</div>';
+        });
+        
+        html += '</div>';
+        
+        return html;
+    }
+
+    generateConfigurationHTML(data) {
+        let html = '';
+        html += '<div style="display: flex; gap: 40px;">';
+        
+        // Левая колонка - основная информация
+        html += '<div style="flex: 1;">';
+        html += '<h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">Конфигурация шкафа</h3>';
+        html += `<p><strong>Тип:</strong> ${data.layoutName}</p>`;
+        html += `<p><strong>Размеры:</strong> ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм</p>`;
+        html += `<p><strong>Цвет корпуса:</strong> ${data.color}</p>`;
+        html += `<p><strong>Высота:</strong> ${data.height} мм</p>`;
+        
+        // Двери
+        if (data.doors.enabled) {
+            html += `<p><strong>Двери:</strong> Да (цвет: ${data.doors.color})</p>`;
+        } else {
+            html += `<p><strong>Двери:</strong> Нет</p>`;
+        }
+        html += '</div>';
+        
+        // Правая колонка - секции и дополнительные параметры
+        html += '<div style="flex: 1;">';
+        html += '<h4 style="margin: 0 0 10px 0; color: #333;">Секции:</h4>';
+        data.sections.forEach((section, index) => {
+            html += `<p style="margin: 5px 0;"><strong>${index + 1}. ${section.name}:</strong><br>`;
+            html += `&nbsp;&nbsp;${section.variant}<br>`;
+            html += `&nbsp;&nbsp;Ширина: ${section.width} мм</p>`;
+        });
+        
+        // Дополнительные параметры
+        const hasAdditional = data.additionalParams.customDepth || data.additionalParams.lighting || 
+                             data.additionalParams.doorSensor || data.additionalParams.assembly;
+        
+        if (hasAdditional) {
+            html += '<h4 style="margin: 15px 0 10px 0; color: #333;">Дополнительно:</h4>';
+            if (data.additionalParams.customDepth) {
+                html += `<p style="margin: 5px 0;">• Глубина: ${data.additionalParams.depth} мм (+20%)</p>`;
+            }
+            if (data.additionalParams.lighting) {
+                html += '<p style="margin: 5px 0;">• Подсветка (3000K, 24v)</p>';
+            }
+            if (data.additionalParams.doorSensor) {
+                html += '<p style="margin: 5px 0;">• Датчик открывания двери</p>';
+            }
+            if (data.additionalParams.assembly) {
+                html += '<p style="margin: 5px 0;">• Сборка</p>';
+            }
+        }
+        html += '</div>';
+        
+        html += '</div>';
+        
+        // Цена и дата внизу
+        html += '<div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd;">';
+        html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+        html += '<div style="font-size: 16px; font-weight: bold;">Примерная стоимость: 235 000 ₽</div>';
+        html += `<div style="color: #666; font-size: 12px;">Создано: ${data.timestamp}</div>`;
+        html += '</div>';
+        html += '</div>';
+        
+        return html;
+    }
+    
+    downloadTextFile(content, filename) {
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        URL.revokeObjectURL(url);
+    }
 
 }
 
