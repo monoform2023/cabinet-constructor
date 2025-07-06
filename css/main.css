@@ -230,6 +230,48 @@ body {
     font-size: calc(min(100vw, 3200px) * 16 / 3200); /* Увеличенный размер шрифта */
 }
 
+/* Блок стоимости и размера */
+.price-info {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.price-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.price-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-right: 4px;
+}
+
+.price-currency {
+    font-size: 20px;
+    font-weight: 600;
+    color: #007bff;
+}
+
+.dimensions-display {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+#cabinet-dimensions {
+    font-weight: 600;
+    color: #495057;
+}
+
 /* Селектор компоновки */
 .layout-selector {
     display: flex;
@@ -632,7 +674,6 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 5px;
 }
 
 .depth-slider {
@@ -892,4 +933,54 @@ body {
 .doors-mirror-control input[type="checkbox"] {
     margin-right: 8px;
     transform: scale(1.2);
-} 
+}
+
+/* Система подсказок */
+.help-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: #adb5bd;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+    cursor: help;
+    position: relative;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+}
+
+.help-icon:hover {
+    background-color: #868e96;
+    transform: scale(1.1);
+}
+
+.help-tooltip {
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    max-width: 250px;
+    white-space: normal;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+}
+
+.help-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+ 

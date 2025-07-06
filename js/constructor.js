@@ -34,10 +34,16 @@ class CabinetConstructor {
             // Инициализируем интерфейс
             this.initEventListeners();
             
-            // Загружаем стартовую компоновку
-            this.loadLayout(this.currentLayout);
+                    // Загружаем стартовую компоновку
+        this.loadLayout(this.currentLayout);
+        
+        // Обновляем отображение размера
+        this.updateDimensionsDisplay();
+        
+        console.log('Конструктор инициализирован');
             
-            console.log('Конструктор инициализирован');
+            // Инициализируем систему подсказок
+            this.initTooltipSystem();
         } catch (error) {
             console.error('Ошибка инициализации конструктора:', error);
         }
@@ -391,6 +397,9 @@ class CabinetConstructor {
             this.createDoors();
         }
 
+        // Обновляем отображение размера
+        this.updateDimensionsDisplay();
+
         console.log('Макет загружен:', layoutId);
     }
 
@@ -513,7 +522,10 @@ class CabinetConstructor {
 
         controlsContainer.innerHTML = `
             <div class="variants-dropdown">
-                <label>Вариант секции:</label>
+                <label>
+                Вариант секции:
+                <span class="help-icon" data-tooltip-file="variant-info.txt">?</span>
+            </label>
                 <select id="variant-select">
                     ${sectionData.config.variants.map(variant => 
                         `<option value="${variant.id}" ${variant.id === sectionData.currentVariant.id ? 'selected' : ''}>
@@ -543,7 +555,10 @@ class CabinetConstructor {
             </div>
 
             <div class="color-selector">
-                <label>Цвет:</label>
+                <label>
+                Цвет:
+                <span class="help-icon" data-tooltip-file="color-info.txt">?</span>
+            </label>
                 <div class="color-buttons" id="color-buttons">
                     <button class="color-button ${this.currentColor === 'c1' ? 'active' : ''}" data-color="c1" title="Цвет 1"></button>
                     <button class="color-button ${this.currentColor === 'c2' ? 'active' : ''}" data-color="c2" title="Цвет 2"></button>
@@ -575,7 +590,10 @@ class CabinetConstructor {
             <div class="depth-control">
                 <div class="custom-depth-checkbox">
                     <input type="checkbox" id="custom-depth-checkbox" ${this.globalSettings.hasCustomDepth ? 'checked' : ''}>
-                    <label for="custom-depth-checkbox">Нестандартная глубина</label>
+                    <label for="custom-depth-checkbox">
+                    Нестандартная глубина
+                    <span class="help-icon" data-tooltip-file="depth-info.txt">?</span>
+                </label>
                     <span class="price-note">+20%</span>
                 </div>
                 <div class="depth-slider-container" id="depth-slider-container" style="display: ${this.globalSettings.hasCustomDepth ? 'block' : 'none'};">
@@ -809,6 +827,9 @@ class CabinetConstructor {
             this.updateDoor(this.activeSection);
         }
 
+        // Обновляем отображение размера
+        this.updateDimensionsDisplay();
+
         console.log(`Ширина секции ${this.activeSection} изменена на ${newWidth}px`);
     }
 
@@ -821,6 +842,9 @@ class CabinetConstructor {
         if (heightDisplay) {
             heightDisplay.value = newHeight;
         }
+
+        // Обновляем отображение размера
+        this.updateDimensionsDisplay();
 
         console.log(`Высота шкафа изменена на ${newHeight}мм`);
     }
@@ -848,6 +872,9 @@ class CabinetConstructor {
         if (depthDisplay) {
             depthDisplay.value = newDepth;
         }
+
+        // Обновляем отображение размера
+        this.updateDimensionsDisplay();
 
         console.log(`Глубина секции изменена на ${newDepth}мм`);
     }
@@ -1790,6 +1817,143 @@ class CabinetConstructor {
             this.testDoorSynchronization();
         }, 100);
     }
+
+    // === СИСТЕМА ПОДСКАЗОК ===
+    
+    initTooltipSystem() {
+        // Встроенные тексты подсказок (работают без HTTP сервера)
+        this.tooltipTexts = new Map([
+            ['layout-info.txt', 'Выберите от одной до четырех секций шкафа. Если ваша гардеробная углоавая или п образная, то вы можете создать шкаф отдельно по каждой стене. Так же вы можете связатся с нами или заполнить форму внизу страницы и мы поможем с проектированием или реализуем нестрандартный вариант.'],
+            ['variant-info.txt', 'Выберите один из шести вариантов компоновки секции. В конструкторе представлены наиболее популярные комплектации, но вы можете создать и собсвенный вариант.'],
+            ['color-info.txt', 'Выберите один из пяти вариантов комбинации цвета. В конструкторе представлены удачные сочетания, но вы можете создать и собсвенный вариант. Все образцы представлены на странице ниже.'],
+            ['depth-info.txt', 'При включении параметра вы можете сделать любую глубину шкафа в доступном диапазоне. Но это добавить 20% к стоимости изделия и + одну неделю к изготовлению.'],
+            ['doors-info.txt', 'В палитре конструктора пять вариантов цвета дверей. Все образцы представлены на странице ниже. Мы используем Итальянские петли Salice. Если необходимо нессиметричное расположение дверей или нестандартный вариант, вы можете заполнить форму ниже или связаться с нами и мы поможем в проектировании.']
+        ]);
+        
+        // Инициализируем обработчики событий для значков подсказок
+        this.attachTooltipListeners();
+        
+        console.log('Система подсказок инициализирована');
+    }
+
+    // === РАСЧЕТ СТОИМОСТИ И РАЗМЕРА ===
+
+    calculateCabinetDimensions() {
+        // Рассчитываем общую ширину секций
+        let totalSectionsWidth = 0;
+        this.sections.forEach((sectionData, sectionId) => {
+            const widthMm = this.pixelsToMillimeters(sectionData.currentWidth);
+            totalSectionsWidth += widthMm;
+        });
+
+        // Добавляем фиксированный размер корпуса в зависимости от количества секций
+        const sectionsCount = this.sections.size;
+        let corpusWidth = 0;
+        switch (sectionsCount) {
+            case 1: corpusWidth = 64; break;
+            case 2: corpusWidth = 96; break;
+            case 3: corpusWidth = 128; break;
+            case 4: corpusWidth = 160; break;
+            default: corpusWidth = 64; break;
+        }
+
+        // Общая ширина шкафа
+        const totalWidth = Math.round(totalSectionsWidth + corpusWidth);
+
+        // Высота и глубина берем из текущих настроек
+        const height = this.globalSettings.sectionHeight;
+        const depth = this.globalSettings.sectionDepth;
+
+        return {
+            width: totalWidth,
+            height: height,
+            depth: depth
+        };
+    }
+
+    updateDimensionsDisplay() {
+        const dimensions = this.calculateCabinetDimensions();
+        const dimensionsElement = document.getElementById('cabinet-dimensions');
+        
+        if (dimensionsElement) {
+            dimensionsElement.textContent = `${dimensions.width}×${dimensions.height}×${dimensions.depth} мм`;
+        }
+    }
+
+    getTooltipText(filename) {
+        return this.tooltipTexts.get(filename) || 'Информация недоступна';
+    }
+
+    attachTooltipListeners() {
+        // Используем делегирование событий для динамически создаваемых элементов
+        document.addEventListener('mouseenter', (e) => {
+            if (e.target.classList.contains('help-icon')) {
+                this.showTooltipHelp(e.target);
+            }
+        }, true);
+
+        document.addEventListener('mouseleave', (e) => {
+            if (e.target.classList.contains('help-icon')) {
+                this.hideTooltipHelp(e.target);
+            }
+        }, true);
+    }
+
+    showTooltipHelp(iconElement) {
+        const filename = iconElement.dataset.tooltipFile;
+        if (!filename) return;
+
+        // Удаляем существующую подсказку если есть
+        this.hideTooltipHelp(iconElement);
+
+        // Получаем текст подсказки
+        const tooltipText = this.getTooltipText(filename);
+
+        // Создаем элемент подсказки
+        const tooltip = document.createElement('div');
+        tooltip.className = 'help-tooltip';
+        tooltip.textContent = tooltipText;
+        tooltip.dataset.tooltip = 'true';
+        tooltip.dataset.tooltipFor = filename;
+
+        // Получаем позицию значка
+        const iconRect = iconElement.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+        // Позиционируем подсказку над значком
+        tooltip.style.position = 'absolute';
+        tooltip.style.left = (iconRect.left + scrollLeft + iconRect.width/2) + 'px'; // Центрируем относительно значка
+        tooltip.style.top = (iconRect.top + scrollTop - 45) + 'px'; // Над значком с отступом
+        tooltip.style.transform = 'translateX(-50%)'; // Центрируем по горизонтали
+        tooltip.style.zIndex = '9999';
+
+        // Добавляем подсказку к body
+        document.body.appendChild(tooltip);
+
+        // Показываем подсказку с небольшой задержкой
+        setTimeout(() => {
+            tooltip.classList.add('show');
+        }, 100);
+    }
+
+    hideTooltipHelp(iconElement) {
+        const filename = iconElement.dataset.tooltipFile;
+        
+        // Ищем подсказку в body по filename
+        const existingTooltip = document.body.querySelector(`[data-tooltip="true"][data-tooltip-for="${filename}"]`);
+        
+        if (existingTooltip) {
+            existingTooltip.classList.remove('show');
+            setTimeout(() => {
+                if (existingTooltip.parentNode) {
+                    existingTooltip.remove();
+                }
+            }, 300);
+        }
+    }
+
+
 }
 
 // Инициализация при загрузке страницы
