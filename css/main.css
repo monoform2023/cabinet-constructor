@@ -235,9 +235,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 8px;
 }
 
 .layout-selector label {
@@ -373,8 +371,6 @@ body {
     flex-direction: column;
     gap: 15px;
     margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
 }
 
 /* Выпадающий список вариантов */
@@ -529,10 +525,6 @@ body {
     opacity: 1;
 }
 
-.height-slider:hover {
-    background: #ced4da;
-}
-
 .height-slider.active:hover {
     background: #dee2e6;
 }
@@ -548,11 +540,14 @@ body {
     transition: background 0.2s ease;
 }
 
+.height-slider:not(.active)::-webkit-slider-thumb {
+    background: #868e96 !important;
+}
+
 .height-slider.active::-webkit-slider-thumb {
     background: #007bff;
 }
 
-.height-slider::-webkit-slider-thumb:hover,
 .height-slider.active::-webkit-slider-thumb:hover {
     background: #0056b3;
 }
@@ -565,6 +560,10 @@ body {
     cursor: pointer;
     border: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.height-slider:not(.active)::-moz-range-thumb {
+    background: #868e96 !important;
 }
 
 .height-slider.active::-moz-range-thumb {
@@ -626,10 +625,7 @@ body {
 }
 
 .price-note {
-    font-size: 12px;
-    color: #28a745;
-    font-weight: 500;
-    margin-left: auto;
+    display: none;
 }
 
 .depth-slider-container {
@@ -655,10 +651,6 @@ body {
     opacity: 1;
 }
 
-.depth-slider:hover {
-    background: #ced4da;
-}
-
 .depth-slider.active:hover {
     background: #dee2e6;
 }
@@ -674,11 +666,14 @@ body {
     transition: background 0.2s ease;
 }
 
+.depth-slider:not(.active)::-webkit-slider-thumb {
+    background: #868e96 !important;
+}
+
 .depth-slider.active::-webkit-slider-thumb {
     background: #007bff;
 }
 
-.depth-slider::-webkit-slider-thumb:hover,
 .depth-slider.active::-webkit-slider-thumb:hover {
     background: #0056b3;
 }
@@ -691,6 +686,10 @@ body {
     cursor: pointer;
     border: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.depth-slider:not(.active)::-moz-range-thumb {
+    background: #868e96 !important;
 }
 
 .depth-slider.active::-moz-range-thumb {
@@ -800,12 +799,15 @@ body {
 
 /* Селектор цвета дверей */
 .doors-color-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 15px;
 }
 
 .doors-color-selector label {
     display: block;
-    margin-bottom: 8px;
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
     color: #333;
@@ -842,14 +844,18 @@ body {
 
 /* Селектор типа ручки */
 .doors-handle-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 15px;
 }
 
 .doors-handle-selector label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #343a40;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
 }
 
 .doors-handle-selector select {
@@ -878,8 +884,9 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
-    font-weight: 500;
-    color: #343a40;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
 }
 
 .doors-mirror-control input[type="checkbox"] {

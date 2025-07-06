@@ -317,7 +317,7 @@ class CabinetConstructor {
         const doorColorButtons = document.querySelectorAll('.door-color-button');
         doorColorButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                const newColor = e.target.dataset.color;
+                const newColor = e.target.dataset.doorColor;
                 if (newColor) {
                     this.changeDoorColor(newColor);
                 }
@@ -340,7 +340,7 @@ class CabinetConstructor {
         document.querySelectorAll('.door-color-button').forEach(button => {
             button.classList.remove('active');
         });
-        document.querySelector(`[data-color="${newColor}"]`).classList.add('active');
+        document.querySelector(`[data-door-color="${newColor}"]`).classList.add('active');
         
         // Обновляем изображения всех дверей
         if (this.doorsEnabled) {
@@ -732,7 +732,7 @@ class CabinetConstructor {
         document.querySelectorAll('.color-button').forEach(button => {
             button.classList.remove('active');
         });
-        document.querySelector(`[data-color="${newColor}"]`).classList.add('active');
+        document.querySelector(`.color-button[data-color="${newColor}"]`).classList.add('active');
         
         // Обновляем изображения всех секций с сохранением выбранных вариантов
         this.sections.forEach((sectionData, sectionId) => {
@@ -1428,7 +1428,7 @@ class CabinetConstructor {
         document.querySelectorAll('.color-button').forEach(button => {
             button.classList.remove('active');
         });
-        document.querySelector(`[data-color="${this.currentColor}"]`).classList.add('active');
+        document.querySelector(`.color-button[data-color="${this.currentColor}"]`).classList.add('active');
 
         console.log('Селектор цвета инициализирован');
     }
