@@ -217,7 +217,7 @@ body {
     width: calc((668 / 3200) * 100%);
     min-height: calc((400 / 1919) * 100%);
     background: white;
-    padding: 20px;
+    padding: 18px;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     color: #333;
@@ -225,46 +225,42 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 10px;
     z-index: 10;
     font-size: calc(min(100vw, 3200px) * 16 / 3200); /* Увеличенный размер шрифта */
 }
 
 /* Блок стоимости и размера */
 .price-info {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 15px;
-    margin-bottom: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .price-display {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: baseline;
     margin-bottom: 6px;
 }
 
 .price-amount {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     color: #2c3e50;
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
 .price-currency {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
-    color: #007bff;
+    color: #333;
 }
 
 .dimensions-display {
-    font-size: 13px;
+    font-size: 14px;
     color: #6c757d;
     line-height: 1.4;
+    font-weight: 600;
 }
 
 #cabinet-dimensions {
@@ -276,8 +272,8 @@ body {
 .layout-selector {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 5px;
 }
 
 .layout-selector label {
@@ -308,7 +304,7 @@ body {
 .color-selector {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .color-selector label {
@@ -411,15 +407,15 @@ body {
 .section-controls {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 /* Выпадающий список вариантов */
 .variants-dropdown {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .variants-dropdown label {
@@ -450,7 +446,7 @@ body {
 .width-control {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .width-control label {
@@ -535,7 +531,7 @@ body {
 .height-control {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .height-control label {
@@ -642,19 +638,21 @@ body {
 .depth-control {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .custom-depth-checkbox {
     display: flex;
     align-items: center;
-    gap: 8px;
     cursor: pointer;
 }
 
-.custom-depth-checkbox input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+/* Общий стиль для всех чекбоксов в меню */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    accent-color: #007bff;
     cursor: pointer;
 }
 
@@ -809,7 +807,7 @@ body {
 
 /* Простая стилизация чекбокса дверей */
 .doors-control {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding: 0;
     background-color: transparent;
     border: none;
@@ -824,14 +822,11 @@ body {
     color: #333;
 }
 
-.doors-control input[type="checkbox"] {
-    margin-right: 8px;
-    transform: scale(1.2);
-}
+
 
 /* Панель управления дверьми */
 .doors-panel {
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 0;
     background-color: transparent;
     border: none;
@@ -842,8 +837,8 @@ body {
 .doors-color-selector {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .doors-color-selector label {
@@ -887,8 +882,8 @@ body {
 .doors-handle-selector {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .doors-handle-selector label {
@@ -930,10 +925,7 @@ body {
     color: #333;
 }
 
-.doors-mirror-control input[type="checkbox"] {
-    margin-right: 8px;
-    transform: scale(1.2);
-}
+
 
 /* Система подсказок */
 .help-icon {
@@ -982,5 +974,88 @@ body {
     opacity: 1;
     visibility: visible;
 }
+
+/* Стили для дополнительных параметров */
+.additional-params {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.additional-params-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+.additional-params-header:hover {
+    background-color: #e9ecef;
+}
+
+.additional-params-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.additional-params-toggle {
+    font-size: 12px;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.additional-params-toggle.expanded {
+    transform: rotate(180deg);
+}
+
+.additional-params-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #f8f9fa;
+    border-radius: 0 0 4px 4px;
+    margin-top: -1px;
+}
+
+.additional-params-content.expanded {
+    max-height: 400px;
+    padding: 10px;
+}
+
+.additional-params-content > div {
+    margin-bottom: 8px;
+}
+
+.additional-params-content > div:last-child {
+    margin-bottom: 0;
+}
+
+.depth-control {
+    margin-bottom: 8px;
+}
+
+.lighting-control,
+.door-sensor-control,
+.assembly-control {
+    margin-bottom: 8px;
+}
+
+.lighting-control label,
+.door-sensor-control label,
+.assembly-control label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+}
+
+
 
  

@@ -31,19 +31,22 @@ class CabinetConstructor {
             // Загружаем конфигурацию
             await this.loadLayouts();
             
-            // Инициализируем интерфейс
-            this.initEventListeners();
-            
-                    // Загружаем стартовую компоновку
-        this.loadLayout(this.currentLayout);
+                    // Инициализируем интерфейс
+        this.initEventListeners();
         
-        // Обновляем отображение размера
-        this.updateDimensionsDisplay();
+                // Загружаем стартовую компоновку
+    this.loadLayout(this.currentLayout);
+    
+    // Обновляем отображение размера
+    this.updateDimensionsDisplay();
+    
+    console.log('Конструктор инициализирован');
         
-        console.log('Конструктор инициализирован');
-            
-            // Инициализируем систему подсказок
-            this.initTooltipSystem();
+        // Инициализируем систему подсказок
+        this.initTooltipSystem();
+        
+        // Инициализируем дополнительные параметры
+        this.initAdditionalParams();
         } catch (error) {
             console.error('Ошибка инициализации конструктора:', error);
         }
@@ -586,32 +589,6 @@ class CabinetConstructor {
                     <span style="font-size: 12px; color: #495057;">мм</span>
                 </div>
             </div>
-
-            <div class="depth-control">
-                <div class="custom-depth-checkbox">
-                    <input type="checkbox" id="custom-depth-checkbox" ${this.globalSettings.hasCustomDepth ? 'checked' : ''}>
-                    <label for="custom-depth-checkbox">
-                    Нестандартная глубина
-                    <span class="help-icon" data-tooltip-file="depth-info.txt">?</span>
-                </label>
-                    <span class="price-note">+20%</span>
-                </div>
-                <div class="depth-slider-container" id="depth-slider-container" style="display: ${this.globalSettings.hasCustomDepth ? 'block' : 'none'};">
-                    <input type="range" 
-                           class="depth-slider ${this.globalSettings.hasCustomDepth ? 'active' : ''}" 
-                           id="depth-slider"
-                           min="410" 
-                           max="640" 
-                           value="${this.globalSettings.sectionDepth}">
-                    <input type="text" 
-                           class="depth-display" 
-                           id="depth-display"
-                           value="${this.globalSettings.sectionDepth}"
-                           data-min="410" 
-                           data-max="640">
-                    <span style="font-size: 12px; color: #495057;">мм</span>
-                </div>
-            </div>
         `;
 
         // Добавляем обработчики событий
@@ -624,9 +601,6 @@ class CabinetConstructor {
         const widthDisplay = document.getElementById('width-display');
         const heightSlider = document.getElementById('height-slider');
         const heightDisplay = document.getElementById('height-display');
-        const customDepthCheckbox = document.getElementById('custom-depth-checkbox');
-        const depthSlider = document.getElementById('depth-slider');
-        const depthDisplay = document.getElementById('depth-display');
 
         if (variantSelect) {
             variantSelect.addEventListener('change', (e) => {
@@ -670,33 +644,7 @@ class CabinetConstructor {
             });
         }
 
-        if (customDepthCheckbox) {
-            customDepthCheckbox.addEventListener('change', (e) => {
-                this.toggleCustomDepth(e.target.checked);
-            });
-        }
 
-        if (depthSlider) {
-            // Активируем слайдер при первом взаимодействии
-            depthSlider.addEventListener('mousedown', () => {
-                this.activateSlider(depthSlider);
-            });
-            
-            depthSlider.addEventListener('input', (e) => {
-                this.activateSlider(depthSlider);
-                this.changeDepth(parseInt(e.target.value));
-            });
-        }
-
-        if (depthDisplay) {
-            this.initInputField(depthDisplay, (value) => {
-                this.changeDepth(value);
-                if (depthSlider) {
-                    depthSlider.value = value;
-                    this.activateSlider(depthSlider);
-                }
-            });
-        }
 
         // Инициализируем цветовые кнопки
         this.initColorButtons();
@@ -761,6 +709,9 @@ class CabinetConstructor {
         if (this.doorsEnabled) {
             this.updateAllDoors();
         }
+        
+        // Обновляем отображение размера (на случай если были двери)
+        this.updateDimensionsDisplay();
         
         console.log('Цвет изменен на:', newColor);
     }
@@ -1578,6 +1529,9 @@ class CabinetConstructor {
             }
         }
         
+        // Обновляем отображение размера (глубина увеличивается на 18мм при включении дверей)
+        this.updateDimensionsDisplay();
+        
         console.log(`Двери ${enabled ? 'включены' : 'выключены'}`);
     }
 
@@ -1827,7 +1781,10 @@ class CabinetConstructor {
             ['variant-info.txt', 'Выберите один из шести вариантов компоновки секции. В конструкторе представлены наиболее популярные комплектации, но вы можете создать и собсвенный вариант.'],
             ['color-info.txt', 'Выберите один из пяти вариантов комбинации цвета. В конструкторе представлены удачные сочетания, но вы можете создать и собсвенный вариант. Все образцы представлены на странице ниже.'],
             ['depth-info.txt', 'При включении параметра вы можете сделать любую глубину шкафа в доступном диапазоне. Но это добавить 20% к стоимости изделия и + одну неделю к изготовлению.'],
-            ['doors-info.txt', 'В палитре конструктора пять вариантов цвета дверей. Все образцы представлены на странице ниже. Мы используем Итальянские петли Salice. Если необходимо нессиметричное расположение дверей или нестандартный вариант, вы можете заполнить форму ниже или связаться с нами и мы поможем в проектировании.']
+            ['doors-info.txt', 'В палитре конструктора пять вариантов цвета дверей. Все образцы представлены на странице ниже. Мы используем Итальянские петли Salice. Если необходимо нессиметричное расположение дверей или нестандартный вариант, вы можете заполнить форму ниже или связаться с нами и мы поможем в проектировании.'],
+            ['lighting-info.txt', 'Встроенная LED подсветка с датчиком движения. Автоматическое включение при открывании дверей. Класс защиты IP65. Гарантия 2 года.'],
+            ['door-sensor-info.txt', 'Беспроводной датчик открывания двери с уведомлениями на смартфон. Батарея работает до 2 лет. Интеграция с системами умного дома.'],
+            ['assembly-info.txt', 'Профессиональная сборка и установка нашими специалистами. Включает доставку, распаковку, сборку и установку. Уборка после монтажа. Гарантия на услуги 1 год.']
         ]);
         
         // Инициализируем обработчики событий для значков подсказок
@@ -1862,7 +1819,12 @@ class CabinetConstructor {
 
         // Высота и глубина берем из текущих настроек
         const height = this.globalSettings.sectionHeight;
-        const depth = this.globalSettings.sectionDepth;
+        let depth = this.globalSettings.sectionDepth;
+
+        // Если двери включены, добавляем 18 мм к глубине
+        if (this.doorsEnabled) {
+            depth += 18;
+        }
 
         return {
             width: totalWidth,
@@ -1887,19 +1849,28 @@ class CabinetConstructor {
     attachTooltipListeners() {
         // Используем делегирование событий для динамически создаваемых элементов
         document.addEventListener('mouseenter', (e) => {
-            if (e.target.classList.contains('help-icon')) {
+            if (e.target && e.target.classList && e.target.classList.contains('help-icon')) {
                 this.showTooltipHelp(e.target);
             }
         }, true);
 
         document.addEventListener('mouseleave', (e) => {
-            if (e.target.classList.contains('help-icon')) {
+            if (e.target && e.target.classList && e.target.classList.contains('help-icon')) {
                 this.hideTooltipHelp(e.target);
             }
         }, true);
+        
+        // Очищаем все подсказки при клике в любом месте (кроме значков подсказок)
+        document.addEventListener('click', (e) => {
+            if (!e.target || !e.target.classList || !e.target.classList.contains('help-icon')) {
+                this.clearAllTooltips();
+            }
+        });
     }
 
     showTooltipHelp(iconElement) {
+        if (!iconElement || !iconElement.dataset) return;
+        
         const filename = iconElement.dataset.tooltipFile;
         if (!filename) return;
 
@@ -1933,23 +1904,123 @@ class CabinetConstructor {
 
         // Показываем подсказку с небольшой задержкой
         setTimeout(() => {
-            tooltip.classList.add('show');
+            if (tooltip && tooltip.classList) {
+                tooltip.classList.add('show');
+            }
         }, 100);
     }
 
     hideTooltipHelp(iconElement) {
+        if (!iconElement || !iconElement.dataset) return;
+        
         const filename = iconElement.dataset.tooltipFile;
+        if (!filename) return;
         
         // Ищем подсказку в body по filename
         const existingTooltip = document.body.querySelector(`[data-tooltip="true"][data-tooltip-for="${filename}"]`);
         
-        if (existingTooltip) {
+        if (existingTooltip && existingTooltip.classList) {
             existingTooltip.classList.remove('show');
             setTimeout(() => {
-                if (existingTooltip.parentNode) {
+                if (existingTooltip && existingTooltip.parentNode) {
                     existingTooltip.remove();
                 }
             }, 300);
+        }
+    }
+    
+    // Принудительная очистка всех зависших подсказок
+    clearAllTooltips() {
+        const allTooltips = document.querySelectorAll('[data-tooltip="true"]');
+        allTooltips.forEach(tooltip => {
+            if (tooltip && tooltip.parentNode) {
+                tooltip.remove();
+            }
+        });
+        console.log('Все подсказки очищены');
+    }
+    
+    // Инициализация дополнительных параметров
+    initAdditionalParams() {
+        // Инициализируем сворачивание раздела
+        const header = document.getElementById('additional-params-header');
+        const toggle = document.getElementById('additional-params-toggle');
+        const content = document.getElementById('additional-params-content');
+        
+        if (header && toggle && content) {
+            header.addEventListener('click', () => {
+                const isExpanded = content.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    content.classList.remove('expanded');
+                    toggle.classList.remove('expanded');
+                } else {
+                    content.classList.add('expanded');
+                    toggle.classList.add('expanded');
+                }
+            });
+        }
+        
+        // Инициализируем обработчики для нестандартной глубины
+        const customDepthCheckbox = document.getElementById('custom-depth-checkbox');
+        const depthSlider = document.getElementById('depth-slider');
+        const depthDisplay = document.getElementById('depth-display');
+        const depthSliderContainer = document.getElementById('depth-slider-container');
+        
+        if (customDepthCheckbox) {
+            customDepthCheckbox.addEventListener('change', (e) => {
+                this.toggleCustomDepth(e.target.checked);
+                if (depthSliderContainer) {
+                    depthSliderContainer.style.display = e.target.checked ? 'flex' : 'none';
+                }
+            });
+        }
+        
+        if (depthSlider) {
+            depthSlider.addEventListener('mousedown', () => {
+                this.activateSlider(depthSlider);
+            });
+            
+            depthSlider.addEventListener('input', (e) => {
+                this.activateSlider(depthSlider);
+                this.changeDepth(parseInt(e.target.value));
+            });
+        }
+        
+        if (depthDisplay) {
+            this.initInputField(depthDisplay, (value) => {
+                this.changeDepth(value);
+                if (depthSlider) {
+                    depthSlider.value = value;
+                    this.activateSlider(depthSlider);
+                }
+            });
+        }
+        
+        // Инициализируем обработчики для новых параметров
+        const lightingCheckbox = document.getElementById('lighting-enabled');
+        const doorSensorCheckbox = document.getElementById('door-sensor-enabled');
+        const assemblyCheckbox = document.getElementById('assembly-enabled');
+        
+        if (lightingCheckbox) {
+            lightingCheckbox.addEventListener('change', (e) => {
+                console.log('Подсветка:', e.target.checked ? 'включена' : 'выключена');
+                // Пока что только логирование
+            });
+        }
+        
+        if (doorSensorCheckbox) {
+            doorSensorCheckbox.addEventListener('change', (e) => {
+                console.log('Датчик открывания двери:', e.target.checked ? 'включен' : 'выключен');
+                // Пока что только логирование
+            });
+        }
+        
+        if (assemblyCheckbox) {
+            assemblyCheckbox.addEventListener('change', (e) => {
+                console.log('Сборка:', e.target.checked ? 'включена' : 'выключена');
+                // Пока что только логирование
+            });
         }
     }
 
@@ -1959,4 +2030,11 @@ class CabinetConstructor {
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     window.cabinetConstructor = new CabinetConstructor();
+    
+    // Глобальная функция для экстренной очистки подсказок (можно вызвать из консоли)
+    window.clearTooltips = () => {
+        if (window.cabinetConstructor) {
+            window.cabinetConstructor.clearAllTooltips();
+        }
+    };
 }); 
