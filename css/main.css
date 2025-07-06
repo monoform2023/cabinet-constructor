@@ -728,6 +728,27 @@ body {
     color: #495057;
 }
 
+.price-detail {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #495057;
+}
+
+.price-detail div {
+    margin-bottom: 2px;
+}
+
+.price-detail div:last-child {
+    margin-bottom: 0;
+    border-top: 1px solid #dee2e6;
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
 /* Селектор компоновки */
 .layout-selector {
     display: flex;

@@ -23,35 +23,46 @@ class CabinetConstructor {
         this.doorsSettings = {
             color: 'c1' // Только цвет, убираем ручку и зеркальность
         };
+
+        // Дополнительные параметры для расчета цены
+        this.additionalParams = {
+            lighting: false,
+            sensor: false,
+            assembly: false
+        };
         
         this.init();
     }
 
     async init() {
-        try {
-            // Загружаем конфигурацию
-            await this.loadLayouts();
-            
-            // Инициализируем интерфейс
-            this.initEventListeners();
-            
-            // НЕ устанавливаем значение в селекторе, оставляем placeholder видимым
-            // Но логически загружаем дефолтную компоновку (3 секции)
-            this.loadLayout(this.currentLayout);
-            
-            // Обновляем отображение размера
-            this.updateDimensionsDisplay();
-            
-            console.log('Конструктор инициализирован');
-            
-            // Инициализируем систему подсказок
-            this.initTooltipSystem();
-            
-            // Инициализируем дополнительные параметры
-            this.initAdditionalParams();
-        } catch (error) {
-            console.error('Ошибка инициализации конструктора:', error);
-        }
+        // Загружаем данные макетов
+        await this.loadLayouts();
+        
+        // Инициализируем систему подсказок
+        this.initTooltipSystem();
+        
+        // Инициализируем систему расчета цены
+        this.initPriceCalculator();
+        
+        // Инициализируем обработчики событий
+        this.initEventListeners();
+        
+        // Инициализируем обработчики для дверей
+        this.initDoorsEventListeners();
+        
+        // Инициализируем дополнительные параметры
+        this.initAdditionalParams();
+        
+        // Инициализируем кнопки действий
+        this.initActionButtons();
+        
+        // Загружаем макет по умолчанию (3 секции)
+        this.loadLayout('3-sections');
+        
+        // Сохраняем ссылку на конструктор в глобальную область
+        window.constructor = this;
+        
+        console.log('Конструктор шкафа инициализирован');
     }
 
     async loadLayouts() {
@@ -434,6 +445,9 @@ class CabinetConstructor {
         // Обновляем отображение размера
         this.updateDimensionsDisplay();
 
+        // Обновляем цену
+        this.updateTotalPrice();
+
         console.log('Макет загружен:', layoutId);
     }
 
@@ -734,6 +748,9 @@ class CabinetConstructor {
             this.updateDoor(this.activeSection);
         }
 
+        // Обновляем цену
+        this.updateTotalPrice();
+
         console.log(`Изменен вариант секции ${this.activeSection} на ${variant.name}`);
     }
 
@@ -763,6 +780,9 @@ class CabinetConstructor {
         
         // Обновляем отображение размера (на случай если были двери)
         this.updateDimensionsDisplay();
+        
+        // Обновляем цену (пока цвет не влияет на цену, но для полноты)
+        this.updateTotalPrice();
         
         console.log('Цвет изменен на:', newColor);
     }
@@ -833,6 +853,9 @@ class CabinetConstructor {
         // Обновляем отображение размера
         this.updateDimensionsDisplay();
 
+        // Обновляем цену
+        this.updateTotalPrice();
+
         console.log(`Ширина секции ${this.activeSection} изменена на ${newWidth}px`);
     }
 
@@ -849,6 +872,9 @@ class CabinetConstructor {
         // Обновляем отображение размера
         this.updateDimensionsDisplay();
 
+        // Обновляем цену
+        this.updateTotalPrice();
+
         console.log(`Высота шкафа изменена на ${newHeight}мм`);
     }
 
@@ -859,7 +885,10 @@ class CabinetConstructor {
         }
 
         // Сохраняем в глобальных настройках
-        this.globalSettings.hasCustomDepth = isEnabled;
+        this.globalSettings.customDepthEnabled = isEnabled;
+
+        // Обновляем цену
+        this.updateTotalPrice();
 
         console.log(`Нестандартная глубина: ${isEnabled ? 'включена' : 'выключена'}`);
     }
@@ -878,6 +907,9 @@ class CabinetConstructor {
 
         // Обновляем отображение размера
         this.updateDimensionsDisplay();
+
+        // Обновляем цену
+        this.updateTotalPrice();
 
         console.log(`Глубина секции изменена на ${newDepth}мм`);
     }
@@ -1543,7 +1575,7 @@ class CabinetConstructor {
                 const ratio = 520 / 1000; // 0.52
                 return Math.round(millimeters * ratio);
             }
-            // Секции с размером 528px (section-1, section-3): 1000мм = 528px
+            // Секции с размером 528px (section-1, section-3): 528px = 1000мм
             const ratio = 528 / 1000; // 0.528
             return Math.round(millimeters * ratio);
         }
@@ -1637,6 +1669,9 @@ class CabinetConstructor {
         
         // Обновляем отображение размера (глубина увеличивается на 18мм при включении дверей)
         this.updateDimensionsDisplay();
+        
+        // Обновляем цену
+        this.updateTotalPrice();
         
         console.log(`Двери ${enabled ? 'включены' : 'выключены'}`);
     }
@@ -2148,22 +2183,25 @@ class CabinetConstructor {
         
         if (lightingCheckbox) {
             lightingCheckbox.addEventListener('change', (e) => {
+                this.additionalParams.lighting = e.target.checked;
+                this.updateTotalPrice();
                 console.log('Подсветка:', e.target.checked ? 'включена' : 'выключена');
-                // Пока что только логирование
             });
         }
         
         if (doorSensorCheckbox) {
             doorSensorCheckbox.addEventListener('change', (e) => {
+                this.additionalParams.sensor = e.target.checked;
+                this.updateTotalPrice();
                 console.log('Датчик открывания двери:', e.target.checked ? 'включен' : 'выключен');
-                // Пока что только логирование
             });
         }
         
         if (assemblyCheckbox) {
             assemblyCheckbox.addEventListener('change', (e) => {
+                this.additionalParams.assembly = e.target.checked;
+                this.updateTotalPrice();
                 console.log('Сборка:', e.target.checked ? 'включена' : 'выключена');
-                // Пока что только логирование
             });
         }
     }
@@ -2698,6 +2736,214 @@ class CabinetConstructor {
         return 1.893939;
     }
 
+    // Система расчета стоимости
+    initPriceCalculator() {
+        // Базовые цены вариантов секций при 1000мм
+        this.sectionPrices = {
+            'variant-1': 97060,  // k1 - Два ящика и штанга
+            'variant-2': 84800,  // k2 - Только полки
+            'variant-3': 121300, // k3 - Четыре ящика и штанга
+            'variant-4': 73070,  // k4 - Полка и штанга
+            'variant-5': 83600,  // k5 - Две штанги
+            'variant-6': 108790  // k6 - Два ящика и полки
+        };
+
+        // Цены опций по количеству секций
+        this.optionPrices = {
+            lighting: {
+                1: 26600,
+                2: 39900,
+                3: 53200,
+                4: 66500
+            },
+            sensor: {
+                1: 6800,
+                2: 13600,
+                3: 20400,
+                4: 27200
+            }
+        };
+
+        // Цены сборки по количеству секций
+        this.assemblyPrices = {
+            1: 17000,
+            2: 20000,
+            3: 25000,
+            4: 28000
+        };
+
+        // Обновляем цену при любых изменениях
+        this.updateTotalPrice();
+    }
+
+    // Расчет стоимости одной секции с учетом размера
+    calculateSectionPrice(sectionData) {
+        const variantId = sectionData.currentVariant.id;
+        const basePrice = this.sectionPrices[variantId] || 0;
+        const sectionWidthMm = this.pixelsToMillimeters(sectionData.currentWidth, sectionData.config.id);
+        
+        // Расчет пропорционально размеру
+        // При 400мм: -30% (коэффициент 0.7)
+        // При 1000мм: базовая цена (коэффициент 1.0)
+        const minWidthMm = 400;
+        const maxWidthMm = 1000;
+        const minPriceCoeff = 0.7; // -30%
+        const maxPriceCoeff = 1.0;
+        
+        // Линейная интерполяция между минимальным и максимальным коэффициентом
+        const priceCoeff = minPriceCoeff + (maxPriceCoeff - minPriceCoeff) * 
+                          (sectionWidthMm - minWidthMm) / (maxWidthMm - minWidthMm);
+        
+        // Ограничиваем коэффициент в пределах 0.7-1.0
+        const clampedCoeff = Math.max(minPriceCoeff, Math.min(maxPriceCoeff, priceCoeff));
+        
+        return Math.round(basePrice * clampedCoeff);
+    }
+
+    // Расчет стоимости всех секций
+    calculateSectionsPrice() {
+        let totalSectionsPrice = 0;
+        
+        this.sections.forEach((sectionData) => {
+            if (sectionData.currentVariant) {
+                totalSectionsPrice += this.calculateSectionPrice(sectionData);
+            }
+        });
+        
+        return totalSectionsPrice;
+    }
+
+    // Расчет стоимости дверей
+    calculateDoorsPrice() {
+        if (!this.doorsEnabled) return 0;
+        
+        let totalDoorsPrice = 0;
+        
+        this.sections.forEach((sectionData) => {
+            const sectionWidthMm = this.pixelsToMillimeters(sectionData.currentWidth, sectionData.config.id);
+            const doorPrice = this.calculateDoorPrice(sectionWidthMm);
+            totalDoorsPrice += doorPrice;
+        });
+        
+        return totalDoorsPrice;
+    }
+
+    // Расчет стоимости одной двери по размеру
+    calculateDoorPrice(widthMm) {
+        // Опорные точки для расчета цены дверей
+        const pricePoints = [
+            { width: 400, price: 16700 },
+            { width: 700, price: 19000 },
+            { width: 701, price: 33400 },
+            { width: 1000, price: 38000 }
+        ];
+        
+        // Находим подходящий интервал для интерполяции
+        for (let i = 0; i < pricePoints.length - 1; i++) {
+            const point1 = pricePoints[i];
+            const point2 = pricePoints[i + 1];
+            
+            if (widthMm >= point1.width && widthMm <= point2.width) {
+                // Линейная интерполяция
+                const ratio = (widthMm - point1.width) / (point2.width - point1.width);
+                const price = point1.price + (point2.price - point1.price) * ratio;
+                return Math.round(price);
+            }
+        }
+        
+        // Если выходит за пределы, используем крайние значения
+        if (widthMm < 400) return 16700;
+        if (widthMm > 1000) return 38000;
+        
+        return 0;
+    }
+
+    // Расчет стоимости опций
+    calculateOptionsPrice() {
+        const sectionsCount = this.sections.size;
+        let optionsPrice = 0;
+        
+        // Подсветка
+        if (this.additionalParams.lighting) {
+            optionsPrice += this.optionPrices.lighting[sectionsCount] || 0;
+        }
+        
+        // Датчик (только если есть подсветка и двери)
+        if (this.additionalParams.sensor && this.additionalParams.lighting && this.doorsEnabled) {
+            optionsPrice += this.optionPrices.sensor[sectionsCount] || 0;
+        }
+        
+        return optionsPrice;
+    }
+
+    // Расчет стоимости сборки
+    calculateAssemblyPrice() {
+        if (!this.additionalParams.assembly) return 0;
+        
+        const sectionsCount = this.sections.size;
+        return this.assemblyPrices[sectionsCount] || 0;
+    }
+
+    // Расчет общей стоимости
+    calculateTotalPrice() {
+        const sectionsPrice = this.calculateSectionsPrice();
+        const doorsPrice = this.calculateDoorsPrice();
+        const optionsPrice = this.calculateOptionsPrice();
+        const assemblyPrice = this.calculateAssemblyPrice();
+        
+        let totalPrice = sectionsPrice + doorsPrice + optionsPrice + assemblyPrice;
+        
+        // Надбавка за нестандартную глубину (+20% к стоимости секций)
+        if (this.globalSettings.customDepthEnabled) {
+            const depthSurcharge = Math.round(sectionsPrice * 0.2);
+            totalPrice += depthSurcharge;
+        }
+        
+        return {
+            sections: sectionsPrice,
+            doors: doorsPrice,
+            options: optionsPrice,
+            assembly: assemblyPrice,
+            depthSurcharge: this.globalSettings.customDepthEnabled ? Math.round(sectionsPrice * 0.2) : 0,
+            total: totalPrice
+        };
+    }
+
+    // Обновление отображения цены
+    updateTotalPrice() {
+        const priceData = this.calculateTotalPrice();
+        const priceElement = document.getElementById('total-price');
+        
+        if (priceElement) {
+            priceElement.textContent = `${priceData.total.toLocaleString('ru-RU')} ₽`;
+            
+            // Добавляем обработчик клика для показа/скрытия детализации
+            priceElement.style.cursor = 'pointer';
+            priceElement.onclick = () => {
+                const priceDetailElement = document.getElementById('price-detail');
+                if (priceDetailElement) {
+                    const isVisible = priceDetailElement.style.display !== 'none';
+                    priceDetailElement.style.display = isVisible ? 'none' : 'block';
+                }
+            };
+        }
+        
+        // Обновляем детализацию цены если элемент существует
+        const priceDetailElement = document.getElementById('price-detail');
+        if (priceDetailElement) {
+            priceDetailElement.innerHTML = `
+                <div>Секции: ${priceData.sections.toLocaleString('ru-RU')} ₽</div>
+                ${priceData.doors > 0 ? `<div>Двери: ${priceData.doors.toLocaleString('ru-RU')} ₽</div>` : ''}
+                ${priceData.options > 0 ? `<div>Опции: ${priceData.options.toLocaleString('ru-RU')} ₽</div>` : ''}
+                ${priceData.assembly > 0 ? `<div>Сборка: ${priceData.assembly.toLocaleString('ru-RU')} ₽</div>` : ''}
+                ${priceData.depthSurcharge > 0 ? `<div>Нестандартная глубина: ${priceData.depthSurcharge.toLocaleString('ru-RU')} ₽</div>` : ''}
+                <div><strong>Итого: ${priceData.total.toLocaleString('ru-RU')} ₽</strong></div>
+            `;
+        }
+        
+        console.log('Расчет цены:', priceData);
+    }
+
 }
 
 // Инициализация при загрузке страницы
@@ -2716,6 +2962,23 @@ document.addEventListener('DOMContentLoaded', () => {
 window.debugSizes = function() {
     if (window.constructor) {
         window.constructor.debugSizeCalculations();
+    } else {
+        console.log('Конструктор не найден');
+    }
+};
+
+// Глобальная функция для тестирования цены
+window.testPrice = function() {
+    if (window.constructor) {
+        const priceData = window.constructor.calculateTotalPrice();
+        console.log('=== ТЕСТ КАЛЬКУЛЯТОРА ===');
+        console.log('Секции:', priceData.sections.toLocaleString('ru-RU'), '₽');
+        console.log('Двери:', priceData.doors.toLocaleString('ru-RU'), '₽');
+        console.log('Опции:', priceData.options.toLocaleString('ru-RU'), '₽');
+        console.log('Сборка:', priceData.assembly.toLocaleString('ru-RU'), '₽');
+        console.log('Нестандартная глубина:', priceData.depthSurcharge.toLocaleString('ru-RU'), '₽');
+        console.log('ИТОГО:', priceData.total.toLocaleString('ru-RU'), '₽');
+        console.log('=========================');
     } else {
         console.log('Конструктор не найден');
     }
