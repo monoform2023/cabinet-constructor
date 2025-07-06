@@ -33,26 +33,28 @@
                 <!-- 0. Блок стоимости и размера -->
                 <div class="price-info">
                     <div class="price-display" id="price-display">
-                        <span class="price-amount">235 000</span>
-                        <span class="price-currency">₽</span>
-                    </div>
-                    <div class="dimensions-display" id="dimensions-display">
-                        Размер: <span id="cabinet-dimensions">1920×2100×600 мм</span>
+                        <div class="price-group">
+                            <span class="price-amount">235 000</span>
+                            <span class="price-currency">₽</span>
+                        </div>
+                        <div class="dimensions-display" id="dimensions-display">
+                            <span id="cabinet-dimensions">1920×2100×600 мм</span>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 1. Селектор компоновки -->
                 <div class="layout-selector">
-                    <label for="layout-select">
-                        Количество секций:
+                    <div class="layout-selector-row">
+                        <select id="layout-select">
+                            <option value="" disabled selected>Выберите количество секций</option>
+                            <option value="1-section">1 секция</option>
+                            <option value="2-sections">2 секции</option>
+                            <option value="3-sections">3 секции</option>
+                            <option value="4-sections">4 секции</option>
+                        </select>
                         <span class="help-icon" data-tooltip-file="layout-info.txt">?</span>
-                    </label>
-                    <select id="layout-select">
-                        <option value="1-section">1 секция</option>
-                        <option value="2-sections">2 секции</option>
-                        <option value="3-sections" selected>3 секции</option>
-                        <option value="4-sections">4 секции</option>
-                    </select>
+                    </div>
                 </div>
                 
                 <!-- 2. Контейнер для контролов активной секции (размер и варианты) -->
@@ -65,20 +67,19 @@
                     <label>
                         <input type="checkbox" id="doors-enabled"> 
                         Двери
-                        <span class="help-icon" data-tooltip-file="doors-info.txt">?</span>
                     </label>
                     
                     <!-- Панель управления дверьми (скрыта по умолчанию) -->
                     <div class="doors-panel" id="doors-panel" style="display: none;">
                         <!-- Цвет дверей -->
                         <div class="doors-color-selector">
-                            <label>Цвет дверей:</label>
                             <div class="doors-color-buttons">
                                 <button class="door-color-button active" data-door-color="c1" style="background-image: url('images/door-color-thumbnails/dc1-thumbnail.jpg');" title="Цвет 1"></button>
                                 <button class="door-color-button" data-door-color="c2" style="background-image: url('images/door-color-thumbnails/dc2-thumbnail.jpg');" title="Цвет 2"></button>
                                 <button class="door-color-button" data-door-color="c3" style="background-image: url('images/door-color-thumbnails/dc3-thumbnail.jpg');" title="Цвет 3"></button>
                                 <button class="door-color-button" data-door-color="c4" style="background-image: url('images/door-color-thumbnails/dc4-thumbnail.jpg');" title="Цвет 4"></button>
                                 <button class="door-color-button" data-door-color="c5" style="background-image: url('images/door-color-thumbnails/dc5-thumbnail.jpg');" title="Цвет 5"></button>
+                                <span class="help-icon" data-tooltip-file="doors-info.txt">?</span>
                             </div>
                         </div>
                     </div>

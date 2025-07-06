@@ -6,6 +6,7 @@ class CabinetConstructor {
         this.activeSection = null;
         this.sections = new Map();
         this.currentColor = 'c1'; // Текущий выбранный цвет (по умолчанию c1)
+        this.firstInteractionWithVariants = true; // Флаг для показа placeholder в селекторе вариантов
         
         // Глобальные настройки высоты и глубины (не зависят от секций)
         this.globalSettings = {
@@ -31,22 +32,23 @@ class CabinetConstructor {
             // Загружаем конфигурацию
             await this.loadLayouts();
             
-                    // Инициализируем интерфейс
-        this.initEventListeners();
-        
-                // Загружаем стартовую компоновку
-    this.loadLayout(this.currentLayout);
-    
-    // Обновляем отображение размера
-    this.updateDimensionsDisplay();
-    
-    console.log('Конструктор инициализирован');
-        
-        // Инициализируем систему подсказок
-        this.initTooltipSystem();
-        
-        // Инициализируем дополнительные параметры
-        this.initAdditionalParams();
+            // Инициализируем интерфейс
+            this.initEventListeners();
+            
+            // НЕ устанавливаем значение в селекторе, оставляем placeholder видимым
+            // Но логически загружаем дефолтную компоновку (3 секции)
+            this.loadLayout(this.currentLayout);
+            
+            // Обновляем отображение размера
+            this.updateDimensionsDisplay();
+            
+            console.log('Конструктор инициализирован');
+            
+            // Инициализируем систему подсказок
+            this.initTooltipSystem();
+            
+            // Инициализируем дополнительные параметры
+            this.initAdditionalParams();
         } catch (error) {
             console.error('Ошибка инициализации конструктора:', error);
         }
@@ -301,6 +303,20 @@ class CabinetConstructor {
         // Селектор компоновки
         const layoutSelect = document.getElementById('layout-select');
         if (layoutSelect) {
+            // Обработчик для удаления placeholder при первом взаимодействии
+            const removePlaceholder = () => {
+                const placeholderOption = layoutSelect.querySelector('option[value=""]');
+                if (placeholderOption) {
+                    placeholderOption.remove();
+                }
+                // Удаляем этот обработчик после первого использования
+                layoutSelect.removeEventListener('focus', removePlaceholder);
+                layoutSelect.removeEventListener('click', removePlaceholder);
+            };
+            
+            layoutSelect.addEventListener('focus', removePlaceholder);
+            layoutSelect.addEventListener('click', removePlaceholder);
+            
             layoutSelect.addEventListener('change', (e) => {
                 this.loadLayout(e.target.value);
             });
@@ -369,6 +385,15 @@ class CabinetConstructor {
 
         this.currentLayout = layoutId;
         const layoutConfig = this.layouts.layouts[layoutId];
+
+        // Сбрасываем флаг для показа placeholder в селекторе вариантов
+        this.firstInteractionWithVariants = true;
+
+        // Обновляем селектор количества секций
+        const layoutSelect = document.getElementById('layout-select');
+        if (layoutSelect) {
+            layoutSelect.value = layoutId;
+        }
 
         console.log('Загружаем макет:', layoutId, layoutConfig);
 
@@ -460,7 +485,7 @@ class CabinetConstructor {
             const sectionData = {
                 element: sectionElement,
                 config: sectionConfig,
-                currentVariant: sectionConfig.variants[0],
+                currentVariant: sectionConfig.variants[0], // Устанавливаем первый вариант как дефолтный
                 currentWidth: sectionConfig.defaultSize.width
             };
             this.sections.set(sectionConfig.id, sectionData);
@@ -525,17 +550,17 @@ class CabinetConstructor {
 
         controlsContainer.innerHTML = `
             <div class="variants-dropdown">
-                <label>
-                Вариант секции:
-                <span class="help-icon" data-tooltip-file="variant-info.txt">?</span>
-            </label>
-                <select id="variant-select">
-                    ${sectionData.config.variants.map(variant => 
-                        `<option value="${variant.id}" ${variant.id === sectionData.currentVariant.id ? 'selected' : ''}>
-                            ${variant.name}
-                        </option>`
-                    ).join('')}
-                </select>
+                <div class="variants-dropdown-row">
+                    <select id="variant-select">
+                        <option value="" disabled ${this.firstInteractionWithVariants ? 'selected' : ''}>Выберите вариант секции</option>
+                        ${sectionData.config.variants.map(variant => 
+                            `<option value="${variant.id}" ${!this.firstInteractionWithVariants && sectionData.currentVariant && variant.id === sectionData.currentVariant.id ? 'selected' : ''}>
+                                ${variant.name}
+                            </option>`
+                        ).join('')}
+                    </select>
+                    <span class="help-icon" data-tooltip-file="variant-info.txt">?</span>
+                </div>
             </div>
 
             <div class="width-control">
@@ -557,20 +582,6 @@ class CabinetConstructor {
                 </div>
             </div>
 
-            <div class="color-selector">
-                <label>
-                Цвет:
-                <span class="help-icon" data-tooltip-file="color-info.txt">?</span>
-            </label>
-                <div class="color-buttons" id="color-buttons">
-                    <button class="color-button ${this.currentColor === 'c1' ? 'active' : ''}" data-color="c1" title="Цвет 1"></button>
-                    <button class="color-button ${this.currentColor === 'c2' ? 'active' : ''}" data-color="c2" title="Цвет 2"></button>
-                    <button class="color-button ${this.currentColor === 'c3' ? 'active' : ''}" data-color="c3" title="Цвет 3"></button>
-                    <button class="color-button ${this.currentColor === 'c4' ? 'active' : ''}" data-color="c4" title="Цвет 4"></button>
-                    <button class="color-button ${this.currentColor === 'c5' ? 'active' : ''}" data-color="c5" title="Цвет 5"></button>
-                </div>
-            </div>
-
             <div class="height-control">
                 <label>Высота шкафа:</label>
                 <div class="height-slider-container">
@@ -589,6 +600,17 @@ class CabinetConstructor {
                     <span style="font-size: 12px; color: #495057;">мм</span>
                 </div>
             </div>
+
+            <div class="color-selector">
+                <div class="color-buttons" id="color-buttons">
+                    <button class="color-button ${this.currentColor === 'c1' ? 'active' : ''}" data-color="c1" title="Цвет 1"></button>
+                    <button class="color-button ${this.currentColor === 'c2' ? 'active' : ''}" data-color="c2" title="Цвет 2"></button>
+                    <button class="color-button ${this.currentColor === 'c3' ? 'active' : ''}" data-color="c3" title="Цвет 3"></button>
+                    <button class="color-button ${this.currentColor === 'c4' ? 'active' : ''}" data-color="c4" title="Цвет 4"></button>
+                    <button class="color-button ${this.currentColor === 'c5' ? 'active' : ''}" data-color="c5" title="Цвет 5"></button>
+                    <span class="help-icon" data-tooltip-file="color-info.txt">?</span>
+                </div>
+            </div>
         `;
 
         // Добавляем обработчики событий
@@ -603,6 +625,29 @@ class CabinetConstructor {
         const heightDisplay = document.getElementById('height-display');
 
         if (variantSelect) {
+            // Обработчик для удаления placeholder при первом взаимодействии
+            const removeVariantPlaceholder = () => {
+                if (this.firstInteractionWithVariants) {
+                    const placeholderOption = variantSelect.querySelector('option[value=""]');
+                    if (placeholderOption) {
+                        placeholderOption.remove();
+                    }
+                    this.firstInteractionWithVariants = false;
+                    
+                    // Устанавливаем текущий вариант как selected
+                    const sectionData = this.sections.get(this.activeSection);
+                    if (sectionData && sectionData.currentVariant) {
+                        variantSelect.value = sectionData.currentVariant.id;
+                    }
+                }
+                // Удаляем этот обработчик после первого использования
+                variantSelect.removeEventListener('focus', removeVariantPlaceholder);
+                variantSelect.removeEventListener('click', removeVariantPlaceholder);
+            };
+            
+            variantSelect.addEventListener('focus', removeVariantPlaceholder);
+            variantSelect.addEventListener('click', removeVariantPlaceholder);
+            
             variantSelect.addEventListener('change', (e) => {
                 this.changeVariant(e.target.value);
             });
@@ -1887,20 +1932,57 @@ class CabinetConstructor {
         tooltip.dataset.tooltip = 'true';
         tooltip.dataset.tooltipFor = filename;
 
-        // Получаем позицию значка
+        // Временно добавляем к body для измерения размеров
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.position = 'absolute';
+        document.body.appendChild(tooltip);
+
+        // Получаем размеры tooltip'а
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const tooltipWidth = tooltipRect.width;
+        const tooltipHeight = tooltipRect.height;
+
+        // Получаем позицию значка и размеры окна
         const iconRect = iconElement.getBoundingClientRect();
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
 
-        // Позиционируем подсказку над значком
-        tooltip.style.position = 'absolute';
-        tooltip.style.left = (iconRect.left + scrollLeft + iconRect.width/2) + 'px'; // Центрируем относительно значка
-        tooltip.style.top = (iconRect.top + scrollTop - 45) + 'px'; // Над значком с отступом
-        tooltip.style.transform = 'translateX(-50%)'; // Центрируем по горизонтали
+        // Вычисляем желаемую позицию (центрированную над значком)
+        let left = iconRect.left + scrollLeft + iconRect.width/2 - tooltipWidth/2;
+        let top = iconRect.top + scrollTop - tooltipHeight - 10; // Над значком с отступом
+
+        // Корректируем позицию если выходит за границы экрана
+        
+        // Проверяем правую границу
+        if (left + tooltipWidth > windowWidth + scrollLeft - 10) {
+            left = windowWidth + scrollLeft - tooltipWidth - 10;
+        }
+        
+        // Проверяем левую границу
+        if (left < scrollLeft + 10) {
+            left = scrollLeft + 10;
+        }
+        
+        // Проверяем верхнюю границу
+        if (top < scrollTop + 10) {
+            // Если не помещается сверху, показываем снизу
+            top = iconRect.bottom + scrollTop + 10;
+        }
+        
+        // Проверяем нижнюю границу (если показываем снизу)
+        if (top + tooltipHeight > windowHeight + scrollTop - 10) {
+            // Если не помещается снизу, показываем сверху (даже если выходит за верхнюю границу)
+            top = iconRect.top + scrollTop - tooltipHeight - 10;
+        }
+
+        // Применяем окончательную позицию
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+        tooltip.style.transform = 'none'; // Убираем transform, так как уже рассчитали точную позицию
         tooltip.style.zIndex = '9999';
-
-        // Добавляем подсказку к body
-        document.body.appendChild(tooltip);
+        tooltip.style.visibility = 'visible';
 
         // Показываем подсказку с небольшой задержкой
         setTimeout(() => {
