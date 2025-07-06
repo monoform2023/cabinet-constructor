@@ -18,6 +18,11 @@ class CabinetConstructor {
         this.doorsEnabled = false;
         this.doors = new Map(); // Хранение данных дверей
         
+        // Настройки дверей
+        this.doorsSettings = {
+            color: 'c1' // Только цвет, убираем ручку и зеркальность
+        };
+        
         this.init();
     }
 
@@ -300,8 +305,52 @@ class CabinetConstructor {
             });
         }
         
+        // Инициализируем обработчики дверей
+        this.initDoorsEventListeners();
+        
         console.log('Обработчики событий инициализированы');
     }
+
+    // Инициализация обработчиков событий для дверей
+    initDoorsEventListeners() {
+        // Цветовые кнопки дверей
+        const doorColorButtons = document.querySelectorAll('.door-color-button');
+        doorColorButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newColor = e.target.dataset.color;
+                if (newColor) {
+                    this.changeDoorColor(newColor);
+                }
+            });
+        });
+
+        console.log('Обработчики событий дверей инициализированы');
+    }
+
+    // Изменение цвета дверей
+    changeDoorColor(newColor) {
+        if (this.doorsSettings.color === newColor) return;
+
+        console.log('Смена цвета дверей с', this.doorsSettings.color, 'на', newColor);
+        
+        // Обновляем настройки дверей
+        this.doorsSettings.color = newColor;
+        
+        // Обновляем активную кнопку цвета
+        document.querySelectorAll('.door-color-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`[data-color="${newColor}"]`).classList.add('active');
+        
+        // Обновляем изображения всех дверей
+        if (this.doorsEnabled) {
+            this.updateAllDoors();
+        }
+        
+        console.log('Цвет дверей изменен на:', newColor);
+    }
+
+
 
     loadLayout(layoutId) {
         if (!this.layouts || !this.layouts.layouts[layoutId]) {
@@ -663,6 +712,11 @@ class CabinetConstructor {
         // Обновляем изображение с учетом текущего размера секции
         this.updateSectionImage(sectionData);
 
+        // Обновляем соответствующую дверь, если двери включены
+        if (this.doorsEnabled) {
+            this.updateDoor(this.activeSection);
+        }
+
         console.log(`Изменен вариант секции ${this.activeSection} на ${variant.name}`);
     }
 
@@ -684,6 +738,11 @@ class CabinetConstructor {
         this.sections.forEach((sectionData, sectionId) => {
             this.updateSectionImage(sectionData);
         });
+        
+        // Обновляем все двери, если двери включены
+        if (this.doorsEnabled) {
+            this.updateAllDoors();
+        }
         
         console.log('Цвет изменен на:', newColor);
     }
@@ -732,6 +791,12 @@ class CabinetConstructor {
         // Применяем масштабирование к элементу секции
         const scale = newWidth / sectionData.config.defaultSize.width;
         sectionData.element.style.transform = `scaleX(${scale})`;
+
+        // Обновляем отображение ширины в миллиметрах
+        const widthDisplay = document.getElementById('width-display');
+        if (widthDisplay) {
+            widthDisplay.value = this.pixelsToMillimeters(newWidth);
+        }
 
         // Обновляем изображение секции
         this.updateSectionImage(sectionData);
@@ -1462,11 +1527,15 @@ class CabinetConstructor {
     toggleDoors(enabled) {
         this.doorsEnabled = enabled;
         const doorsContainer = document.getElementById('doors-container');
+        const doorsPanel = document.getElementById('doors-panel');
         
         if (enabled) {
             // Включаем двери
             if (doorsContainer) {
                 doorsContainer.style.display = 'block';
+            }
+            if (doorsPanel) {
+                doorsPanel.style.display = 'block';
             }
             // Создаем двери, если их еще нет
             if (this.doors.size === 0) {
@@ -1476,6 +1545,9 @@ class CabinetConstructor {
             // Выключаем двери
             if (doorsContainer) {
                 doorsContainer.style.display = 'none';
+            }
+            if (doorsPanel) {
+                doorsPanel.style.display = 'none';
             }
         }
         
@@ -1501,29 +1573,15 @@ class CabinetConstructor {
             doorElement.className = `door ${sectionConfig.id}-door`;
             doorElement.id = `${sectionConfig.id}-door`;
             
-            // Используем ту же логику позиционирования, что и для секций
-            doorElement.style.left = `${(sectionConfig.position.left / 3200) * 100}%`;
-            doorElement.style.top = `${(sectionConfig.position.top / 1919) * 100}%`;
-            doorElement.style.width = `${(sectionConfig.defaultSize.width / 3200) * 100}%`;
-            doorElement.style.height = `${(sectionConfig.defaultSize.height / 1919) * 100}%`;
-            
-            // Устанавливаем transform-origin из конфигурации
-            doorElement.style.transformOrigin = sectionConfig.transformOrigin;
-            
-            // Применяем текущий transform от соответствующей секции
-            const sectionData = this.sections.get(sectionConfig.id);
-            if (sectionData && sectionData.element.style.transform) {
-                doorElement.style.transform = sectionData.element.style.transform;
-            }
-            
             // Добавляем стили для позиционирования (как у секций)
             doorElement.style.position = 'absolute';
-            
-            // Пока ставим временный цвет для тестирования
-            doorElement.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
-            doorElement.style.border = '2px solid red';
+            doorElement.style.backgroundRepeat = 'no-repeat';
+            doorElement.style.backgroundPosition = 'center';
             
             doorsContainer.appendChild(doorElement);
+            
+            // Получаем данные соответствующей секции
+            const sectionData = this.sections.get(sectionConfig.id);
             
             // Сохраняем данные двери
             const doorData = {
@@ -1532,6 +1590,9 @@ class CabinetConstructor {
                 currentWidth: sectionData ? sectionData.currentWidth : sectionConfig.defaultSize.width
             };
             this.doors.set(sectionConfig.id, doorData);
+            
+            // Сразу синхронизируем с реальными размерами секции
+            this.updateDoor(sectionConfig.id);
         });
         
         console.log('Двери созданы:', this.doors.size);
@@ -1552,27 +1613,74 @@ class CabinetConstructor {
         
         if (!doorData || !sectionData) return;
         
-        // Синхронизируем все стили позиционирования
-        doorData.element.style.left = sectionData.element.style.left;
-        doorData.element.style.top = sectionData.element.style.top;
-        doorData.element.style.width = sectionData.element.style.width;
-        doorData.element.style.height = sectionData.element.style.height;
+        // Получаем вычисленные стили секции
+        const sectionElement = sectionData.element;
+        const sectionComputedStyle = window.getComputedStyle(sectionElement);
         
-        // Синхронизируем transform
-        if (sectionData.element.style.transform) {
-            doorData.element.style.transform = sectionData.element.style.transform;
+        // Копируем ВСЕ стили позиционирования и размеров
+        doorData.element.style.position = sectionElement.style.position || sectionComputedStyle.position;
+        doorData.element.style.left = sectionElement.style.left || sectionComputedStyle.left;
+        doorData.element.style.top = sectionElement.style.top || sectionComputedStyle.top;
+        doorData.element.style.width = sectionElement.style.width || sectionComputedStyle.width;
+        doorData.element.style.height = sectionElement.style.height || sectionComputedStyle.height;
+        
+        // Копируем transform и transform-origin
+        doorData.element.style.transform = sectionElement.style.transform || sectionComputedStyle.transform;
+        doorData.element.style.transformOrigin = sectionElement.style.transformOrigin || sectionComputedStyle.transformOrigin;
+        
+        // Копируем дополнительные стили которые могут влиять на размеры
+        doorData.element.style.margin = sectionElement.style.margin || sectionComputedStyle.margin;
+        doorData.element.style.padding = sectionElement.style.padding || sectionComputedStyle.padding;
+        doorData.element.style.border = sectionElement.style.border || sectionComputedStyle.border;
+        doorData.element.style.boxSizing = sectionElement.style.boxSizing || sectionComputedStyle.boxSizing;
+        
+        // Копируем right и bottom если они установлены
+        if (sectionElement.style.right || sectionComputedStyle.right !== 'auto') {
+            doorData.element.style.right = sectionElement.style.right || sectionComputedStyle.right;
         }
-        
-        // Синхронизируем transform-origin
-        if (sectionData.element.style.transformOrigin) {
-            doorData.element.style.transformOrigin = sectionData.element.style.transformOrigin;
+        if (sectionElement.style.bottom || sectionComputedStyle.bottom !== 'auto') {
+            doorData.element.style.bottom = sectionElement.style.bottom || sectionComputedStyle.bottom;
         }
         
         // Обновляем данные ширины
         doorData.currentWidth = sectionData.currentWidth;
         
-        // Здесь позже будет обновление изображения двери
-        console.log(`Дверь ${sectionId} обновлена`);
+        // Убираем временные стили если они были
+        doorData.element.style.backgroundColor = '';
+        doorData.element.style.borderColor = '';
+        
+        // Обновляем изображение двери
+        this.updateDoorImage(doorData);
+        
+        console.log(`Дверь ${sectionId} полностью синхронизирована с секцией`);
+    }
+
+    // Обновление изображения двери
+    updateDoorImage(doorData) {
+        if (!doorData || !doorData.config) return;
+
+        // Определяем размер двери в миллиметрах
+        const doorWidthMm = this.pixelsToMillimeters(doorData.currentWidth);
+        
+        // Получаем оптимальный размер изображения
+        const optimalSize = ConfigUtils.getOptimalImageSize(doorWidthMm);
+        
+        // Формируем название изображения двери по схеме: [sections]_s[number]_d_[color]_r1_[size].jpg
+        const sectionsCount = this.currentLayout.split('-')[0]; // "1", "2", "3", "4"
+        const sectionNumber = doorData.config.id.split('-')[1]; // "1", "2", "3", "4"
+        const doorColor = this.doorsSettings.color; // "c1", "c2", "c3", "c4", "c5"
+        
+        const doorImageName = `${sectionsCount}_s${sectionNumber}_d_${doorColor}_r1_${optimalSize}.jpg`;
+        const doorImagePath = `${doorData.config.imagePath}doors/${doorImageName}`;
+        
+        // Применяем изображение двери
+        doorData.element.style.backgroundImage = `url('${doorImagePath}')`;
+        
+        // Для дверей всегда растягиваем картинку точно по размеру блока
+        // чтобы фасад полностью заполнял площадь секции
+        doorData.element.style.backgroundSize = '100% 100%';
+        
+        ConfigUtils.log('debug', `Дверь ${doorData.config.id}: размер ${doorWidthMm}мм, цвет ${doorColor}, изображение ${doorImageName}`);
     }
 
     // Обновление всех дверей
@@ -1580,6 +1688,107 @@ class CabinetConstructor {
         this.doors.forEach((doorData, sectionId) => {
             this.updateDoor(sectionId);
         });
+    }
+
+    // Тестовая функция для проверки синхронизации размеров
+    testDoorSynchronization() {
+        if (!this.doorsEnabled) {
+            console.log('❌ Двери не включены');
+            return;
+        }
+
+        console.log('🔍 Проверяем синхронизацию размеров дверей с секциями:');
+        console.log('='.repeat(60));
+        
+        let allSynced = true;
+        
+        this.sections.forEach((sectionData, sectionId) => {
+            const doorData = this.doors.get(sectionId);
+            
+            if (!doorData) {
+                console.log(`❌ ${sectionId}: Дверь не найдена`);
+                allSynced = false;
+                return;
+            }
+            
+            // Получаем вычисленные размеры элементов
+            const sectionRect = sectionData.element.getBoundingClientRect();
+            const doorRect = doorData.element.getBoundingClientRect();
+            
+            const sectionComputedStyle = window.getComputedStyle(sectionData.element);
+            const doorComputedStyle = window.getComputedStyle(doorData.element);
+            
+            // Сравниваем реальные размеры с допуском в 1px
+            const tolerance = 1;
+            
+            const isLeftSynced = Math.abs(sectionRect.left - doorRect.left) <= tolerance;
+            const isTopSynced = Math.abs(sectionRect.top - doorRect.top) <= tolerance;
+            const isWidthSynced = Math.abs(sectionRect.width - doorRect.width) <= tolerance;
+            const isHeightSynced = Math.abs(sectionRect.height - doorRect.height) <= tolerance;
+            
+            // Проверяем стили
+            const sectionStyles = {
+                left: sectionData.element.style.left,
+                top: sectionData.element.style.top,
+                width: sectionData.element.style.width,
+                height: sectionData.element.style.height,
+                transform: sectionData.element.style.transform,
+                transformOrigin: sectionData.element.style.transformOrigin
+            };
+            
+            const doorStyles = {
+                left: doorData.element.style.left,
+                top: doorData.element.style.top,
+                width: doorData.element.style.width,
+                height: doorData.element.style.height,
+                transform: doorData.element.style.transform,
+                transformOrigin: doorData.element.style.transformOrigin
+            };
+            
+            const isTransformSynced = sectionStyles.transform === doorStyles.transform;
+            const isTransformOriginSynced = sectionStyles.transformOrigin === doorStyles.transformOrigin;
+            
+            const isSynced = isLeftSynced && isTopSynced && isWidthSynced && isHeightSynced && isTransformSynced && isTransformOriginSynced;
+            
+            console.log(`${isSynced ? '✅' : '❌'} ${sectionId}:`);
+            console.log(`  Позиция X: ${isLeftSynced ? '✅' : '❌'} (Секция: ${sectionRect.left.toFixed(1)}px, Дверь: ${doorRect.left.toFixed(1)}px, разница: ${Math.abs(sectionRect.left - doorRect.left).toFixed(1)}px)`);
+            console.log(`  Позиция Y: ${isTopSynced ? '✅' : '❌'} (Секция: ${sectionRect.top.toFixed(1)}px, Дверь: ${doorRect.top.toFixed(1)}px, разница: ${Math.abs(sectionRect.top - doorRect.top).toFixed(1)}px)`);
+            console.log(`  Ширина: ${isWidthSynced ? '✅' : '❌'} (Секция: ${sectionRect.width.toFixed(1)}px, Дверь: ${doorRect.width.toFixed(1)}px, разница: ${Math.abs(sectionRect.width - doorRect.width).toFixed(1)}px)`);
+            console.log(`  Высота: ${isHeightSynced ? '✅' : '❌'} (Секция: ${sectionRect.height.toFixed(1)}px, Дверь: ${doorRect.height.toFixed(1)}px, разница: ${Math.abs(sectionRect.height - doorRect.height).toFixed(1)}px)`);
+            console.log(`  Transform: ${isTransformSynced ? '✅' : '❌'} (Секция: "${sectionStyles.transform}", Дверь: "${doorStyles.transform}")`);
+            console.log(`  TransformOrigin: ${isTransformOriginSynced ? '✅' : '❌'} (Секция: ${sectionStyles.transformOrigin}, Дверь: ${doorStyles.transformOrigin})`);
+            console.log('');
+            
+            if (!isSynced) {
+                allSynced = false;
+            }
+        });
+        
+        console.log('='.repeat(60));
+        if (allSynced) {
+            console.log('🎉 Все двери идеально синхронизированы с секциями!');
+        } else {
+            console.log('⚠️ Обнаружены проблемы синхронизации. Попробуйте вызвать forceDoorUpdate()');
+        }
+        
+        return allSynced;
+    }
+
+    // Функция для принудительного обновления всех дверей (для отладки)
+    forceDoorUpdate() {
+        if (!this.doorsEnabled) {
+            console.log('❌ Двери не включены');
+            return;
+        }
+        
+        console.log('🔧 Принудительно обновляем все двери...');
+        this.updateAllDoors();
+        console.log('✅ Все двери обновлены');
+        
+        // Сразу проверяем синхронизацию
+        setTimeout(() => {
+            this.testDoorSynchronization();
+        }, 100);
     }
 }
 

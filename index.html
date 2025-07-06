@@ -46,6 +46,21 @@
                     <label>
                         <input type="checkbox" id="doors-enabled"> Двери
                     </label>
+                    
+                    <!-- Панель управления дверьми (скрыта по умолчанию) -->
+                    <div class="doors-panel" id="doors-panel" style="display: none;">
+                        <!-- Цвет дверей -->
+                        <div class="doors-color-selector">
+                            <label>Цвет дверей:</label>
+                            <div class="doors-color-buttons">
+                                <button class="door-color-button active" data-color="c1" style="background-image: url('images/door-color-thumbnails/dc1-thumbnail.jpg');" title="Цвет 1"></button>
+                                <button class="door-color-button" data-color="c2" style="background-image: url('images/door-color-thumbnails/dc2-thumbnail.jpg');" title="Цвет 2"></button>
+                                <button class="door-color-button" data-color="c3" style="background-image: url('images/door-color-thumbnails/dc3-thumbnail.jpg');" title="Цвет 3"></button>
+                                <button class="door-color-button" data-color="c4" style="background-image: url('images/door-color-thumbnails/dc4-thumbnail.jpg');" title="Цвет 4"></button>
+                                <button class="door-color-button" data-color="c5" style="background-image: url('images/door-color-thumbnails/dc5-thumbnail.jpg');" title="Цвет 5"></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- 3. Контейнер для контролов активной секции (размер и варианты) -->

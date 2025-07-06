@@ -157,6 +157,19 @@ body {
     box-sizing: border-box;
 }
 
+/* Базовые стили для фасадов */
+.door {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    pointer-events: none; /* Не блокируем клики на секциях */
+}
+
 /* Пульсирующий кружок при наведении на секцию (только если секция не активна) */
 .section:hover:not(.active)::after {
     content: '';
@@ -772,6 +785,104 @@ body {
 }
 
 .doors-control input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+/* Панель управления дверьми */
+.doors-panel {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Селектор цвета дверей */
+.doors-color-selector {
+    margin-bottom: 15px;
+}
+
+.doors-color-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #343a40;
+}
+
+.doors-color-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.door-color-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid #dee2e6;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.door-color-button:hover {
+    border-color: #28a745;
+    transform: scale(1.05);
+}
+
+.door-color-button.active {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+/* Селектор типа ручки */
+.doors-handle-selector {
+    margin-bottom: 15px;
+}
+
+.doors-handle-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #343a40;
+}
+
+.doors-handle-selector select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.doors-handle-selector select:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+/* Контрол зеркальности */
+.doors-mirror-control {
+    margin-bottom: 0;
+}
+
+.doors-mirror-control label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #343a40;
+}
+
+.doors-mirror-control input[type="checkbox"] {
     margin-right: 8px;
     transform: scale(1.2);
 } 
