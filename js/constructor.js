@@ -581,9 +581,9 @@ class CabinetConstructor {
                     <input type="text" 
                            class="width-display" 
                            id="width-display"
-                           value="${this.pixelsToMillimeters(sectionData.currentWidth)}"
-                           data-min="${this.pixelsToMillimeters(sectionData.config.minWidth)}" 
-                           data-max="${this.pixelsToMillimeters(sectionData.config.maxWidth)}">
+                           value="${this.pixelsToMillimeters(sectionData.currentWidth, this.activeSection)}"
+                           data-min="${this.pixelsToMillimeters(sectionData.config.minWidth, this.activeSection)}" 
+                           data-max="${this.pixelsToMillimeters(sectionData.config.maxWidth, this.activeSection)}">
                     <span style="font-size: 12px; color: #495057;">мм</span>
                 </div>
             </div>
@@ -667,7 +667,7 @@ class CabinetConstructor {
 
         if (widthDisplay) {
             this.initInputField(widthDisplay, (value) => {
-                const pixels = this.millimetersToPixels(value);
+                const pixels = this.millimetersToPixels(value, this.activeSection);
                 this.changeWidth(pixels);
                 if (widthSlider) widthSlider.value = pixels;
             });
@@ -772,7 +772,8 @@ class CabinetConstructor {
         if (!sectionData || !sectionData.currentVariant) return;
 
         // Определяем размер секции в миллиметрах
-        const sectionWidthMm = this.pixelsToMillimeters(sectionData.currentWidth);
+        const sectionId = Array.from(this.sections.entries()).find(([id, data]) => data === sectionData)?.[0];
+        const sectionWidthMm = this.pixelsToMillimeters(sectionData.currentWidth, sectionId);
         
         // Получаем оптимальный размер изображения
         const optimalSize = ConfigUtils.getOptimalImageSize(sectionWidthMm);
@@ -815,7 +816,7 @@ class CabinetConstructor {
         // Обновляем отображение ширины в миллиметрах
         const widthDisplay = document.getElementById('width-display');
         if (widthDisplay) {
-            widthDisplay.value = this.pixelsToMillimeters(newWidth);
+            widthDisplay.value = this.pixelsToMillimeters(newWidth, this.activeSection);
         }
 
         // Обновляем изображение секции
@@ -1462,38 +1463,92 @@ class CabinetConstructor {
         console.log('Селектор цвета инициализирован');
     }
 
-    pixelsToMillimeters(pixels) {
-        // Специальный коэффициент для односекционного варианта (536px = 1000мм)
+    pixelsToMillimeters(pixels, sectionId = null) {
+        // Определяем какую секцию использовать для расчета
+        const targetSection = sectionId || this.activeSection;
+        
+        // Для 1-секционного варианта: 536px = 1000мм
         if (this.currentLayout === '1-section') {
-            const ratio = 1000 / 536; // 1.8656
+            const ratio = 1000 / 536; // 1.866
             return Math.round(pixels * ratio);
         }
         
-        // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (520px = 1000мм)
-        if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
-            const ratio = 1000 / 520; // 1.923
+        // Для 2-секционного варианта: 528px = 1000мм
+        if (this.currentLayout === '2-sections') {
+            const ratio = 1000 / 528; // 1.894
             return Math.round(pixels * ratio);
         }
         
-        // Стандартный коэффициент для всех остальных секций
+        // Для 3-секционного варианта
+        if (this.currentLayout === '3-sections') {
+            // Центральная секция (section-2): 520px = 1000мм
+            if (targetSection === 'section-2') {
+                const ratio = 1000 / 520; // 1.923
+                return Math.round(pixels * ratio);
+            }
+            // Боковые секции (section-1, section-3): 528px = 1000мм
+            const ratio = 1000 / 528; // 1.894
+            return Math.round(pixels * ratio);
+        }
+        
+        // Для 4-секционного варианта
+        if (this.currentLayout === '4-sections') {
+            // Секции с размером 520px (section-2, section-4): 520px = 1000мм
+            if (targetSection === 'section-2' || targetSection === 'section-4') {
+                const ratio = 1000 / 520; // 1.923
+                return Math.round(pixels * ratio);
+            }
+            // Секции с размером 528px (section-1, section-3): 528px = 1000мм
+            const ratio = 1000 / 528; // 1.894
+            return Math.round(pixels * ratio);
+        }
+        
+        // Стандартный коэффициент для всех остальных случаев
         const ratio = this.layouts?.settings?.pixelsToMillimeters || 1.893939;
         return Math.round(pixels * ratio);
     }
 
-    millimetersToPixels(millimeters) {
-        // Специальный коэффициент для односекционного варианта (1000мм = 536px)
+    millimetersToPixels(millimeters, sectionId = null) {
+        // Определяем какую секцию использовать для расчета
+        const targetSection = sectionId || this.activeSection;
+        
+        // Для 1-секционного варианта: 1000мм = 536px
         if (this.currentLayout === '1-section') {
             const ratio = 536 / 1000; // 0.536
             return Math.round(millimeters * ratio);
         }
         
-        // Специальный коэффициент ТОЛЬКО для центральной секции (section-2) в 3-секционном и 4-секционном макетах (1000мм = 520px)
-        if ((this.currentLayout === '3-sections' || this.currentLayout === '4-sections') && this.activeSection === 'section-2') {
-            const ratio = 520 / 1000; // 0.52
+        // Для 2-секционного варианта: 1000мм = 528px
+        if (this.currentLayout === '2-sections') {
+            const ratio = 528 / 1000; // 0.528
             return Math.round(millimeters * ratio);
         }
         
-        // Стандартный коэффициент для всех остальных секций
+        // Для 3-секционного варианта
+        if (this.currentLayout === '3-sections') {
+            // Центральная секция (section-2): 1000мм = 520px
+            if (targetSection === 'section-2') {
+                const ratio = 520 / 1000; // 0.52
+                return Math.round(millimeters * ratio);
+            }
+            // Боковые секции (section-1, section-3): 1000мм = 528px
+            const ratio = 528 / 1000; // 0.528
+            return Math.round(millimeters * ratio);
+        }
+        
+        // Для 4-секционного варианта
+        if (this.currentLayout === '4-sections') {
+            // Секции с размером 520px (section-2, section-4): 1000мм = 520px
+            if (targetSection === 'section-2' || targetSection === 'section-4') {
+                const ratio = 520 / 1000; // 0.52
+                return Math.round(millimeters * ratio);
+            }
+            // Секции с размером 528px (section-1, section-3): 1000мм = 528px
+            const ratio = 528 / 1000; // 0.528
+            return Math.round(millimeters * ratio);
+        }
+        
+        // Стандартный коэффициент для всех остальных случаев
         const ratio = this.layouts?.settings?.millimetersToPixels || 0.528;
         return Math.round(millimeters * ratio);
     }
@@ -1691,8 +1746,9 @@ class CabinetConstructor {
     updateDoorImage(doorData) {
         if (!doorData || !doorData.config) return;
 
-        // Определяем размер двери в миллиметрах
-        const doorWidthMm = this.pixelsToMillimeters(doorData.currentWidth);
+        // Определяем размер двери в миллиметрах  
+        const sectionId = Array.from(this.doors.entries()).find(([id, data]) => data === doorData)?.[0];
+        const doorWidthMm = this.pixelsToMillimeters(doorData.currentWidth, sectionId);
         
         // Получаем оптимальный размер изображения
         const optimalSize = ConfigUtils.getOptimalImageSize(doorWidthMm);
@@ -1850,7 +1906,7 @@ class CabinetConstructor {
         // Рассчитываем общую ширину секций
         let totalSectionsWidth = 0;
         this.sections.forEach((sectionData, sectionId) => {
-            const widthMm = this.pixelsToMillimeters(sectionData.currentWidth);
+            const widthMm = this.pixelsToMillimeters(sectionData.currentWidth, sectionId);
             totalSectionsWidth += widthMm;
         });
 
@@ -2186,7 +2242,7 @@ class CabinetConstructor {
                 id: sectionId,
                 name: sectionData.config.name,
                 variant: sectionData.currentVariant ? sectionData.currentVariant.name : 'Не выбран',
-                width: this.pixelsToMillimeters(sectionData.currentWidth)
+                width: this.pixelsToMillimeters(sectionData.currentWidth, sectionId)
             });
         });
         
@@ -2566,6 +2622,82 @@ class CabinetConstructor {
         URL.revokeObjectURL(url);
     }
 
+    // Отладочная функция для проверки размеров
+    debugSizeCalculations() {
+        console.log('=== ОТЛАДКА РАЗМЕРОВ ===');
+        console.log('Текущий макет:', this.currentLayout);
+        console.log('Активная секция:', this.activeSection);
+        
+        const sectionData = this.sections.get(this.activeSection);
+        if (sectionData) {
+            const realWidth = sectionData.element.offsetWidth;
+            const configWidth = sectionData.currentWidth;
+            const calculatedMm = this.pixelsToMillimeters(configWidth, this.activeSection);
+            const realMm = this.pixelsToMillimeters(realWidth, this.activeSection);
+            const ratio = this.getConversionRatio(this.currentLayout, this.activeSection);
+            
+            console.log('Конфигурация секции:', sectionData.config);
+            console.log('Текущая ширина (currentWidth):', configWidth);
+            console.log('Реальная ширина DOM:', realWidth);
+            console.log('Расчет мм (от currentWidth):', calculatedMm);
+            console.log('Расчет мм (от реальной ширины):', realMm);
+            console.log('Коэффициент для секции:', ratio);
+            console.log('Ожидаемый коэффициент:', `1000 / ${configWidth} = ${(1000 / configWidth).toFixed(3)}`);
+        }
+        
+        // Проверяем все секции
+        console.log('\n=== ВСЕ СЕКЦИИ ===');
+        this.sections.forEach((sectionData, sectionId) => {
+            const realWidth = sectionData.element.offsetWidth;
+            const configWidth = sectionData.currentWidth;
+            const calculatedMm = this.pixelsToMillimeters(configWidth, sectionId);
+            const ratio = this.getConversionRatio(this.currentLayout, sectionId);
+            
+            console.log(`${sectionId}:`, {
+                'конфиг': `${configWidth}px`,
+                'реальный': `${realWidth}px`,
+                'расчет мм': calculatedMm,
+                'коэффициент': ratio.toFixed(3)
+            });
+        });
+    }
+    
+    // Функция для получения коэффициента конвертации
+    getConversionRatio(layout, sectionId) {
+        // Для 1-секционного варианта: 536px = 1000мм
+        if (layout === '1-section') {
+            return 1000 / 536;
+        }
+        
+        // Для 2-секционного варианта: 528px = 1000мм
+        if (layout === '2-sections') {
+            return 1000 / 528;
+        }
+        
+        // Для 3-секционного варианта
+        if (layout === '3-sections') {
+            // Центральная секция (section-2): 520px = 1000мм
+            if (sectionId === 'section-2') {
+                return 1000 / 520;
+            }
+            // Боковые секции (section-1, section-3): 528px = 1000мм
+            return 1000 / 528;
+        }
+        
+        // Для 4-секционного варианта
+        if (layout === '4-sections') {
+            // Секции с размером 520px (section-2, section-4): 520px = 1000мм
+            if (sectionId === 'section-2' || sectionId === 'section-4') {
+                return 1000 / 520;
+            }
+            // Секции с размером 528px (section-1, section-3): 528px = 1000мм
+            return 1000 / 528;
+        }
+        
+        // Стандартный коэффициент
+        return 1.893939;
+    }
+
 }
 
 // Инициализация при загрузке страницы
@@ -2579,3 +2711,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 }); 
+
+// Глобальная функция для отладки размеров
+window.debugSizes = function() {
+    if (window.constructor) {
+        window.constructor.debugSizeCalculations();
+    } else {
+        console.log('Конструктор не найден');
+    }
+};
+
+// Глобальная функция для очистки тултипов
+window.clearTooltips = function() {
+    if (window.constructor) {
+        window.constructor.clearAllTooltips();
+    }
+};
