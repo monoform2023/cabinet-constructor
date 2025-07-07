@@ -347,6 +347,21 @@ class CabinetConstructor {
         // Инициализируем кнопки действий
         this.initActionButtons();
         
+        // Обновляем позицию индикатора при изменении размера окна с задержкой
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.updateSectionIndicator();
+                // Обновляем все hover эффекты
+                this.sections.forEach((sectionData) => {
+                    if (sectionData.element._updateHover) {
+                        sectionData.element._updateHover();
+                    }
+                });
+            }, 100);
+        });
+        
         console.log('Обработчики событий инициализированы');
     }
 
@@ -451,6 +466,51 @@ class CabinetConstructor {
         console.log('Макет загружен:', layoutId);
     }
 
+    // Инициализация hover эффектов для секции
+    initSectionHoverEffects(sectionElement, sectionId) {
+        const hoverContainer = document.getElementById('hover-effects-container');
+        if (!hoverContainer) return;
+
+        // Создаем элемент для hover эффекта
+        const hoverEffect = document.createElement('div');
+        hoverEffect.className = 'section-hover-effect';
+        hoverEffect.id = `hover-${sectionId}`;
+        hoverContainer.appendChild(hoverEffect);
+
+        // Функция обновления позиции hover эффекта
+        const updateHoverPosition = () => {
+            const mainWindow = document.getElementById('main-window');
+            const mainRect = mainWindow.getBoundingClientRect();
+            const sectionRect = sectionElement.getBoundingClientRect();
+            
+            const left = sectionRect.left - mainRect.left;
+            const top = sectionRect.top - mainRect.top;
+            const width = sectionRect.width;
+            const height = sectionRect.height;
+            
+            hoverEffect.style.left = `${left}px`;
+            hoverEffect.style.top = `${top}px`;
+            hoverEffect.style.width = `${width}px`;
+            hoverEffect.style.height = `${height}px`;
+        };
+
+        // Обработчики hover
+        sectionElement.addEventListener('mouseenter', () => {
+            // Не показываем hover для активной секции
+            if (sectionElement.classList.contains('active')) return;
+            
+            updateHoverPosition();
+            hoverEffect.style.opacity = '1';
+        });
+
+        sectionElement.addEventListener('mouseleave', () => {
+            hoverEffect.style.opacity = '0';
+        });
+
+        // Сохраняем ссылку на функцию обновления для использования при изменении размеров
+        sectionElement._updateHover = updateHoverPosition;
+    }
+
     updateLayoutClass(cssClass) {
         const container = document.getElementById('constructor-container');
         if (container) {
@@ -472,7 +532,17 @@ class CabinetConstructor {
         if (sectionsContainer) {
             sectionsContainer.innerHTML = '';
         }
+        
+        // Очищаем hover эффекты
+        const hoverContainer = document.getElementById('hover-effects-container');
+        if (hoverContainer) {
+            hoverContainer.innerHTML = '';
+        }
+        
         this.sections.clear();
+        
+        // Скрываем индикатор при очистке секций
+        this.updateSectionIndicator();
     }
 
     createSections(sectionsConfig) {
@@ -498,6 +568,9 @@ class CabinetConstructor {
             sectionElement.addEventListener('click', () => {
                 this.setActiveSection(sectionConfig.id);
             });
+
+            // Добавляем hover эффекты
+            this.initSectionHoverEffects(sectionElement, sectionConfig.id);
 
             sectionsContainer.appendChild(sectionElement);
             
@@ -557,6 +630,46 @@ class CabinetConstructor {
         
         // Обновляем контролы
         this.updateSectionControls();
+        
+        // Обновляем позицию индикатора
+        this.updateSectionIndicator();
+    }
+
+    // Обновление позиции индикатора для активной секции
+    updateSectionIndicator() {
+        const indicator = document.getElementById('section-indicator');
+        if (!indicator) return;
+
+        if (!this.activeSection) {
+            indicator.classList.remove('active');
+            return;
+        }
+
+        const sectionData = this.sections.get(this.activeSection);
+        if (!sectionData) {
+            indicator.classList.remove('active');
+            return;
+        }
+
+        const sectionElement = sectionData.element;
+        if (!sectionElement) {
+            indicator.classList.remove('active');
+            return;
+        }
+
+        // Получаем позицию секции относительно main-window
+        const mainWindow = document.getElementById('main-window');
+        const mainRect = mainWindow.getBoundingClientRect();
+        const sectionRect = sectionElement.getBoundingClientRect();
+        
+        // Вычисляем позицию относительно main-window
+        const centerX = sectionRect.left - mainRect.left + sectionRect.width / 2;
+        const topY = sectionRect.top - mainRect.top - 50; // 50px выше секции
+
+        // Позиционируем индикатор
+        indicator.style.left = `${centerX - 4}px`; // -4px чтобы центрировать кружок 8px
+        indicator.style.top = `${topY}px`;
+        indicator.classList.add('active');
     }
 
     updateSectionControls() {
@@ -855,6 +968,15 @@ class CabinetConstructor {
 
         // Обновляем цену
         this.updateTotalPrice();
+
+        // Обновляем позицию индикатора с небольшой задержкой для плавности
+        setTimeout(() => {
+            this.updateSectionIndicator();
+            // Обновляем позицию hover эффекта
+            if (sectionData.element._updateHover) {
+                sectionData.element._updateHover();
+            }
+        }, 50);
 
         console.log(`Ширина секции ${this.activeSection} изменена на ${newWidth}px`);
     }
@@ -1657,6 +1779,8 @@ class CabinetConstructor {
             if (this.doors.size === 0) {
                 this.createDoors();
             }
+            // Принудительно синхронизируем все двери с текущими размерами секций
+            this.updateAllDoors();
         } else {
             // Выключаем двери
             if (doorsContainer) {
