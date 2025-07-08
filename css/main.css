@@ -776,10 +776,11 @@ body {
     cursor: pointer;
     outline: none;
     transition: border-color 0.2s ease;
+    max-width: calc(100% - 32px); /* Ограничиваем ширину чтобы оставить место для знака вопроса */
 }
 
 .layout-selector select:focus {
-    border-color: #007bff;
+    border-color: #333;
 }
 
 /* Селектор цвета */
@@ -810,13 +811,13 @@ body {
 }
 
 .color-button:hover {
-    border-color: #007bff;
+    border-color: #333;
     transform: scale(1.1);
 }
 
 .color-button.active {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Стили для help-icon в ряду с цветными кнопками */
@@ -891,6 +892,7 @@ body {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 10px;
+    min-height: 44px; /* Минимальная высота чтобы зарезервировать место */
 }
 
 /* Выпадающий список вариантов */
@@ -917,10 +919,11 @@ body {
     cursor: pointer;
     outline: none;
     transition: border-color 0.2s ease;
+    max-width: calc(100% - 32px); /* Ограничиваем ширину чтобы оставить место для знака вопроса */
 }
 
 .variants-dropdown select:focus {
-    border-color: #007bff;
+    border-color: #333;
 }
 
 /* Контрол ширины */
@@ -945,12 +948,13 @@ body {
 
 .width-slider {
     width: 192px;
-    height: 4px;
-    border-radius: 2px;
+    height: 6px;
+    border-radius: 3px;
     background: #e9ecef;
     outline: none;
     cursor: pointer;
     transition: background 0.2s ease;
+    -webkit-appearance: none;
 }
 
 .width-slider:hover {
@@ -959,27 +963,28 @@ body {
 
 .width-slider::-webkit-slider-thumb {
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #6c757d;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background 0.2s ease;
 }
 
 .width-slider::-webkit-slider-thumb:hover {
-    background: #0056b3;
+    background: #333;
 }
 
 .width-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #6c757d;
     cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .width-display {
@@ -999,13 +1004,13 @@ body {
 }
 
 .width-display:hover {
-    border-color: #007bff;
+    border-color: #333;
 }
 
 .width-display:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Контрол высоты */
@@ -1031,13 +1036,14 @@ body {
 
 .height-slider {
     width: 192px;
-    height: 4px;
-    border-radius: 2px;
+    height: 6px;
+    border-radius: 3px;
     background: #dee2e6;
     outline: none;
     cursor: pointer;
     transition: all 0.2s ease;
     opacity: 0.6;
+    -webkit-appearance: none;
 }
 
 .height-slider.active {
@@ -1051,12 +1057,13 @@ body {
 
 .height-slider::-webkit-slider-thumb {
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #868e96;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background 0.2s ease;
 }
 
@@ -1065,21 +1072,21 @@ body {
 }
 
 .height-slider.active::-webkit-slider-thumb {
-    background: #007bff;
+    background: #6c757d;
 }
 
 .height-slider.active::-webkit-slider-thumb:hover {
-    background: #0056b3;
+    background: #333;
 }
 
 .height-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #868e96;
     cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .height-slider:not(.active)::-moz-range-thumb {
@@ -1087,7 +1094,7 @@ body {
 }
 
 .height-slider.active::-moz-range-thumb {
-    background: #007bff;
+    background: #6c757d;
 }
 
 .height-display {
@@ -1107,13 +1114,13 @@ body {
 }
 
 .height-display:hover {
-    border-color: #007bff;
+    border-color: #333;
 }
 
 .height-display:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Контрол глубины */
@@ -1134,7 +1141,7 @@ input[type="checkbox"] {
     width: 18px;
     height: 18px;
     margin-right: 8px;
-    accent-color: #007bff;
+    accent-color: #333;
     cursor: pointer;
 }
 
@@ -1158,13 +1165,14 @@ input[type="checkbox"] {
 
 .depth-slider {
     width: 192px;
-    height: 4px;
-    border-radius: 2px;
+    height: 6px;
+    border-radius: 3px;
     background: #dee2e6;
     outline: none;
     cursor: pointer;
     transition: all 0.2s ease;
     opacity: 0.6;
+    -webkit-appearance: none;
 }
 
 .depth-slider.active {
@@ -1178,12 +1186,13 @@ input[type="checkbox"] {
 
 .depth-slider::-webkit-slider-thumb {
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #868e96;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background 0.2s ease;
 }
 
@@ -1192,21 +1201,21 @@ input[type="checkbox"] {
 }
 
 .depth-slider.active::-webkit-slider-thumb {
-    background: #007bff;
+    background: #6c757d;
 }
 
 .depth-slider.active::-webkit-slider-thumb:hover {
-    background: #0056b3;
+    background: #333;
 }
 
 .depth-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #868e96;
     cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .depth-slider:not(.active)::-moz-range-thumb {
@@ -1214,7 +1223,7 @@ input[type="checkbox"] {
 }
 
 .depth-slider.active::-moz-range-thumb {
-    background: #007bff;
+    background: #6c757d;
 }
 
 .depth-display {
@@ -1234,13 +1243,13 @@ input[type="checkbox"] {
 }
 
 .depth-display:hover {
-    border-color: #007bff;
+    border-color: #333;
 }
 
 .depth-display:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Tooltip для подсказок */
@@ -1345,13 +1354,13 @@ input[type="checkbox"] {
 }
 
 .door-color-button:hover {
-    border-color: #007bff;
+    border-color: #333;
     transform: scale(1.05);
 }
 
 .door-color-button.active {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Селектор типа ручки */
@@ -1383,8 +1392,7 @@ input[type="checkbox"] {
 
 .doors-handle-selector select:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
 }
 
 /* Контрол зеркальности */
@@ -1418,6 +1426,8 @@ input[type="checkbox"] {
     position: relative;
     vertical-align: middle;
     transition: all 0.2s ease;
+    flex-shrink: 0; /* Не сжимаем знак вопроса */
+    min-width: 16px; /* Минимальная ширина */
 }
 
 .help-icon:hover {
@@ -1780,7 +1790,7 @@ input[type="checkbox"] {
 
 .mobile-tab:hover {
     color: #495057;
-    background: rgba(0, 123, 255, 0.1);
+    background: rgba(108, 117, 125, 0.1);
 }
 
 .mobile-tab.active {
@@ -1881,7 +1891,7 @@ input[type="checkbox"] {
 .mobile-price-amount {
     font-size: 20px;
     font-weight: bold;
-    color: #28a745;
+    color: #333;
 }
 
 .mobile-dimensions {

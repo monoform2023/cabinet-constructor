@@ -3091,54 +3091,164 @@ class CabinetConstructor {
     }
     
     generateSectionsReport(data) {
+        // Получаем актуальную цену из калькулятора
+        const priceData = this.calculateTotalPrice();
+        
         let report = '';
         report += '=== ИНФОРМАЦИЯ О ШКАФЕ ===\n\n';
         report += `Дата создания: ${data.timestamp}\n\n`;
         
         // Основная информация
         report += '--- ОСНОВНАЯ ИНФОРМАЦИЯ ---\n';
-        report += `Стоимость: 235 000 ₽\n`;
-        report += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм\n\n`;
+        report += `Тип шкафа: ${data.layoutName}\n`;
+        report += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм\n`;
+        report += `Цвет корпуса: ${data.color}\n`;
+        if (data.doors.enabled) {
+            report += `Двери: Да (цвет: ${data.doors.color})\n`;
+        } else {
+            report += `Двери: Нет\n`;
+        }
+        report += '\n';
         
         // Секции
         report += '--- СЕКЦИИ ---\n';
         data.sections.forEach((section, index) => {
-            report += `${index + 1}. ${section.name} (${section.variant}, ${section.width} мм)\n`;
+            report += `${index + 1}. ${section.name}\n`;
+            report += `   Вариант: ${section.variant}\n`;
+            report += `   Ширина: ${section.width} мм\n\n`;
         });
         
-        report += '\n=== КОНЕЦ ОТЧЕТА ===';
+        // Дополнительные параметры
+        const hasAdditional = data.additionalParams.customDepth || data.additionalParams.lighting || 
+                             data.additionalParams.doorSensor || data.additionalParams.assembly;
+        
+        if (hasAdditional) {
+            report += '--- ДОПОЛНИТЕЛЬНЫЕ ПАРАМЕТРЫ ---\n';
+            if (data.additionalParams.customDepth) {
+                report += `• Нестандартная глубина: ${data.additionalParams.depth} мм\n`;
+            }
+            if (data.additionalParams.lighting) {
+                report += '• Подсветка LED (3000K, 24v)\n';
+            }
+            if (data.additionalParams.doorSensor) {
+                report += '• Датчик открывания двери\n';
+            }
+            if (data.additionalParams.assembly) {
+                report += '• Сборка\n';
+            }
+            report += '\n';
+        }
+        
+        // Расчет стоимости
+        report += '--- РАСЧЕТ СТОИМОСТИ ---\n';
+        report += `Секции: ${priceData.sections.toLocaleString('ru-RU')} ₽\n`;
+        if (priceData.doors > 0) {
+            report += `Двери: ${priceData.doors.toLocaleString('ru-RU')} ₽\n`;
+        }
+        if (priceData.options > 0) {
+            report += `Опции: ${priceData.options.toLocaleString('ru-RU')} ₽\n`;
+        }
+        if (priceData.assembly > 0) {
+            report += `Сборка: ${priceData.assembly.toLocaleString('ru-RU')} ₽\n`;
+        }
+        if (priceData.depthSurcharge > 0) {
+            report += `Нестандартная глубина (+20%): ${priceData.depthSurcharge.toLocaleString('ru-RU')} ₽\n`;
+        }
+        report += `\nИТОГО: ${priceData.total.toLocaleString('ru-RU')} ₽\n\n`;
+        
+        report += '=== КОНЕЦ ОТЧЕТА ===';
         
         return report;
     }
     
     generateCompactInfoHTML(data) {
+        // Получаем актуальную цену из калькулятора
+        const priceData = this.calculateTotalPrice();
+        
         let html = '';
         
-        // Основная информация в одну строку
-        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 12px;">';
+        // Блок с ценой и расчетом в одной строке
+        html += '<div style="display: flex; gap: 20px; margin-bottom: 20px;">';
         
-        // Стоимость
-        html += '<div style="font-size: 26px; font-weight: bold; color: #333;">';
-        html += 'Стоимость: 235 000 ₽';
+        // Левая часть - стоимость крупно
+        html += '<div style="flex: 1; text-align: center; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; border: 2px solid #dee2e6;">';
+        html += '<div style="font-size: 32px; font-weight: bold; color: #333; margin-bottom: 10px;">';
+        html += `${priceData.total.toLocaleString('ru-RU')} ₽`;
+        html += '</div>';
+        html += '<div style="font-size: 16px; color: #6c757d;">';
+        html += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм`;
+        html += '</div>';
         html += '</div>';
         
-        // Размер шкафа
-        html += '<div style="font-size: 22px; color: #666;">';
-        html += `Размер: ${data.dimensions.width}×${data.dimensions.height}×${data.dimensions.depth} мм`;
+        // Правая часть - детализация стоимости
+        html += '<div style="flex: 1; background: #fff; padding: 20px; border-radius: 12px; border: 2px solid #ddd;">';
+        html += '<div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center;">Состав стоимости:</div>';
+        
+        html += '<div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; font-size: 16px;">';
+        html += `<div>Секции:</div><div style="font-weight: bold;">${priceData.sections.toLocaleString('ru-RU')} ₽</div>`;
+        
+        if (priceData.doors > 0) {
+            html += `<div>Двери:</div><div style="font-weight: bold;">${priceData.doors.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.options > 0) {
+            html += `<div>Опции:</div><div style="font-weight: bold;">${priceData.options.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.assembly > 0) {
+            html += `<div>Сборка:</div><div style="font-weight: bold;">${priceData.assembly.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.depthSurcharge > 0) {
+            html += `<div>Нестандартная глубина (+20%):</div><div style="font-weight: bold;">${priceData.depthSurcharge.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        html += '</div>';
         html += '</div>';
         
         html += '</div>';
         
         // Секции компактно
         html += '<div style="background: #fff; padding: 20px; border-radius: 12px; border: 2px solid #ddd;">';
-        html += '<div style="font-size: 20px; font-weight: bold; color: #333; margin-bottom: 12px;">Секции:</div>';
+        html += '<div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center;">Секции шкафа:</div>';
         
-        // Секции в одну строку через разделитель
-        const sectionsText = data.sections.map((section, index) => {
-            return `${index + 1}. ${section.name} (${section.variant}, ${section.width} мм)`;
-        }).join(' • ');
+        // Секции в сетку для лучшего отображения
+        html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">';
+        data.sections.forEach((section, index) => {
+            html += '<div style="padding: 12px; border: 1px solid #e9ecef; border-radius: 8px; background: #f8f9fa;">';
+            html += `<div style="font-weight: bold; color: #495057; margin-bottom: 5px;">${index + 1}. ${section.name}</div>`;
+            html += `<div style="font-size: 14px; color: #6c757d;">${section.variant}</div>`;
+            html += `<div style="font-size: 14px; color: #6c757d;">Ширина: ${section.width} мм</div>`;
+            html += '</div>';
+        });
+        html += '</div>';
         
-        html += `<div style="font-size: 18px; color: #666; line-height: 1.4;">${sectionsText}</div>`;
+        // Дополнительные параметры если есть
+        const hasAdditional = data.additionalParams.customDepth || data.additionalParams.lighting || 
+                             data.additionalParams.doorSensor || data.additionalParams.assembly;
+        
+        if (hasAdditional) {
+            html += '<div style="margin-top: 15px; padding: 15px; background: #e7f3ff; border-radius: 8px;">';
+            html += '<div style="font-weight: bold; color: #0d6efd; margin-bottom: 8px;">Дополнительные параметры:</div>';
+            html += '<div style="font-size: 14px; color: #495057;">';
+            
+            if (data.additionalParams.customDepth) {
+                html += `• Глубина: ${data.additionalParams.depth} мм<br>`;
+            }
+            if (data.additionalParams.lighting) {
+                html += '• Подсветка LED (3000K, 24v)<br>';
+            }
+            if (data.additionalParams.doorSensor) {
+                html += '• Датчик открывания двери<br>';
+            }
+            if (data.additionalParams.assembly) {
+                html += '• Сборка<br>';
+            }
+            
+            html += '</div>';
+            html += '</div>';
+        }
+        
         html += '</div>';
         
         return html;
@@ -3223,10 +3333,39 @@ class CabinetConstructor {
         
         // Цена и дата внизу
         html += '<div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd;">';
-        html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
-        html += '<div style="font-size: 16px; font-weight: bold;">Примерная стоимость: 235 000 ₽</div>';
+        
+        // Получаем актуальную цену
+        const priceData = this.calculateTotalPrice();
+        
+        // Детализация стоимости
+        html += '<div style="margin-bottom: 15px;">';
+        html += '<h4 style="margin: 0 0 10px 0; color: #333;">Расчет стоимости:</h4>';
+        html += '<div style="display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px; margin-bottom: 10px;">';
+        html += `<div>Секции:</div><div style="text-align: right;">${priceData.sections.toLocaleString('ru-RU')} ₽</div>`;
+        
+        if (priceData.doors > 0) {
+            html += `<div>Двери:</div><div style="text-align: right;">${priceData.doors.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.options > 0) {
+            html += `<div>Опции:</div><div style="text-align: right;">${priceData.options.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.assembly > 0) {
+            html += `<div>Сборка:</div><div style="text-align: right;">${priceData.assembly.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        if (priceData.depthSurcharge > 0) {
+            html += `<div>Нестандартная глубина (+20%):</div><div style="text-align: right;">${priceData.depthSurcharge.toLocaleString('ru-RU')} ₽</div>`;
+        }
+        
+        html += '</div>';
+        html += '<div style="border-top: 1px solid #ccc; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">';
+        html += `<div style="font-size: 18px; font-weight: bold; color: #333;">Итого: ${priceData.total.toLocaleString('ru-RU')} ₽</div>`;
         html += `<div style="color: #666; font-size: 12px;">Создано: ${data.timestamp}</div>`;
         html += '</div>';
+        html += '</div>';
+        
         html += '</div>';
         
         return html;
