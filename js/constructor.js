@@ -2817,13 +2817,31 @@ class CabinetConstructor {
     }
     
     handleOrder() {
-        // Переход на страницу заказа (пока просто placeholder)
-        const orderUrl = 'https://example.com/order'; // Здесь будет реальная ссылка
-        
-        // Можно открыть в новой вкладке или в текущей
-        window.open(orderUrl, '_blank');
-        
-        console.log('Переход к оформлению заказа');
+        try {
+            // Если мы внутри iframe, отправляем сообщение родительскому окну (Tilda)
+            if (window.parent && window.parent !== window) {
+                // Собираем данные конфигурации для передачи в форму
+                const configData = this.collectConfigurationData();
+                
+                // Отправляем сообщение родительскому окну для открытия popup
+                window.parent.postMessage({
+                    type: 'openTildaPopup',
+                    popup: 'zakaz',
+                    configData: configData
+                }, '*');
+                
+                console.log('Отправлено сообщение для открытия popup Tilda');
+            } else {
+                // Если не в iframe, открываем в новой вкладке (fallback)
+                const orderUrl = 'https://example.com/order';
+                window.open(orderUrl, '_blank');
+                console.log('Открыт в новой вкладке (fallback)');
+            }
+        } catch (error) {
+            console.error('Ошибка при открытии формы заказа:', error);
+            // Fallback в случае ошибки
+            alert('Для оформления заказа свяжитесь с нами по телефону');
+        }
     }
     
     async handleSaveImage() {
