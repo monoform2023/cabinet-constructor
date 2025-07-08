@@ -1651,6 +1651,11 @@ input[type="checkbox"] {
     display: none;
 }
 
+/* Мобильная панель цены поверх основного окна */
+.mobile-price-overlay {
+    display: none;
+}
+
 /* Медиазапрос для мобильных устройств */
 @media screen and (max-width: 768px) {
     /* Скрываем десктопную панель управления */
@@ -1672,15 +1677,76 @@ input[type="checkbox"] {
         z-index: 1000;
     }
     
+    /* Показываем мобильную панель цены поверх основного окна */
+    .mobile-price-overlay {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 100; /* Поверх основного окна, но под мобильным меню */
+        background: transparent; /* Прозрачный фон */
+        border: none; /* Убираем границу */
+        border-radius: 0;
+        box-shadow: none; /* Убираем тень */
+        padding: 0;
+    }
+    
+    /* Стили цены в оверлее - делаем стоимость почти черной */
+    .mobile-price-overlay .mobile-price-amount {
+        color: #333333; /* Почти черный цвет */
+        font-size: 18px;
+        font-weight: bold;
+        text-align: left; /* Выравниваем по левому краю */
+        display: block;
+    }
+    
+    .mobile-price-overlay .mobile-dimensions {
+        color: #6c757d;
+        font-size: 11px;
+        text-align: left; /* Выравниваем по левому краю */
+        display: block;
+    }
+    
+    /* Настраиваем внутренний блок цены в оверлее */
+    .mobile-price-overlay .mobile-price-info {
+        background: transparent; /* Прозрачный фон */
+        padding: 8px 12px;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .mobile-price-overlay .mobile-price-display {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Выравниваем содержимое по левому краю */
+        gap: 2px;
+    }
+    
     /* Адаптируем основное окно под мобильную панель */
     .main-window {
-        margin-bottom: 250px; /* Место для мобильной панели */
+        position: fixed;
+        left: 0; /* Оставляем у левого края */
+        top: 0;
+        margin: 0; /* Убираем центрирование */
+        width: 130vw; /* Увеличиваем ширину на 30%, чтобы правая часть ушла за экран */
+        max-width: none; /* Убираем ограничение max-width */
+        
+        /* Сохраняем пропорции, но ограничиваем высоту доступной областью */
+        height: calc(130vw * 1919 / 3200); /* Пропорциональная высота для новой ширины */
+        max-height: calc(100vh - 250px); /* Не больше доступной высоты */
+        
+        z-index: 1; /* Размещаем под мобильным меню */
+        
+        /* Прижимаем к верху мобильного меню (низ окна касается верха меню) */
+        bottom: 250px; /* Расстояние от низа экрана = высота мобильного меню */
+        top: auto;
     }
     
     /* Убираем отступы в главном контейнере на мобильных */
     .constructor-container {
         min-height: 100vh;
-        padding-bottom: 250px;
+        padding: 0; /* Убираем все отступы */
+        position: relative;
     }
 }
 
@@ -1718,8 +1784,8 @@ input[type="checkbox"] {
 }
 
 .mobile-tab.active {
-    color: #007bff;
-    border-bottom-color: #007bff;
+    color: #333;
+    border-bottom-color: #333;
     background: #ffffff;
 }
 
@@ -1755,6 +1821,33 @@ input[type="checkbox"] {
     margin-bottom: 8px;
 }
 
+/* Исключение для чекбоксов - размещаем в одну строку */
+.mobile-tab-panel input[type="checkbox"] + label {
+    display: inline !important;
+    margin-left: 8px;
+    margin-bottom: 0;
+}
+
+/* Специальные стили для чекбокса нестандартной глубины */
+.mobile-custom-depth-checkbox {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-custom-depth-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.mobile-custom-depth-checkbox label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+}
+
 .mobile-tab-panel select {
     width: 100%;
     padding: 8px 12px;
@@ -1763,6 +1856,29 @@ input[type="checkbox"] {
     font-size: 14px;
     background: #ffffff;
     margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.mobile-tab-panel select:focus {
+    border-color: #6c757d;
+}
+
+/* Стили для селектора типов секции - делаем как основной селектор */
+.mobile-variants-dropdown select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #ffffff;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.mobile-variants-dropdown select:focus {
+    border-color: #6c757d;
 }
 
 /* Стили цены */
@@ -1817,7 +1933,7 @@ input[type="checkbox"] {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #6c757d;
     cursor: pointer;
     border: 2px solid #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -1863,12 +1979,41 @@ input[type="checkbox"] {
 
 .mobile-color-button.active,
 .mobile-door-color-button.active {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #333;
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.25);
 }
 
 /* Стили чекбоксов */
 .mobile-tab-panel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+/* Общие стили для всех мобильных чекбоксов и их контейнеров */
+.mobile-lighting-control,
+.mobile-door-sensor-control,
+.mobile-assembly-control,
+.mobile-doors-control {
+    margin-bottom: 15px;
+}
+
+.mobile-lighting-control label,
+.mobile-door-sensor-control label,
+.mobile-assembly-control label,
+.mobile-doors-control label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-lighting-control input[type="checkbox"],
+.mobile-door-sensor-control input[type="checkbox"],
+.mobile-assembly-control input[type="checkbox"],
+.mobile-doors-control input[type="checkbox"] {
     width: 16px;
     height: 16px;
     margin-right: 8px;
@@ -1898,18 +2043,21 @@ input[type="checkbox"] {
 .mobile-order-button {
     flex: 1;
     padding: 12px 20px;
-    background: #28a745;
+    background: linear-gradient(135deg, #333 0%, #000 100%);
     color: white;
     border: none;
     border-radius: 6px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-order-button:hover {
-    background: #218838;
+    background: linear-gradient(135deg, #555 0%, #333 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .mobile-save-button {

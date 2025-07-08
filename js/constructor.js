@@ -587,19 +587,45 @@ class CabinetConstructor {
     
     // Инициализация мобильных кнопок действий
     initMobileActionButtons() {
-        const mobileOrderButton = document.getElementById('mobile-order-button');
-        if (mobileOrderButton) {
-            mobileOrderButton.addEventListener('click', () => {
-                this.handleOrder();
-            });
-        }
+        // Все кнопки заказать
+        const orderButtons = [
+            'mobile-order-button-params',
+            'mobile-order-button-size', 
+            'mobile-order-button-color',
+            'mobile-order-button-doors',
+            'mobile-order-button'  // Основная кнопка в табе "Дополнительно"
+        ];
         
-        const mobileSaveButton = document.getElementById('mobile-save-button');
-        if (mobileSaveButton) {
-            mobileSaveButton.addEventListener('click', () => {
-                this.handleSaveImage();
-            });
-        }
+        // Все кнопки сохранить
+        const saveButtons = [
+            'mobile-save-button-params',
+            'mobile-save-button-size',
+            'mobile-save-button-color', 
+            'mobile-save-button-doors',
+            'mobile-save-button'  // Основная кнопка в табе "Дополнительно"
+        ];
+        
+        // Добавляем обработчики для всех кнопок заказать
+        orderButtons.forEach(buttonId => {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.addEventListener('click', () => {
+                    this.handleOrder();
+                });
+            }
+        });
+        
+        // Добавляем обработчики для всех кнопок сохранить
+        saveButtons.forEach(buttonId => {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.addEventListener('click', () => {
+                    this.handleSaveImage();
+                });
+            }
+        });
+        
+        console.log('Мобильные кнопки действий инициализированы');
     }
     
     // Синхронизация кнопок цветов между десктопом и мобилом
@@ -670,17 +696,56 @@ class CabinetConstructor {
             const select = desktopVariantsDropdown.querySelector('select');
             if (select) {
                 mobileVariantsDropdown.innerHTML = `
-                    <label>Вариант секции:</label>
                     ${select.outerHTML.replace('id="', 'id="mobile-')}
                 `;
                 
                 // Добавляем обработчик для мобильного селектора
                 const mobileSelect = mobileVariantsDropdown.querySelector('select');
                 if (mobileSelect) {
+                    // Синхронизируем значение сразу при создании
+                    const sectionData = this.sections.get(this.activeSection);
+                    if (sectionData && sectionData.currentVariant) {
+                        // Если уже есть выбранный вариант, удаляем placeholder и устанавливаем значение
+                        const placeholderOption = mobileSelect.querySelector('option[value=""]');
+                        if (placeholderOption) {
+                            placeholderOption.remove();
+                        }
+                        mobileSelect.value = sectionData.currentVariant.id;
+                        this.firstInteractionWithVariants = false;
+                    }
+                    
+                    // Обработчик для удаления placeholder при первом взаимодействии
+                    const removeMobilePlaceholder = () => {
+                        if (this.firstInteractionWithVariants) {
+                            const placeholderOption = mobileSelect.querySelector('option[value=""]');
+                            if (placeholderOption) {
+                                placeholderOption.remove();
+                            }
+                            this.firstInteractionWithVariants = false;
+                            
+                            // Устанавливаем текущий вариант как selected
+                            const sectionData = this.sections.get(this.activeSection);
+                            if (sectionData && sectionData.currentVariant) {
+                                mobileSelect.value = sectionData.currentVariant.id;
+                            }
+                        }
+                        // Удаляем этот обработчик после первого использования
+                        mobileSelect.removeEventListener('focus', removeMobilePlaceholder);
+                        mobileSelect.removeEventListener('click', removeMobilePlaceholder);
+                    };
+                    
+                    mobileSelect.addEventListener('focus', removeMobilePlaceholder);
+                    mobileSelect.addEventListener('click', removeMobilePlaceholder);
+                    
                     mobileSelect.addEventListener('change', (e) => {
                         // Синхронизируем с десктопным селектором
                         select.value = e.target.value;
                         select.dispatchEvent(new Event('change'));
+                        
+                        // Обновляем мобильные элементы после изменения
+                        setTimeout(() => {
+                            this.updateMobileElements();
+                        }, 50);
                     });
                 }
             }
@@ -984,6 +1049,9 @@ class CabinetConstructor {
         
         // Обновляем позицию индикатора
         this.updateSectionIndicator();
+        
+        // Обновляем мобильные элементы для полной синхронизации
+        this.updateMobileElements();
     }
 
     // Обновление позиции индикатора для активной секции
@@ -1217,6 +1285,9 @@ class CabinetConstructor {
 
         // Обновляем цену
         this.updateTotalPrice();
+        
+        // Обновляем мобильные элементы для синхронизации
+        this.updateMobileElements();
 
         console.log(`Изменен вариант секции ${this.activeSection} на ${variant.name}`);
     }
