@@ -175,6 +175,154 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Мобильная панель управления -->
+        <div class="mobile-control-panel" id="mobile-control-panel">
+            <!-- Горизонтальные табы -->
+            <div class="mobile-tabs" id="mobile-tabs">
+                <button class="mobile-tab active" data-tab="params">Параметры</button>
+                <button class="mobile-tab" data-tab="size">Размер</button>
+                <button class="mobile-tab" data-tab="color">Цвет</button>
+                <button class="mobile-tab" data-tab="doors">Двери</button>
+                <button class="mobile-tab" data-tab="additional">Дополнительно</button>
+            </div>
+            
+            <!-- Содержимое табов -->
+            <div class="mobile-tab-content" id="mobile-tab-content">
+                <!-- Таб "Параметры" -->
+                <div class="mobile-tab-panel active" data-panel="params">
+                    <!-- Стоимость и размеры вверху -->
+                    <div class="mobile-price-info">
+                        <div class="mobile-price-display">
+                            <span id="mobile-total-price" class="mobile-price-amount">Загрузка...</span>
+                            <span id="mobile-cabinet-dimensions" class="mobile-dimensions">1920×2100×600 мм</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Селектор компоновки -->
+                    <div class="mobile-layout-selector">
+                        <label for="mobile-layout-select">Количество секций:</label>
+                        <select id="mobile-layout-select">
+                            <option value="" disabled selected>Выберите количество секций</option>
+                            <option value="1-section">1 секция</option>
+                            <option value="2-sections">2 секции</option>
+                            <option value="3-sections">3 секции</option>
+                            <option value="4-sections">4 секции</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Варианты секций -->
+                    <div class="mobile-section-controls" id="mobile-section-controls">
+                        <!-- Будет заполняться динамически -->
+                    </div>
+                </div>
+                
+                <!-- Таб "Размер" -->
+                <div class="mobile-tab-panel" data-panel="size">
+                    <!-- Ширина -->
+                    <div class="mobile-width-control">
+                        <label>Ширина секции:</label>
+                        <div class="mobile-slider-container">
+                            <input type="range" class="mobile-width-slider" id="mobile-width-slider" min="400" max="800" value="520">
+                            <input type="text" class="mobile-width-display" id="mobile-width-display" value="520">
+                            <span>мм</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Высота -->
+                    <div class="mobile-height-control">
+                        <label>Высота шкафа:</label>
+                        <div class="mobile-slider-container">
+                            <input type="range" class="mobile-height-slider" id="mobile-height-slider" min="1800" max="2620" value="2620">
+                            <input type="text" class="mobile-height-display" id="mobile-height-display" value="2620">
+                            <span>мм</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Глубина -->
+                    <div class="mobile-depth-control">
+                        <div class="mobile-custom-depth-checkbox">
+                            <input type="checkbox" id="mobile-custom-depth-checkbox">
+                            <label for="mobile-custom-depth-checkbox">Нестандартная глубина</label>
+                        </div>
+                        <div class="mobile-depth-slider-container" id="mobile-depth-slider-container" style="display: none;">
+                            <input type="range" class="mobile-depth-slider" id="mobile-depth-slider" min="400" max="800" value="582">
+                            <input type="text" class="mobile-depth-display" id="mobile-depth-display" value="582">
+                            <span>мм</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Таб "Цвет" -->
+                <div class="mobile-tab-panel" data-panel="color">
+                    <label>Цвет секции:</label>
+                    <div class="mobile-color-buttons" id="mobile-color-buttons">
+                        <button class="mobile-color-button active" data-color="c1" style="background-image: url('images/color-thumbnails/c1-thumbnail.jpg');" title="Цвет 1"></button>
+                        <button class="mobile-color-button" data-color="c2" style="background-image: url('images/color-thumbnails/c2-thumbnail.jpg');" title="Цвет 2"></button>
+                        <button class="mobile-color-button" data-color="c3" style="background-image: url('images/color-thumbnails/c3-thumbnail.jpg');" title="Цвет 3"></button>
+                        <button class="mobile-color-button" data-color="c4" style="background-image: url('images/color-thumbnails/c4-thumbnail.jpg');" title="Цвет 4"></button>
+                        <button class="mobile-color-button" data-color="c5" style="background-image: url('images/color-thumbnails/c5-thumbnail.jpg');" title="Цвет 5"></button>
+                    </div>
+                </div>
+                
+                <!-- Таб "Двери" -->
+                <div class="mobile-tab-panel" data-panel="doors">
+                    <div class="mobile-doors-control">
+                        <label>
+                            <input type="checkbox" id="mobile-doors-enabled"> 
+                            Двери
+                        </label>
+                        
+                        <div class="mobile-doors-panel" id="mobile-doors-panel" style="display: none;">
+                            <label>Цвет дверей:</label>
+                            <div class="mobile-doors-color-buttons">
+                                <button class="mobile-door-color-button active" data-door-color="c1" style="background-image: url('images/door-color-thumbnails/dc1-thumbnail.jpg');" title="Цвет 1"></button>
+                                <button class="mobile-door-color-button" data-door-color="c2" style="background-image: url('images/door-color-thumbnails/dc2-thumbnail.jpg');" title="Цвет 2"></button>
+                                <button class="mobile-door-color-button" data-door-color="c3" style="background-image: url('images/door-color-thumbnails/dc3-thumbnail.jpg');" title="Цвет 3"></button>
+                                <button class="mobile-door-color-button" data-door-color="c4" style="background-image: url('images/door-color-thumbnails/dc4-thumbnail.jpg');" title="Цвет 4"></button>
+                                <button class="mobile-door-color-button" data-door-color="c5" style="background-image: url('images/door-color-thumbnails/dc5-thumbnail.jpg');" title="Цвет 5"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Таб "Дополнительно" -->
+                <div class="mobile-tab-panel" data-panel="additional">
+                    <!-- Подсветка -->
+                    <div class="mobile-lighting-control">
+                        <label>
+                            <input type="checkbox" id="mobile-lighting-enabled"> Подсветка
+                        </label>
+                    </div>
+                    
+                    <!-- Датчик открывания двери -->
+                    <div class="mobile-door-sensor-control">
+                        <label>
+                            <input type="checkbox" id="mobile-door-sensor-enabled"> Датчик открывания двери
+                        </label>
+                    </div>
+                    
+                    <!-- Сборка -->
+                    <div class="mobile-assembly-control">
+                        <label>
+                            <input type="checkbox" id="mobile-assembly-enabled"> Сборка
+                        </label>
+                    </div>
+                    
+                    <!-- Кнопки действий -->
+                    <div class="mobile-action-buttons">
+                        <button class="mobile-order-button" id="mobile-order-button">Заказать</button>
+                        <button class="mobile-save-button" id="mobile-save-button" title="Сохранить изображение">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15,3 21,3 21,9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Скрипты -->

@@ -50,6 +50,9 @@ class CabinetConstructor {
         // Инициализируем обработчики для дверей
         this.initDoorsEventListeners();
         
+        // Инициализируем мобильную панель
+        this.initMobileEventListeners();
+        
         // Инициализируем дополнительные параметры
         this.initAdditionalParams();
         
@@ -365,6 +368,318 @@ class CabinetConstructor {
         console.log('Обработчики событий инициализированы');
     }
 
+    // Инициализация обработчиков событий для мобильной панели
+    initMobileEventListeners() {
+        // Инициализация табов
+        this.initMobileTabs();
+        
+        // Мобильный селектор компоновки
+        const mobileLayoutSelect = document.getElementById('mobile-layout-select');
+        if (mobileLayoutSelect) {
+            mobileLayoutSelect.addEventListener('change', (e) => {
+                this.loadLayout(e.target.value);
+                // Синхронизируем с десктопным селектором
+                const desktopSelect = document.getElementById('layout-select');
+                if (desktopSelect) {
+                    desktopSelect.value = e.target.value;
+                }
+            });
+        }
+        
+        // Мобильные бегунки размера
+        this.initMobileSliders();
+        
+        // Мобильные кнопки цветов
+        this.initMobileColorButtons();
+        
+        // Мобильные элементы управления дверями
+        this.initMobileDoorsControls();
+        
+        // Мобильные дополнительные параметры
+        this.initMobileAdditionalParams();
+        
+        // Мобильные кнопки действий
+        this.initMobileActionButtons();
+        
+        console.log('Мобильные обработчики событий инициализированы');
+    }
+    
+    // Инициализация мобильных табов
+    initMobileTabs() {
+        const tabs = document.querySelectorAll('.mobile-tab');
+        const panels = document.querySelectorAll('.mobile-tab-panel');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetPanel = tab.dataset.tab;
+                
+                // Убираем активный класс со всех табов и панелей
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+                
+                // Добавляем активный класс к выбранному табу и панели
+                tab.classList.add('active');
+                const panel = document.querySelector(`[data-panel="${targetPanel}"]`);
+                if (panel) {
+                    panel.classList.add('active');
+                }
+            });
+        });
+    }
+    
+    // Инициализация мобильных бегунков
+    initMobileSliders() {
+        // Бегунок ширины
+        const mobileWidthSlider = document.getElementById('mobile-width-slider');
+        const mobileWidthDisplay = document.getElementById('mobile-width-display');
+        if (mobileWidthSlider && mobileWidthDisplay) {
+            this.initInputField(mobileWidthDisplay, (value) => {
+                this.changeWidth(value);
+                mobileWidthSlider.value = value;
+            });
+            
+            mobileWidthSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                this.changeWidth(value);
+                mobileWidthDisplay.value = value;
+            });
+        }
+        
+        // Бегунок высоты
+        const mobileHeightSlider = document.getElementById('mobile-height-slider');
+        const mobileHeightDisplay = document.getElementById('mobile-height-display');
+        if (mobileHeightSlider && mobileHeightDisplay) {
+            this.initInputField(mobileHeightDisplay, (value) => {
+                this.changeHeight(value);
+                mobileHeightSlider.value = value;
+            });
+            
+            mobileHeightSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                this.changeHeight(value);
+                mobileHeightDisplay.value = value;
+            });
+        }
+        
+        // Чекбокс нестандартной глубины
+        const mobileCustomDepthCheckbox = document.getElementById('mobile-custom-depth-checkbox');
+        if (mobileCustomDepthCheckbox) {
+            mobileCustomDepthCheckbox.addEventListener('change', (e) => {
+                this.toggleCustomDepth(e.target.checked);
+                // Синхронизируем с десктопным чекбоксом
+                const desktopCheckbox = document.getElementById('custom-depth-checkbox');
+                if (desktopCheckbox) {
+                    desktopCheckbox.checked = e.target.checked;
+                }
+            });
+        }
+        
+        // Бегунок глубины
+        const mobileDepthSlider = document.getElementById('mobile-depth-slider');
+        const mobileDepthDisplay = document.getElementById('mobile-depth-display');
+        if (mobileDepthSlider && mobileDepthDisplay) {
+            this.initInputField(mobileDepthDisplay, (value) => {
+                this.changeDepth(value);
+                mobileDepthSlider.value = value;
+            });
+            
+            mobileDepthSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                this.changeDepth(value);
+                mobileDepthDisplay.value = value;
+            });
+        }
+    }
+    
+    // Инициализация мобильных кнопок цветов
+    initMobileColorButtons() {
+        // Кнопки цвета секций
+        const mobileColorButtons = document.querySelectorAll('.mobile-color-button');
+        mobileColorButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newColor = e.target.dataset.color;
+                if (newColor) {
+                    this.changeColor(newColor);
+                    // Синхронизируем с десктопными кнопками
+                    this.syncColorButtons(newColor);
+                }
+            });
+        });
+    }
+    
+    // Инициализация мобильных элементов управления дверями
+    initMobileDoorsControls() {
+        // Чекбокс дверей
+        const mobileDoorsCheckbox = document.getElementById('mobile-doors-enabled');
+        if (mobileDoorsCheckbox) {
+            mobileDoorsCheckbox.addEventListener('change', (e) => {
+                this.toggleDoors(e.target.checked);
+                // Синхронизируем с десктопным чекбоксом
+                const desktopCheckbox = document.getElementById('doors-enabled');
+                if (desktopCheckbox) {
+                    desktopCheckbox.checked = e.target.checked;
+                }
+            });
+        }
+        
+        // Кнопки цвета дверей
+        const mobileDoorColorButtons = document.querySelectorAll('.mobile-door-color-button');
+        mobileDoorColorButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const newColor = e.target.dataset.doorColor;
+                if (newColor) {
+                    this.changeDoorColor(newColor);
+                    // Синхронизируем с десктопными кнопками
+                    this.syncDoorColorButtons(newColor);
+                }
+            });
+        });
+    }
+    
+    // Инициализация мобильных дополнительных параметров
+    initMobileAdditionalParams() {
+        // Подсветка
+        const mobileLighting = document.getElementById('mobile-lighting-enabled');
+        if (mobileLighting) {
+            mobileLighting.addEventListener('change', (e) => {
+                this.additionalParams.lighting = e.target.checked;
+                this.updateTotalPrice();
+                // Синхронизируем с десктопом
+                const desktopLighting = document.getElementById('lighting-enabled');
+                if (desktopLighting) {
+                    desktopLighting.checked = e.target.checked;
+                }
+            });
+        }
+        
+        // Датчик открывания двери
+        const mobileSensor = document.getElementById('mobile-door-sensor-enabled');
+        if (mobileSensor) {
+            mobileSensor.addEventListener('change', (e) => {
+                this.additionalParams.sensor = e.target.checked;
+                this.updateTotalPrice();
+                // Синхронизируем с десктопом
+                const desktopSensor = document.getElementById('door-sensor-enabled');
+                if (desktopSensor) {
+                    desktopSensor.checked = e.target.checked;
+                }
+            });
+        }
+        
+        // Сборка
+        const mobileAssembly = document.getElementById('mobile-assembly-enabled');
+        if (mobileAssembly) {
+            mobileAssembly.addEventListener('change', (e) => {
+                this.additionalParams.assembly = e.target.checked;
+                this.updateTotalPrice();
+                // Синхронизируем с десктопом
+                const desktopAssembly = document.getElementById('assembly-enabled');
+                if (desktopAssembly) {
+                    desktopAssembly.checked = e.target.checked;
+                }
+            });
+        }
+    }
+    
+    // Инициализация мобильных кнопок действий
+    initMobileActionButtons() {
+        const mobileOrderButton = document.getElementById('mobile-order-button');
+        if (mobileOrderButton) {
+            mobileOrderButton.addEventListener('click', () => {
+                this.handleOrder();
+            });
+        }
+        
+        const mobileSaveButton = document.getElementById('mobile-save-button');
+        if (mobileSaveButton) {
+            mobileSaveButton.addEventListener('click', () => {
+                this.handleSaveImage();
+            });
+        }
+    }
+    
+    // Синхронизация кнопок цветов между десктопом и мобилом
+    syncColorButtons(activeColor) {
+        // Обновляем десктопные кнопки
+        document.querySelectorAll('.color-button').forEach(button => {
+            button.classList.toggle('active', button.dataset.color === activeColor);
+        });
+        // Обновляем мобильные кнопки
+        document.querySelectorAll('.mobile-color-button').forEach(button => {
+            button.classList.toggle('active', button.dataset.color === activeColor);
+        });
+    }
+    
+    // Синхронизация кнопок цветов дверей между десктопом и мобилом
+    syncDoorColorButtons(activeColor) {
+        // Обновляем десктопные кнопки
+        document.querySelectorAll('.door-color-button').forEach(button => {
+            button.classList.toggle('active', button.dataset.doorColor === activeColor);
+        });
+        // Обновляем мобильные кнопки
+        document.querySelectorAll('.mobile-door-color-button').forEach(button => {
+            button.classList.toggle('active', button.dataset.doorColor === activeColor);
+        });
+    }
+    
+    // Обновление мобильных элементов при изменениях
+    updateMobileElements() {
+        // Обновляем цену
+        const mobilePriceElement = document.getElementById('mobile-total-price');
+        const desktopPriceElement = document.getElementById('total-price');
+        if (mobilePriceElement && desktopPriceElement) {
+            mobilePriceElement.textContent = desktopPriceElement.textContent;
+        }
+        
+        // Обновляем размеры
+        const mobileDimensionsElement = document.getElementById('mobile-cabinet-dimensions');
+        const desktopDimensionsElement = document.getElementById('cabinet-dimensions');
+        if (mobileDimensionsElement && desktopDimensionsElement) {
+            mobileDimensionsElement.textContent = desktopDimensionsElement.textContent;
+        }
+        
+        // Обновляем контролы активной секции
+        this.updateMobileSectionControls();
+    }
+    
+    // Обновление мобильных контролов секции
+    updateMobileSectionControls() {
+        const mobileContainer = document.getElementById('mobile-section-controls');
+        const desktopContainer = document.getElementById('section-controls');
+        
+        if (!mobileContainer || !desktopContainer) return;
+        
+        // Копируем содержимое десктопных контролов в мобильные
+        const desktopVariantsDropdown = desktopContainer.querySelector('.variants-dropdown');
+        if (desktopVariantsDropdown) {
+            // Создаем мобильную версию селектора вариантов
+            let mobileVariantsDropdown = mobileContainer.querySelector('.mobile-variants-dropdown');
+            if (!mobileVariantsDropdown) {
+                mobileVariantsDropdown = document.createElement('div');
+                mobileVariantsDropdown.className = 'mobile-variants-dropdown';
+                mobileContainer.appendChild(mobileVariantsDropdown);
+            }
+            
+            const select = desktopVariantsDropdown.querySelector('select');
+            if (select) {
+                mobileVariantsDropdown.innerHTML = `
+                    <label>Вариант секции:</label>
+                    ${select.outerHTML.replace('id="', 'id="mobile-')}
+                `;
+                
+                // Добавляем обработчик для мобильного селектора
+                const mobileSelect = mobileVariantsDropdown.querySelector('select');
+                if (mobileSelect) {
+                    mobileSelect.addEventListener('change', (e) => {
+                        // Синхронизируем с десктопным селектором
+                        select.value = e.target.value;
+                        select.dispatchEvent(new Event('change'));
+                    });
+                }
+            }
+        }
+    }
+
     // Инициализация обработчиков событий для дверей
     initDoorsEventListeners() {
         // Цветовые кнопки дверей
@@ -390,11 +705,8 @@ class CabinetConstructor {
         // Обновляем настройки дверей
         this.doorsSettings.color = newColor;
         
-        // Обновляем активную кнопку цвета
-        document.querySelectorAll('.door-color-button').forEach(button => {
-            button.classList.remove('active');
-        });
-        document.querySelector(`[data-door-color="${newColor}"]`).classList.add('active');
+        // Обновляем активную кнопку цвета (десктоп и мобиль)
+        this.syncDoorColorButtons(newColor);
         
         // Обновляем изображения всех дверей
         if (this.doorsEnabled) {
@@ -748,6 +1060,9 @@ class CabinetConstructor {
 
         // Добавляем обработчики событий
         this.initSectionControlsEvents();
+        
+        // Синхронизируем мобильную панель
+        this.updateMobileSectionControls();
     }
 
     initSectionControlsEvents() {
@@ -875,11 +1190,8 @@ class CabinetConstructor {
         // Обновляем текущий цвет
         this.currentColor = newColor;
         
-        // Обновляем активную кнопку цвета
-        document.querySelectorAll('.color-button').forEach(button => {
-            button.classList.remove('active');
-        });
-        document.querySelector(`.color-button[data-color="${newColor}"]`).classList.add('active');
+        // Обновляем активную кнопку цвета (десктоп и мобиль)
+        this.syncColorButtons(newColor);
         
         // Обновляем изображения всех секций с сохранением выбранных вариантов
         this.sections.forEach((sectionData, sectionId) => {
@@ -951,6 +1263,16 @@ class CabinetConstructor {
         if (widthDisplay) {
             widthDisplay.value = this.pixelsToMillimeters(newWidth, this.activeSection);
         }
+        
+        // Синхронизируем мобильные элементы
+        const mobileWidthSlider = document.getElementById('mobile-width-slider');
+        const mobileWidthDisplay = document.getElementById('mobile-width-display');
+        if (mobileWidthSlider) {
+            mobileWidthSlider.value = this.pixelsToMillimeters(newWidth, this.activeSection);
+        }
+        if (mobileWidthDisplay) {
+            mobileWidthDisplay.value = this.pixelsToMillimeters(newWidth, this.activeSection);
+        }
 
         // Обновляем изображение секции
         this.updateSectionImage(sectionData);
@@ -990,6 +1312,16 @@ class CabinetConstructor {
         if (heightDisplay) {
             heightDisplay.value = newHeight;
         }
+        
+        // Синхронизируем мобильные элементы
+        const mobileHeightSlider = document.getElementById('mobile-height-slider');
+        const mobileHeightDisplay = document.getElementById('mobile-height-display');
+        if (mobileHeightSlider) {
+            mobileHeightSlider.value = newHeight;
+        }
+        if (mobileHeightDisplay) {
+            mobileHeightDisplay.value = newHeight;
+        }
 
         // Обновляем отображение размера
         this.updateDimensionsDisplay();
@@ -1004,6 +1336,12 @@ class CabinetConstructor {
         const depthSliderContainer = document.getElementById('depth-slider-container');
         if (depthSliderContainer) {
             depthSliderContainer.style.display = isEnabled ? 'block' : 'none';
+        }
+
+        // Синхронизируем мобильную панель
+        const mobileDepthSliderContainer = document.getElementById('mobile-depth-slider-container');
+        if (mobileDepthSliderContainer) {
+            mobileDepthSliderContainer.style.display = isEnabled ? 'block' : 'none';
         }
 
         // Сохраняем в глобальных настройках
@@ -1025,6 +1363,16 @@ class CabinetConstructor {
         const depthDisplay = document.getElementById('depth-display');
         if (depthDisplay) {
             depthDisplay.value = newDepth;
+        }
+        
+        // Синхронизируем мобильные элементы
+        const mobileDepthSlider = document.getElementById('mobile-depth-slider');
+        const mobileDepthDisplay = document.getElementById('mobile-depth-display');
+        if (mobileDepthSlider) {
+            mobileDepthSlider.value = newDepth;
+        }
+        if (mobileDepthDisplay) {
+            mobileDepthDisplay.value = newDepth;
         }
 
         // Обновляем отображение размера
@@ -1796,6 +2144,12 @@ class CabinetConstructor {
         
         // Обновляем цену
         this.updateTotalPrice();
+        
+        // Синхронизируем мобильную панель
+        const mobileDoorsPanel = document.getElementById('mobile-doors-panel');
+        if (mobileDoorsPanel) {
+            mobileDoorsPanel.style.display = enabled ? 'block' : 'none';
+        }
         
         console.log(`Двери ${enabled ? 'включены' : 'выключены'}`);
     }
@@ -3064,6 +3418,9 @@ class CabinetConstructor {
                 <div><strong>Итого: ${priceData.total.toLocaleString('ru-RU')} ₽</strong></div>
             `;
         }
+        
+        // Синхронизируем мобильную панель
+        this.updateMobileElements();
         
         console.log('Расчет цены:', priceData);
     }
