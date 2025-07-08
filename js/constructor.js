@@ -429,19 +429,23 @@ class CabinetConstructor {
     
     // Инициализация мобильных бегунков
     initMobileSliders() {
-        // Бегунок ширины
+        // Бегунок ширины - будет настроен динамически при выборе секции
         const mobileWidthSlider = document.getElementById('mobile-width-slider');
         const mobileWidthDisplay = document.getElementById('mobile-width-display');
         if (mobileWidthSlider && mobileWidthDisplay) {
-            this.initInputField(mobileWidthDisplay, (value) => {
-                this.changeWidth(value);
-                mobileWidthSlider.value = value;
+            // Настройка бегунка ширины (работает в пикселях, как десктопная версия)
+            mobileWidthSlider.addEventListener('input', (e) => {
+                const pixelValue = parseInt(e.target.value);
+                this.changeWidth(pixelValue);
+                // Обновляем поле ввода в миллиметрах
+                mobileWidthDisplay.value = this.pixelsToMillimeters(pixelValue, this.activeSection);
             });
             
-            mobileWidthSlider.addEventListener('input', (e) => {
-                const value = parseInt(e.target.value);
-                this.changeWidth(value);
-                mobileWidthDisplay.value = value;
+            // Настройка поля ввода ширины (работает в миллиметрах)
+            this.initInputField(mobileWidthDisplay, (mmValue) => {
+                const pixelValue = this.millimetersToPixels(mmValue, this.activeSection);
+                this.changeWidth(pixelValue);
+                mobileWidthSlider.value = pixelValue;
             });
         }
         
@@ -649,6 +653,9 @@ class CabinetConstructor {
         
         if (!mobileContainer || !desktopContainer) return;
         
+        // Обновляем бегунок ширины для мобильной версии
+        this.updateMobileWidthControls();
+        
         // Копируем содержимое десктопных контролов в мобильные
         const desktopVariantsDropdown = desktopContainer.querySelector('.variants-dropdown');
         if (desktopVariantsDropdown) {
@@ -677,6 +684,38 @@ class CabinetConstructor {
                     });
                 }
             }
+        }
+    }
+    
+    // Обновление мобильного бегунка ширины
+    updateMobileWidthControls() {
+        if (!this.activeSection) return;
+        
+        const sectionData = this.sections.get(this.activeSection);
+        if (!sectionData) return;
+        
+        const mobileWidthSlider = document.getElementById('mobile-width-slider');
+        const mobileWidthDisplay = document.getElementById('mobile-width-display');
+        
+        if (mobileWidthSlider && mobileWidthDisplay) {
+            // Настраиваем диапазоны бегунка в пикселях (как в десктопе)
+            mobileWidthSlider.min = sectionData.config.minWidth;
+            mobileWidthSlider.max = sectionData.config.maxWidth;
+            mobileWidthSlider.value = sectionData.currentWidth;
+            
+            // Настраиваем поле ввода в миллиметрах
+            mobileWidthDisplay.value = this.pixelsToMillimeters(sectionData.currentWidth, this.activeSection);
+            mobileWidthDisplay.dataset.min = this.pixelsToMillimeters(sectionData.config.minWidth, this.activeSection);
+            mobileWidthDisplay.dataset.max = this.pixelsToMillimeters(sectionData.config.maxWidth, this.activeSection);
+            
+            console.log(`Мобильный бегунок ширины обновлен для ${this.activeSection}:`, {
+                minPx: sectionData.config.minWidth,
+                maxPx: sectionData.config.maxWidth,
+                currentPx: sectionData.currentWidth,
+                minMm: this.pixelsToMillimeters(sectionData.config.minWidth, this.activeSection),
+                maxMm: this.pixelsToMillimeters(sectionData.config.maxWidth, this.activeSection),
+                currentMm: this.pixelsToMillimeters(sectionData.currentWidth, this.activeSection)
+            });
         }
     }
 
@@ -1268,10 +1307,10 @@ class CabinetConstructor {
         const mobileWidthSlider = document.getElementById('mobile-width-slider');
         const mobileWidthDisplay = document.getElementById('mobile-width-display');
         if (mobileWidthSlider) {
-            mobileWidthSlider.value = this.pixelsToMillimeters(newWidth, this.activeSection);
+            mobileWidthSlider.value = newWidth; // Мобильный бегунок работает в пикселях
         }
         if (mobileWidthDisplay) {
-            mobileWidthDisplay.value = this.pixelsToMillimeters(newWidth, this.activeSection);
+            mobileWidthDisplay.value = this.pixelsToMillimeters(newWidth, this.activeSection); // Поле ввода в миллиметрах
         }
 
         // Обновляем изображение секции
